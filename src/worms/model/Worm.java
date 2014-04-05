@@ -71,12 +71,29 @@ public class Worm {
 		this.setRadius(radius);
 		this.setName(name);
 		this.setActionPoints(maxActionPoints);
+		this.setHitPoints(maxHitPoints);
+		this.setIsAlive(true);
 	}
 	
 	public Worm(World world){
+		Random perimeter = world.getPerimeter();
+		this.setXpos(perimeter.nextDouble()*world.getWidth());
+		this.setYpos(perimeter.nextDouble()*world.getHeight());
+		this.setDirection(perimeter.nextDouble()*2*Math.PI);
+		this.setRadius(radiusLowerBound);
+		this.setName("Worm");
+		this.setActionPoints(this.getMaxActionPoints());
+		this.setHitPoints(this.getMaxHitPoints());
+		this.setIsAlive(true);
 		
 	}
 	
+	public void newRound(){
+		int  health = 10;
+		this.renewActionPoints();
+		this.heal(health);
+	
+	}
 	//position (defensive)
 	/**
 	 * Returns the x-position of the worm.
@@ -264,6 +281,7 @@ public class Worm {
 			throw new IllegalArgumentException();
 		this.mass = DENSITY*((4.0/3.0)*Math.PI*Math.pow(radius, 3));
 		this.setMaxActionPoints();
+		this.setMaxHitPoints();
 		this.setActionPoints(this.getActionPoints());
 	}
 
@@ -362,7 +380,9 @@ public class Worm {
 		else 
 			this.actionPoints = actionPoints;
 	}
-	
+	public void renewActionPoints(){
+		this.setActionPoints(this.getMaxActionPoints());
+	}
 	//hitpoints (total)
 	/**
 	 * Return the maximal amount of hit points for this worm.
@@ -416,6 +436,17 @@ public class Worm {
 			this.hitPoints = 0;
 		else 
 			this.hitPoints = hitPoints;
+	}
+	public void setIsAlive(boolean alive){
+		this.alive = alive;
+	}
+
+	public boolean getIsAlive(){
+		return this.alive;
+	}
+	
+	public void heal(int amount){
+		this.setHitPoints(this.getHitPoints()+amount);
 	}
 	//move (defensive)
 	/**
@@ -589,6 +620,7 @@ public class Worm {
 		return step;
 	}
 	
+	private boolean alive;
 	// variables
 	private double xpos;
 	private double ypos;

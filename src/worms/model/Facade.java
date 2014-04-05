@@ -198,8 +198,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public Worm getCurrentWorm(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getCurrentWorm();
 	}
 
 	@Override
@@ -210,8 +209,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public int getHitPoints(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getHitPoints();
 	}
 
 	@Override
@@ -239,8 +237,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public int getMaxHitPoints(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getMaxHitPoints();
 	}
 
 	@Override
@@ -275,8 +272,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public Collection<Worm> getWorms(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getWorms();
 	}
 
 	@Override
@@ -323,8 +319,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public boolean isAlive(Worm worm) {
-		// TODO Auto-generated method stub
-		return false;
+		return worm.getIsAlive();
 	}
 
 	@Override
@@ -382,13 +377,13 @@ public  class Facade implements IFacade {
 
 	@Override
 	public void startGame(World world) {
-		// TODO Auto-generated method stub
+		world.startGame();
 		
 	}
 
 	@Override
 	public void startNextTurn(World world) {
-		// TODO Auto-generated method stub
+		world.startNextTurn();
 		
 	}
 	

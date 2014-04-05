@@ -4,6 +4,7 @@
 package worms.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -17,6 +18,7 @@ public class World {
 		this.setWidth(width);
 		this.setPassableMap(passableMap);
 		this.perimeter = random;
+		
 	}
 	/**
 	 * Returns the width of the world.
@@ -131,9 +133,53 @@ public class World {
 //	public void removeFood(Food food) {
 //		food.remove(food);
 //	}
+	
+	private int getCurrentWormIndex() {
+		return currentWormIndex;
+	}
+
+	private void setCurrentWormIndex(int currentWormIndex) {
+		this.currentWormIndex = currentWormIndex;
+	}
+
+	public Worm getCurrentWorm(){
+		return this.worms.get(this.getCurrentWormIndex());
+	}
+
+	public void startNextTurn(){
+		if (getCurrentWormIndex() >= (worms.size()-1))
+			startNextRound();
+		else
+			setCurrentWormIndex(getCurrentWormIndex()+1);
+
+	}
+
+	private void startNextRound(){
+
+		for (Worm worm: worms){
+			worm.newRound();
+		}
+		setCurrentWormIndex(0);
+
+	}
+
+	public void	startGame(){
+		setCurrentWormIndex(0);
+	}
 
 //	private ArrayList<Food> food = new ArrayList<Food>();
 	private ArrayList<Worm> worms = new ArrayList<Worm>();
+	//	public void addFood(Food food) {
+	//		food.add(food);
+	//	}
+	//	public ArrayList<Food> getFood() {
+	//		return food;
+	//	}
+	//	public void removeFood(Food food) {
+	//		food.remove(food);
+	//	}
+		
+	private int currentWormIndex;
 	private final Random perimeter;
 	private boolean[][] passableMap;
 	private double width;
