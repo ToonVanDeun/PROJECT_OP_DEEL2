@@ -139,8 +139,8 @@ public  class Facade implements IFacade {
 
 	@Override
 	public void addNewFood(World world) {
-		// TODO Auto-generated method stub
-		
+		Food food = new Food(world);
+		world.addFood(food);
 	}
 
 	@Override

@@ -124,15 +124,7 @@ public class World {
 	public ArrayList<Worm> getWorms(){
 		return worms;
 	}
-//	public void addFood(Food food) {
-//		food.add(food);
-//	}
-//	public ArrayList<Food> getFood() {
-//		return food;
-//	}
-//	public void removeFood(Food food) {
-//		food.remove(food);
-//	}
+	
 	
 	private int getCurrentWormIndex() {
 		return currentWormIndex;
@@ -167,18 +159,18 @@ public class World {
 		setCurrentWormIndex(0);
 	}
 
-//	private ArrayList<Food> food = new ArrayList<Food>();
-	private ArrayList<Worm> worms = new ArrayList<Worm>();
-	//	public void addFood(Food food) {
-	//		food.add(food);
-	//	}
-	//	public ArrayList<Food> getFood() {
-	//		return food;
-	//	}
-	//	public void removeFood(Food food) {
-	//		food.remove(food);
-	//	}
+	public void addFood(Food food) {
+			foods.add(food);
+		}
+		public ArrayList<Food> getFood() {
+			return foods;
+		}
+		public void removeFood(Food food) {
+			foods.remove(food);
+		}
 		
+	private ArrayList<Food> foods = new ArrayList<Food>();
+	private ArrayList<Worm> worms = new ArrayList<Worm>();
 	private int currentWormIndex;
 	private final Random perimeter;
 	private boolean[][] passableMap;

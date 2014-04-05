@@ -24,6 +24,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @version 1.0
  */
 public class Worm {
+	
 	/**
 	 * Initialize a worm with a x-and -position (meters), direction (radians), radius (meters) and a name.
 	 * @param xpos
@@ -65,8 +66,7 @@ public class Worm {
 	 * 			|new.getRadiusLowerBound() ==  0.25
 	 */
 	public Worm(double xpos, double ypos, double direction, double radius, String name){
-		this.setXpos(xpos);
-		this.setYpos(ypos);
+		this.position = new Position(xpos, ypos);
 		this.setDirection(direction);
 		this.setRadius(radius);
 		this.setName(name);
@@ -100,7 +100,7 @@ public class Worm {
 	 */
 	@Basic @Raw
 	public double getXpos(){
-		return this.xpos;
+		return position.getXpos();
 	}
 	/**
 	 * Sets the x-position of the worm.
@@ -113,17 +113,15 @@ public class Worm {
 	 * 			| ! isValidXpos(xpos)
 	 */
 	@Raw
-	private void setXpos(double xpos) throws IllegalArgumentException{
-		if (! isValidPos(xpos))
-			throw new IllegalArgumentException();
-		this.xpos = xpos;
+	private void setXpos(double xpos) {
+		position.setXpos(xpos);
 	}
 	/**
 	 * Returns the y-position of the worm.
 	 */
 	@Basic @Raw
 	public double getYpos(){
-		return this.ypos;
+		return position.getYpos();
 	}
 	/**
 	 * Sets the y-position of the worm.
@@ -136,10 +134,8 @@ public class Worm {
 	 * 			| ! isValidPos(ypos)
 	 */
 	@Raw
-	private void setYpos(double ypos) throws IllegalArgumentException{
-		if (! isValidPos(ypos))
-			throw new IllegalArgumentException();
-		this.ypos = ypos;
+	private void setYpos(double ypos) {
+		position.setYpos(ypos);
 	}
 	/**
 	 * Checks whether the given position is a valid position.
@@ -622,8 +618,9 @@ public class Worm {
 	
 	
 	// variables
-	private double xpos;
-	private double ypos;
+	private Position position;
+//	private double xpos;
+//	private double ypos;
 	private double direction;
 	private double radius;
 	private static double radiusLowerBound = 0.25;
