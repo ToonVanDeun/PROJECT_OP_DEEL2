@@ -89,7 +89,7 @@ public class Worm {
 	}
 	
 	public void newRound(){
-		int  health = 10;
+		
 		this.renewActionPoints();
 		this.heal(health);
 	
@@ -620,7 +620,7 @@ public class Worm {
 		return step;
 	}
 	
-	private boolean alive;
+	
 	// variables
 	private double xpos;
 	private double ypos;
@@ -633,6 +633,8 @@ public class Worm {
 	private int maxHitPoints;
 	private int hitPoints;
 	private String name;
+	private int  health = 10;
+	private boolean alive;
 	//constants
 	private static final int DENSITY = 1062;
 	private static final double G = 9.80665;
