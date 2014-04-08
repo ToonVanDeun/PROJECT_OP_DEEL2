@@ -74,6 +74,7 @@ public class Worm {
 		this.setHitPoints(maxHitPoints);
 		this.setIsAlive(true);
 	}
+
 	
 	public Worm(World world){
 		Random perimeter = world.getPerimeter();

@@ -36,7 +36,7 @@ public class World {
 	 * 			If width isn't a valid width the exception is thrown.
 	 * 			| ! isValidWidth(width)
 	 */
-	public void setWidth(double width) throws IllegalArgumentException {
+	public final void setWidth(double width) throws IllegalArgumentException {
 		if (! isValidWidth(width))
 			throw new IllegalArgumentException();
 		this.width = width;
@@ -53,10 +53,11 @@ public class World {
 		return ((0<= width) && (width<=Double.MAX_VALUE));
 	}
 	/**
-	 * Sets the upper bound width of the world.
+	 * Sets the upper bound for the width of the world. 
+	 * It must be smaller than the current width.
 	 */
 	public void setUpperboundWidth(double upperboundWidth) throws IllegalArgumentException {
-		if (! isValidWidth(width))
+		if ((! isValidWidth(width)) || (upperboundWidth>this.getWidth()))
 			throw new IllegalArgumentException();
 		this.upperboundWidth = upperboundWidth;
 	}
@@ -82,7 +83,7 @@ public class World {
 	 * 			If height isn't a valid height the exception is thrown.
 	 * 			| ! isValidHeight(height)
 	 */
-	public void setHeight(double height) throws IllegalArgumentException {
+	public final void setHeight(double height) throws IllegalArgumentException {
 		if (! isValidHeight(height))
 			throw new IllegalArgumentException();
 		this.height = height;	
@@ -113,7 +114,7 @@ public class World {
 		this.passableMap = passableMap;
 	}
 	public Random getPerimeter() {
-		return this.perimeter;
+		return this.perimeter;		
 	}
 	public void addWorm(Worm worm){
 		worms.add(worm);
