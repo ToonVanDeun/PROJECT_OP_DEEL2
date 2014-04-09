@@ -139,14 +139,13 @@ public  class Facade implements IFacade {
 
 	@Override
 	public void addNewFood(World world) {
-		Food food = new Food(world);
-		world.addFood(food);
+		new Food(world);
 	}
 
 	@Override
 	public void addNewWorm(World world) {
 		Worm worm = new Worm(world);
-		world.addWorm(worm);
+		world.addAsObject(worm);
 		
 	}
 

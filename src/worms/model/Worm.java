@@ -23,7 +23,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 			https://github.com/ToonVanDeun/PROJECT_OP
  * @version 1.0
  */
-public class Worm {
+public class Worm extends Object {
 	
 	/**
 	 * Initialize a worm with a x-and -position (meters), direction (radians), radius (meters) and a name.
@@ -65,7 +65,8 @@ public class Worm {
 	 * 			Or when no lower bound is given it's set to 0.25 as it is in this case.
 	 * 			|new.getRadiusLowerBound() ==  0.25
 	 */
-	public Worm(double xpos, double ypos, double direction, double radius, String name){
+	public Worm(World world, double xpos, double ypos, double direction, double radius, String name){
+		super(world);
 		this.position = new Position(xpos, ypos);
 		this.setDirection(direction);
 		this.setRadius(radius);
@@ -77,6 +78,7 @@ public class Worm {
 
 	
 	public Worm(World world){
+		super(world);
 		Random perimeter = world.getPerimeter();
 		this.setXpos(perimeter.nextDouble()*world.getWidth());
 		this.setYpos(perimeter.nextDouble()*world.getHeight());

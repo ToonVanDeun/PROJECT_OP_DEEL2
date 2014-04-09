@@ -96,7 +96,7 @@ public abstract class Object {
 	 * @throws IllegalStateException
 	 *         This object already belongs to a world.
 	 *       | hasWorld()
-	 */
+	 */	
 	public void setWorldTo(World world)
 			throws IllegalArgumentException, IllegalStateException {
 		if ((world == null)
@@ -132,6 +132,10 @@ public abstract class Object {
 		}
 	}
 
+	public double getRadius() {
+		return this.radius;
+	}	
+	
 	/**
 	 * Set the owner of this ownable to the given owner.
 	 *
@@ -153,5 +157,5 @@ public abstract class Object {
 	 */
 	private World world;
 		
-	
+	double radius;
 }
