@@ -20,8 +20,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 		 *
 		 * @param  world
 		 *         The world for this new food.
-		 * @effect This new food is initialized as a new object with
-		 *         in a given world.
+		 * @effect This new food is initialized as a new object in a given world.
 		 *       | super(world)
 		 * @effect The food is placed in a position, adjacent to impassable terrain
 		 * 			|.....
@@ -30,7 +29,6 @@ import be.kuleuven.cs.som.annotate.Raw;
 		public Food(World world) throws IllegalArgumentException {
 			super(world);
 			this.setRadius();
-			this.setWorldTo(world);
 			this.position = new Position(world, this);
 			
 			

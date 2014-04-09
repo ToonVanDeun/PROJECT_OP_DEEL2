@@ -5,9 +5,11 @@ package worms.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import worms.Worms;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
@@ -288,6 +290,28 @@ public class World {
 	}
 	
 	/**
+	 * Return a list of all the objects that are worms of this world.
+	 * 
+	 * @return The size of the resulting list is smaller than or equal to the number of
+	 *         objects in this world.
+	 *       | result.size() <= getNbObjects()
+	 * @return Each object in the resulting list is a worm.
+	 *       | for each index in 0..result-size()-1 :
+	 *       |   result.get(index) == ..........
+	 *       
+	 */
+	public Collection<Worm> getWorms() {
+		ArrayList<Object> lijst = new ArrayList<Object>(objects);
+		worms = null; 
+		
+		for (int i = 0; i < lijst.size(); i++) {
+			if (lijst.get(i) instanceof Worm)
+				worms.add((Worm) lijst.get(i));
+		}
+		return worms;
+	}
+	
+	/**
 	 * Add the given object at the end of the list of
 	 * objects of this world.
 	 * 
@@ -361,5 +385,7 @@ public class World {
 	private double height;
 	private double upperboundWidth;
 	private double upperboundHeight;
+
+	private Collection<Worm> worms;
 	
 }

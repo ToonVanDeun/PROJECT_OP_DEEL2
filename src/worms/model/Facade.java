@@ -164,8 +164,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public Food createFood(World world, double x, double y) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Food(world, x, y);
 	}
 
 	@Override
