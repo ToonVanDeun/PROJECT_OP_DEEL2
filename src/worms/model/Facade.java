@@ -179,7 +179,8 @@ public  class Facade implements IFacade {
 	@Override
 	public Worm createWorm(World world, double x, double y, double direction,
 			double radius, String name) {
-		return new Worm(x,y,direction,radius, name);
+		return new Worm(world,x,y,direction,radius, name);
+		//return null;
 	}
 
 	@Override
@@ -196,13 +197,13 @@ public  class Facade implements IFacade {
 
 	@Override
 	public Worm getCurrentWorm(World world) {
-		return world.getCurrentWorm();
+		//return world.getCurrentWorm();
+		return null;
 	}
 
 	@Override
 	public Collection<Food> getFood(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getFood();
 	}
 
 	@Override
@@ -240,8 +241,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public double getRadius(Food food) {
-		// TODO Auto-generated method stub
-		return 0;
+		return food.getRadius();
 	}
 
 	@Override
@@ -275,8 +275,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public double getX(Food food) {
-		// TODO Auto-generated method stub
-		return 0;
+		return food.getXpos();
 	}
 
 	@Override
@@ -287,8 +286,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public double getY(Food food) {
-		// TODO Auto-generated method stub
-		return 0;
+		return food.getYpos();
 	}
 
 	@Override
@@ -299,8 +297,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public boolean isActive(Food food) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -375,13 +372,13 @@ public  class Facade implements IFacade {
 
 	@Override
 	public void startGame(World world) {
-		world.startGame();
+		//world.startGame();
 		
 	}
 
 	@Override
 	public void startNextTurn(World world) {
-		world.startNextTurn();
+		//world.startNextTurn();
 		
 	}
 	

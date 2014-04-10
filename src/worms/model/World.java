@@ -135,7 +135,7 @@ public class World {
 //	public Worm getCurrentWorm(){
 //		return this.worms.get(this.getCurrentWormIndex());
 //	}
-//
+
 //	public void startNextTurn(){
 //		if (getCurrentWormIndex() >= (worms.size()-1))
 //			startNextRound();
@@ -302,7 +302,7 @@ public class World {
 	 */
 	public Collection<Worm> getWorms() {
 		ArrayList<Object> lijst = new ArrayList<Object>(objects);
-		worms = null; 
+		Collection<Worm> worms = new ArrayList<Worm>(); 
 		
 		for (int i = 0; i < lijst.size(); i++) {
 			if (lijst.get(i) instanceof Worm)
@@ -310,7 +310,29 @@ public class World {
 		}
 		return worms;
 	}
-	
+	/**
+	 * Return a list of all the objects that is food of this world.
+	 * 
+	 * @return The size of the resulting list is smaller than or equal to the number of
+	 *         objects in this world.
+	 *       | result.size() <= getNbObjects()
+	 * @return Each object in the resulting list is food.
+	 *       | for each index in 0..result-size()-1 :
+	 *       |   result.get(index) == ..........
+	 *       
+	 */
+	public Collection<Food> getFood() {
+		ArrayList<Object> lijst = new ArrayList<Object>(objects);
+		Collection<Food> food = new ArrayList<Food>();
+		
+		
+		for (int i = 0; i < lijst.size(); i++) {
+			if (lijst.get(i) instanceof Food)
+				food.add((Food) lijst.get(i));
+				System.out.println("einde if " + food);
+		}
+		return food;
+	}
 	/**
 	 * Add the given object at the end of the list of
 	 * objects of this world.
@@ -386,6 +408,7 @@ public class World {
 	private double upperboundWidth;
 	private double upperboundHeight;
 
-	private Collection<Worm> worms;
+	//private Collection<Worm> worms;
+	//private Collection<Food> food;
 	
 }

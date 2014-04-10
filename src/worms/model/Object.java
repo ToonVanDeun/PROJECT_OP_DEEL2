@@ -49,7 +49,7 @@ public abstract class Object {
 	 *
 	 * @param  world
 	 *         The world to check.
-	 * @return True, if the object is not jet in a world.
+	 * @return True, if the object is not yet in a world.
 	 * 			| ...
 	 */
 	@Raw
