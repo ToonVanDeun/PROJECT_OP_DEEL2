@@ -323,6 +323,7 @@ public class World {
 	 */
 	public Collection<Food> getFood() {
 		ArrayList<Object> lijst = new ArrayList<Object>(objects);
+		System.out.println("object " + objects);
 		Collection<Food> food = new ArrayList<Food>();
 		
 		
