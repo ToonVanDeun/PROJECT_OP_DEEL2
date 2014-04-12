@@ -20,6 +20,8 @@ import be.kuleuven.cs.som.annotate.Raw;
  */
 public class World {
 	public World(double width, double height, boolean[][] passableMap, Random random) {
+		System.out.println(width);
+		System.out.println(height);
 		this.setHeight(height);
 		this.setWidth(width);
 		this.setPassableMap(passableMap);
@@ -121,8 +123,38 @@ public class World {
 		return passableMap;
 	}
 	public void setPassableMap(boolean[][] passableMap) {
-		this.passableMap = passableMap;	
+		int mapWidth = passableMap.length;
+		int mapHeight = passableMap[1].length;
+		System.out.println("mapheight "+mapHeight);
+		System.out.println("mapwidth "+mapWidth);
+		double worldWidth =  (this.getWidth());
+		double worldHeight = (this.getHeight());
+		System.out.println("worldwidth "+worldWidth);
+		System.out.println("worldheight "+worldHeight);
+		boolean[][] scaledPassableMap = new boolean[(int) worldWidth+1][(int) worldHeight+1];
+		int x=0;
+		int y=0;
+		double xScale = (worldWidth / mapWidth);
+		double yScale = (worldHeight / mapHeight);
+		System.out.println("xscale "+xScale);
+		System.out.println("yscale "+yScale);
+		int i=0;
+		int j=0;
+		for (y=0 ; y< mapHeight ; y++){
+			for (x=0 ; x< mapWidth ; x++){
+				if (passableMap[x][y]) {
+					for (i=0; i<(1+xScale); i++){
+						for (j=0; j<(j+1+yScale);j++){
+							if ((((int) (x*xScale+i))<worldWidth+1) && ((int) (y*yScale+j))<worldHeight)
+								scaledPassableMap[(int) (x*xScale+i)][(int) (y*yScale+j)] = passableMap[x][y];
+						}
+					}
+				}
+			}
+		}	
+		this.passableMap = scaledPassableMap;	
 	}
+	
 	
 	public boolean isImpassable(double x, double y, double radius) {
 		return ((! this.getPassableMap() [(int) x][(int) y] ) &&
