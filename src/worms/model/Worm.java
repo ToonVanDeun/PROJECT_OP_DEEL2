@@ -81,8 +81,6 @@ public class Worm extends Object {
 		super(world);
 		Random perimeter = world.getPerimeter();
 		this.position = new Position(world, this);
-		//this.setXpos(perimeter.nextDouble()*world.getWidth());
-		//this.setYpos(perimeter.nextDouble()*world.getHeight());
 		this.setDirection(perimeter.nextDouble()*2*Math.PI);
 		this.setRadius(radiusLowerBound);
 		this.setName("Worm");
