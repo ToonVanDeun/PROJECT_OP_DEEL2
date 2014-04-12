@@ -371,14 +371,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean isAdjacent(World world, double x, double y, double radius) {
-		return( world.getPassableMap() [(int) x][(int) y] ) ;
-				/**
-				 
-				((!world.getPassableMap() [(int) (x+0.1*radius)][(int) y]) ||
-				(!world.getPassableMap() [(int) (x-0.1*radius)][(int) y]) ||
-				(!world.getPassableMap() [(int) x][(int) (y+0.1*radius)]) ||
-				(!world.getPassableMap() [(int) x][(int) (y-0.1*radius)]));
-				*/
+		return world.isAjacent(x, y, radius);
 	}
 	/**
 	 * Returns whether a worm is alive.
@@ -400,8 +393,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean isImpassable(World world, double x, double y, double radius) {
-		// TODO Auto-generated method stub
-		return false;
+		return world.isImpassable(x, y, radius);
 	}
 	/**
 	 * Makes a given projectile jump.

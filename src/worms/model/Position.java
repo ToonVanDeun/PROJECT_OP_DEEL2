@@ -16,26 +16,22 @@ public class Position {
 		double randXpos = (Math.random()*world.getWidth());
 		double randYpos = (Math.random()*world.getHeight());
 		
-		
-		if (world.getPassableMap() [(int) randXpos][(int) randYpos])
-			//this.setAdjacantPosition(world, object);
-			;
-		else {		
+		if (world.isImpassable(randXpos, randYpos, 1)) {
 			double randomDirection = getDirectionToCenter(world);
 			double radius = object.getRadius();
 					
-			this.setXpos(randXpos);
-			this.setYpos(randYpos);
-			
-			/**while ( (! world.getPassableMap() [(int) this.getXpos()][(int) this.getYpos()]) &&
-					(this.isValidXPos(this.getXpos(), world) && this.isValidYPos(this.getYpos(), world)) )
-							
-				this.setXpos(this.getXpos() + (Math.cos(randomDirection)*radius*0.1));
-				this.setYpos(this.getYpos() + (Math.sin(randomDirection)*radius*0.1));
-			*/	
-					
-			if (! this.isValidXPos(this.getXpos(), world) || !this.isValidYPos(this.getYpos(), world)) {	
-				//this.setAdjacantPosition(world, object);
+			while ( (! world.getPassableMap() [(int) randXpos][(int) randYpos]) &&
+					(this.isValidXPos(randXpos, world) && this.isValidYPos(randYpos, world)) ) {
+				randXpos = randXpos + (Math.cos(randomDirection)*radius*0.1);
+				randYpos = randYpos + (Math.sin(randomDirection)*radius*0.1);
+			}
+				
+			if (world.isAjacent(randXpos, randYpos, radius)) {	
+				this.setXpos(randXpos);
+				this.setYpos(randYpos);
+			}
+			else {
+				this.setAdjacantPosition(world, object);
 			}
 		
 		}
@@ -89,14 +85,6 @@ public class Position {
 		return ! (Double.isNaN(pos)) && pos>0 && pos<world.getHeight();
 	}
 		
-	public boolean isAdjacent(World world, double x, double y, double radius) {
-		return( world.getPassableMap() [(int) x][(int) y] ) &&
-				((!world.getPassableMap() [(int) (x+0.1*radius)][(int) y]) ||
-				(!world.getPassableMap() [(int) (x-0.1*radius)][(int) y]) ||
-				(!world.getPassableMap() [(int) x][(int) (y+0.1*radius)]) ||
-				(!world.getPassableMap() [(int) x][(int) (y-0.1*radius)]));
-	}
-	
 	private double xpos;
 	private double ypos;
 

@@ -121,8 +121,25 @@ public class World {
 		return passableMap;
 	}
 	public void setPassableMap(boolean[][] passableMap) {
-		this.passableMap = passableMap;
+		this.passableMap = passableMap;	
 	}
+	
+	public boolean isImpassable(double x, double y, double radius) {
+		return ((! this.getPassableMap() [(int) x][(int) y] ) &&
+				((!this.getPassableMap() [(int) (x+radius)][(int) y]) ||
+				(!this.getPassableMap() [(int) (x-radius)][(int) y]) ||
+				(!this.getPassableMap() [(int) x][(int) (y+radius)]) ||
+				(!this.getPassableMap() [(int) x][(int) (y-radius)])));
+	}
+	
+	public boolean isAjacent(double x, double y, double radius) {
+		return( (this.getPassableMap() [(int) x][(int) y] ) &&
+				((!this.getPassableMap() [(int) (x+0.1*radius)][(int) y]) ||
+				(!this.getPassableMap() [(int) (x-0.1*radius)][(int) y]) ||
+				(!this.getPassableMap() [(int) x][(int) (y+0.1*radius)]) ||
+				(!this.getPassableMap() [(int) x][(int) (y-0.1*radius)])));
+	}
+	
 	public Random getPerimeter() {
 		return this.perimeter;		
 	}
