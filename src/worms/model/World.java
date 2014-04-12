@@ -25,6 +25,10 @@ public class World {
 		this.perimeter = random;
 		
 	}
+	
+	//World Setup
+	
+	
 	/**
 	 * Returns the width of the world.
 	 */
@@ -122,6 +126,8 @@ public class World {
 		return this.perimeter;		
 	}
 	
+	//Worm Index and Current Worm
+	
 	
 	private int getCurrentWormIndex() {
 		return currentWormIndex;
@@ -135,6 +141,8 @@ public class World {
 		return ((ArrayList<Worm>) getWorms()).get(this.getCurrentWormIndex());
 	}
 
+	//Start 
+	
 	public void startNextTurn(){
 		if (getCurrentWormIndex() >= (getWorms().size()-1))
 			startNextRound();
@@ -155,9 +163,9 @@ public class World {
 	public void	startGame(){
 		setCurrentWormIndex(0);
 	}
-
 	
-	private int currentWormIndex;
+	//All objects
+	
 	
 	/**
 	 * Return the object of this world at the given index.
@@ -174,7 +182,6 @@ public class World {
 	public Object getObjectAt(int index) throws IndexOutOfBoundsException {
 		return objects.get(index - 1);
 	}
-
 	/**
 	 * Return the number of objects in this world.
 	 */
@@ -183,7 +190,6 @@ public class World {
 	public int getNbObjects() {
 		return objects.size();
 	}
-	
 	/**
 	 * Check whether this world can have the given object
 	 * as one of its objects.
@@ -200,7 +206,6 @@ public class World {
 	public boolean canHaveAsObject(Object object) {
 		return (object != null) && object.canHaveAsWorld(this);
 	}
-
 	/**
 	 * Check whether this world can have the given object
 	 * as one of its objects at the given index.
@@ -234,7 +239,6 @@ public class World {
 				return false;
 		return true;
 	}
-	
 	/**
 	 * Check whether this world has the given object as one of
 	 * its objects.
@@ -251,7 +255,6 @@ public class World {
 	public boolean hasAsObject(Object object) {
 		return objects.contains(object);
 	}
-
 	/**
 	 * Return the index at which the given object is registered
 	 * in the list of objects for this world.
@@ -269,7 +272,6 @@ public class World {
 	public int getIndexOfObject(Object object) {
 		return objects.indexOf(object);
 	}
-	
 	/**
 	 * Return a list of all the objects of this world.
 	 * 
@@ -283,50 +285,6 @@ public class World {
 	 */
 	public List<Object> getAllObjects() {
 		return new ArrayList<Object>(objects);
-	}
-	
-	/**
-	 * Return a list of all the objects that are worms of this world.
-	 * 
-	 * @return The size of the resulting list is smaller than or equal to the number of
-	 *         objects in this world.
-	 *       | result.size() <= getNbObjects()
-	 * @return Each object in the resulting list is a worm.
-	 *       | for each index in 0..result-size()-1 :
-	 *       |   result.get(index) == ..........
-	 *       
-	 */
-	public Collection<Worm> getWorms() {
-		ArrayList<Object> lijst = new ArrayList<Object>(objects);
-		Collection<Worm> worms = new ArrayList<Worm>(); 
-		
-		for (int i = 0; i < lijst.size(); i++) {
-			if (lijst.get(i) instanceof Worm)
-				worms.add((Worm) lijst.get(i));
-		}
-		return worms;
-	}
-	/**
-	 * Return a list of all the objects that is food of this world.
-	 * 
-	 * @return The size of the resulting list is smaller than or equal to the number of
-	 *         objects in this world.
-	 *       | result.size() <= getNbObjects()
-	 * @return Each object in the resulting list is food.
-	 *       | for each index in 0..result-size()-1 :
-	 *       |   result.get(index) == ..........
-	 *       
-	 */
-	public Collection<Food> getFood() {
-		ArrayList<Object> lijst = new ArrayList<Object>(objects);
-		Collection<Food> food = new ArrayList<Food>();
-		
-		
-		for (int i = 0; i < lijst.size(); i++) {
-			if (lijst.get(i) instanceof Food)
-				food.add((Food) lijst.get(i));
-		}
-		return food;
 	}
 	/**
 	 * Add the given object at the end of the list of
@@ -352,7 +310,6 @@ public class World {
 		assert !hasAsObject(object);
 		objects.add(object);
 	}
-
 	/**
 	 * Remove the given object from the objects of this world.
 	 * 
@@ -381,11 +338,63 @@ public class World {
 		assert (hasAsObject(object));
 		objects.remove(object);
 	}
+	/**
+	 * Return a list of all the objects that are worms of this world.
+	 * 
+	 * @return The size of the resulting list is smaller than or equal to the number of
+	 *         objects in this world.
+	 *       | result.size() <= getNbObjects()
+	 * @return Each object in the resulting list is a worm.
+	 *       | for each index in 0..result-size()-1 :
+	 *       |   result.get(index) == ..........
+	 *       
+	 */
+	
+	//List of Worms
 	
 	
+	public Collection<Worm> getWorms() {
+		ArrayList<Object> lijst = new ArrayList<Object>(objects);
+		Collection<Worm> worms = new ArrayList<Worm>(); 
+		
+		for (int i = 0; i < lijst.size(); i++) {
+			if (lijst.get(i) instanceof Worm)
+				worms.add((Worm) lijst.get(i));
+		}
+		return worms;
+	}
+
+	/**
+	 * Return a list of all the objects that is food of this world.
+	 * 
+	 * @return The size of the resulting list is smaller than or equal to the number of
+	 *         objects in this world.
+	 *       | result.size() <= getNbObjects()
+	 * @return Each object in the resulting list is food.
+	 *       | for each index in 0..result-size()-1 :
+	 *       |   result.get(index) == ..........
+	 *       
+	 */
+	
+	//List of Food
 	
 	
-	
+	public Collection<Food> getFood() {
+		ArrayList<Object> lijst = new ArrayList<Object>(objects);
+		Collection<Food> food = new ArrayList<Food>();
+		
+		
+		for (int i = 0; i < lijst.size(); i++) {
+			if (lijst.get(i) instanceof Food)
+				food.add((Food) lijst.get(i));
+		}
+		return food;
+	}
+
+
+
+
+
 	/**
 	 * Variable referencing a list collecting all the objects of
 	 * this world.
@@ -402,8 +411,6 @@ public class World {
 	private double height;
 	private double upperboundWidth;
 	private double upperboundHeight;
-
-	//private Collection<Worm> worms;
-	//private Collection<Food> food;
+	private int currentWormIndex;
 	
 }
