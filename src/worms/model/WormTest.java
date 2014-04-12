@@ -28,13 +28,14 @@ public class WormTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		worm_position = new Worm(0, 0, 0, 5, "Position");
-		worm_direction = new Worm(0, 0, 0, 5, "Direction");
-		worm_radius = new Worm(0, 0, 0, 5, "Radius");
-		worm_name = new Worm(0, 0, 0, 1, "Name");
-		worm_move = new Worm(0, 0, (Math.PI)/4, 1, "Move");
-		worm_turn = new Worm(0, 0, 0, 1, "Turn");
-		worm_jump = new Worm(0, 0, 3 * Math.PI / 2, 1, "Jump");
+		World world = new World(0, 0, null, null);
+		worm_position = new Worm(world, 0, 0, 0, 5, "Position");
+		worm_direction = new Worm(world,0, 0, 0, 5, "Direction");
+		worm_radius = new Worm(world, 0, 0, 0, 5, "Radius");
+		worm_name = new Worm(world, 0, 0, 0, 1, "Name");
+		worm_move = new Worm(world, 0, 0, (Math.PI)/4, 1, "Move");
+		worm_turn = new Worm(world, 0, 0, 0, 1, "Turn");
+		worm_jump = new Worm(world, 0, 0, 3 * Math.PI / 2, 1, "Jump");
 	}
 
 	@After

@@ -314,7 +314,7 @@ public class Worm extends Object {
 	 * 			(if it starts with a capital and exists of at least 2 letters and no numbers
 	 * 			also single and double quotes are allowed.)
 	 * 			If the give name is not a valid name the method returns false.
-	 * 			| result == match "[A-Z]{1}[a-zA-Z " ']{1,}"
+	 * 			| result == match "[A-Z]{1}[a-zA-Z0-9 " ']{1,}"
 	 */
 	@Raw
 	public static boolean isValidName(String name){
