@@ -33,7 +33,7 @@ public class Position {
 			this.setYpos(oldY);
 		}
 		else {
-			this.setAdjacantPosition(world, object);	
+			this.setAdjacantPosition(world, object);
 		}
 		
 		
