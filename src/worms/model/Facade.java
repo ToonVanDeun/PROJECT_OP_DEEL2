@@ -144,8 +144,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public void addNewWorm(World world) {
-		Worm worm = new Worm(world);
-		world.addAsObject(worm);
+		new Worm(world);
 		
 	}
 
