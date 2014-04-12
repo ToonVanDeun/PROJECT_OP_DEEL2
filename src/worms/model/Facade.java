@@ -2,10 +2,17 @@ package worms.model;
 import java.util.Collection;
 import java.util.Random;
 
+import worms.gui.Level;
 import worms.model.IFacade;
 import worms.model.Worm;
 
 public  class Facade implements IFacade {
+	/**
+	 * constructor for Facade.
+	 */
+	public Facade() {
+		
+	}
 	/**
 	 * Checks whether a given worm can turn over a given angel.
 	 */
@@ -364,8 +371,14 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean isAdjacent(World world, double x, double y, double radius) {
-		// TODO Auto-generated method stub
-		return false;
+		return( world.getPassableMap() [(int) x][(int) y] ) ;
+				/**
+				 
+				((!world.getPassableMap() [(int) (x+0.1*radius)][(int) y]) ||
+				(!world.getPassableMap() [(int) (x-0.1*radius)][(int) y]) ||
+				(!world.getPassableMap() [(int) x][(int) (y+0.1*radius)]) ||
+				(!world.getPassableMap() [(int) x][(int) (y-0.1*radius)]));
+				*/
 	}
 	/**
 	 * Returns whether a worm is alive.

@@ -13,33 +13,46 @@ public class Position {
 	}
 	
 	public void setAdjacantPosition(World world, Object object) {
-		this.setRandomPosInWorld(world);
-		double randomDirection = Math.random()*(2*Math.PI);
-		double radius = object.getRadius();
-		double oldX = this.getXpos();
-		double oldY = this.getYpos();
-		while ( (this.isValidXPos(this.getXpos(),world)) && (this.isValidYPos(this.getYpos(),world)) &&
-				world.getPassableMap() [(int) this.getXpos()][(int) this.getYpos()])
+		double randXpos = (Math.random()*world.getWidth());
+		double randYpos = (Math.random()*world.getHeight());
+		
+		
+		if (world.getPassableMap() [(int) randXpos][(int) randYpos])
+			//this.setAdjacantPosition(world, object);
+			;
+		else {		
+			double randomDirection = getDirectionToCenter(world);
+			double radius = object.getRadius();
+					
+			this.setXpos(randXpos);
+			this.setYpos(randYpos);
 			
-			oldX = this.getXpos();
-			oldY = this.getYpos();
-						
-			this.setXpos(this.getXpos() + (Math.cos(randomDirection)*radius*0.1));
-			this.setYpos(this.getYpos() + (Math.sin(randomDirection)*radius*0.1));
-			
-				
-		if ( ! world.getPassableMap() [(int) this.getXpos()][(int) this.getYpos()]) {	
-			this.setXpos(oldX);
-			this.setYpos(oldY);
+			/**while ( (! world.getPassableMap() [(int) this.getXpos()][(int) this.getYpos()]) &&
+					(this.isValidXPos(this.getXpos(), world) && this.isValidYPos(this.getYpos(), world)) )
+							
+				this.setXpos(this.getXpos() + (Math.cos(randomDirection)*radius*0.1));
+				this.setYpos(this.getYpos() + (Math.sin(randomDirection)*radius*0.1));
+			*/	
+					
+			if (! this.isValidXPos(this.getXpos(), world) || !this.isValidYPos(this.getYpos(), world)) {	
+				//this.setAdjacantPosition(world, object);
+			}
+		
 		}
-		else {
-			this.setAdjacantPosition(world, object);
-		}
+	}
 		
-		
-		
+	public double getDirectionToCenter(World world) {
+		double centerX = world.getWidth()/2;
+		double centerY = world.getHeight()/2;
+		double diffX = (centerX - this.getXpos());
+		double diffY = (centerY - this.getYpos());
+		double direction = Math.atan(diffY/diffX);
+		if (diffX < 0)
+			direction = direction + Math.PI;
+		return direction;
 		
 	}
+		
 
 	private void setRandomPosInWorld(World world) {
 		setXpos(Math.random()*world.getWidth());
@@ -67,12 +80,23 @@ public class Position {
 	public boolean isValidPos(double pos) {
 		return ! (Double.isNaN(pos));
 	}
+	@Raw
 	public boolean isValidXPos(double pos, World world) {
 		return !(Double.isNaN(pos)) && pos>0 && pos<world.getWidth();
 	}
+	@Raw
 	public boolean isValidYPos(double pos, World world) {
 		return ! (Double.isNaN(pos)) && pos>0 && pos<world.getHeight();
 	}
+		
+	public boolean isAdjacent(World world, double x, double y, double radius) {
+		return( world.getPassableMap() [(int) x][(int) y] ) &&
+				((!world.getPassableMap() [(int) (x+0.1*radius)][(int) y]) ||
+				(!world.getPassableMap() [(int) (x-0.1*radius)][(int) y]) ||
+				(!world.getPassableMap() [(int) x][(int) (y+0.1*radius)]) ||
+				(!world.getPassableMap() [(int) x][(int) (y-0.1*radius)]));
+	}
+	
 	private double xpos;
 	private double ypos;
 
