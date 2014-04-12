@@ -196,8 +196,7 @@ public  class Facade implements IFacade {
 
 	@Override
 	public Worm getCurrentWorm(World world) {
-		//return world.getCurrentWorm();
-		return null;
+		return world.getCurrentWorm();
 	}
 
 	@Override
@@ -371,13 +370,13 @@ public  class Facade implements IFacade {
 
 	@Override
 	public void startGame(World world) {
-		//world.startGame();
+		world.startGame();
 		
 	}
 
 	@Override
 	public void startNextTurn(World world) {
-		//world.startNextTurn();
+		world.startNextTurn();
 		
 	}
 	

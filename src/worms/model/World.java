@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import worms.Worms;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
@@ -124,44 +123,41 @@ public class World {
 	}
 	
 	
-//	private int getCurrentWormIndex() {
-//		return currentWormIndex;
-//	}
-//
-//	private void setCurrentWormIndex(int currentWormIndex) {
-//		this.currentWormIndex = currentWormIndex;
-//	}
-//
-//	public Worm getCurrentWorm(){
-//		return this.worms.get(this.getCurrentWormIndex());
-//	}
+	private int getCurrentWormIndex() {
+		return currentWormIndex;
+	}
 
-//	public void startNextTurn(){
-//		if (getCurrentWormIndex() >= (worms.size()-1))
-//			startNextRound();
-//		else
-//			setCurrentWormIndex(getCurrentWormIndex()+1);
-//
-//	}
-//
-//	private void startNextRound(){
-//
-//		for (Worm worm: worms){
-//			worm.newRound();
-//		}
-//		setCurrentWormIndex(0);
-//
-//	}
-//
-//	public void	startGame(){
-//		setCurrentWormIndex(0);
-//	}
+	private void setCurrentWormIndex(int currentWormIndex) {
+		this.currentWormIndex = currentWormIndex;
+	}
+
+	public Worm getCurrentWorm(){
+		return ((ArrayList<Worm>) getWorms()).get(this.getCurrentWormIndex());
+	}
+
+	public void startNextTurn(){
+		if (getCurrentWormIndex() >= (getWorms().size()-1))
+			startNextRound();
+		else
+			setCurrentWormIndex(getCurrentWormIndex()+1);
+
+	}
+
+	private void startNextRound(){
+
+		for (Worm worm: getWorms()){
+			worm.newRound();
+		}
+		setCurrentWormIndex(0);
+
+	}
+
+	public void	startGame(){
+		setCurrentWormIndex(0);
+	}
 
 	
-		
-//	private ArrayList<Food> foods = new ArrayList<Food>();
-//	private ArrayList<Worm> worms = new ArrayList<Worm>();
-//	private int currentWormIndex;
+	private int currentWormIndex;
 	
 	/**
 	 * Return the object of this world at the given index.
@@ -323,14 +319,12 @@ public class World {
 	 */
 	public Collection<Food> getFood() {
 		ArrayList<Object> lijst = new ArrayList<Object>(objects);
-		System.out.println("object " + objects);
 		Collection<Food> food = new ArrayList<Food>();
 		
 		
 		for (int i = 0; i < lijst.size(); i++) {
 			if (lijst.get(i) instanceof Food)
 				food.add((Food) lijst.get(i));
-				System.out.println("einde if " + food);
 		}
 		return food;
 	}
