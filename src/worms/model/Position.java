@@ -28,7 +28,7 @@ public class Position {
 				randYpos = (Math.random()*world.getHeight()) + (Math.sin(randomDirection)*radius*0.1);
 			}
 			
-			if (!world.isAjacent(randYpos, randXpos, radius)) {	
+			if (!this.isValidXPos(randXpos, world) || !this.isValidYPos(randYpos, world)) {	
 				this.setAdjacantPosition(world, object);
 			}
 			this.setXpos(randXpos);
