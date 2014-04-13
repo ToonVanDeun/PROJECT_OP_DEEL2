@@ -186,19 +186,39 @@ public class World {
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
 		
-		return ((! this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale)] ));
+		return ((! this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ));
 	}
 	
 	public boolean isAjacent(double x, double y, double radius) {
+		return false;
+		/**
+		 
+		int mapWidth = passableMap[1].length; //eigenlijk height
+		int mapHeight = passableMap.length; //eigenlijk width
+		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
+		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
+		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
+		
+		return ((this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ) &&
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y+radius)*yScale)][(int) Math.round(x*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y-radius)*yScale)][(int) Math.round(x*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x+radius)*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] ));
+						
+		*/
+		
+		/**
 		int mapWidth = passableMap[1].length; //eigenlijk height
 		int mapHeight = passableMap.length; //eigenlijk width
 		double xScale = (mapWidth/this.getWidth());
 		double yScale = (mapHeight/this.getHeight());
-		return ((! this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale)] ) &&
+		return ((! this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ) &&
 				((!this.getPassableMap() [(int) Math.round(y*yScale+0.1*radius)][(int) Math.round(x*xScale)]) ||
 				(!this.getPassableMap() [(int) Math.round(y*yScale-0.1*radius)][(int) Math.round(x*xScale)]) ||
 				(!this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale+0.1*radius)]) ||
 				(!this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale-0.1*radius)])));
+		*/
+		
 	}
 	
 	public Random getPerimeter() {
