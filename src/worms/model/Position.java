@@ -13,30 +13,34 @@ public class Position {
 	}
 	
 	public void setAdjacantPosition(World world, Object object) {
-		double randXpos = (Math.random()*world.getWidth());
-		double randYpos = (Math.random()*world.getHeight());
+		double radius = object.getRadius();
+		double randXpos = 1*radius+ (Math.random()*(world.getWidth()-2*radius));
+		double randYpos = 1*radius+ (Math.random()*(world.getHeight()-2*radius));
 		
 		double toOrFromCenter = (Math.random()*1);
 		
-		if (!this.isValidXPos(randXpos, world) || !this.isValidYPos(randYpos, world) || 
-				world.isImpassable(randXpos, randYpos, 1)) {	
-			this.setAdjacantPosition(world, object);
-		}
-		
-		if (!world.isImpassable(randXpos, randYpos, 1)) {
+		if (!world.isImpassable(randXpos, randYpos, radius)) {
 			double randomDirection = getDirectionToCenter(world)+Math.PI*toOrFromCenter;
-			double radius = object.getRadius();
 					
-			while (!world.isAjacent(randXpos, randYpos, radius) && 
-					(this.isValidXPos(randXpos, world) && this.isValidYPos(randYpos, world)) ) {
+			while (	!world.isAjacent(randXpos, randYpos, radius) 
+					&& (this.isValidXPos(randXpos, world, radius) 
+					&& this.isValidYPos(randYpos, world, radius))) {
 				randXpos = (Math.random()*world.getWidth()) + (Math.cos(randomDirection)*radius*0.1);
 				randYpos = (Math.random()*world.getHeight()) + (Math.sin(randomDirection)*radius*0.1);
-			}	
-	
-		
-		setRandomPosInWorld(world);
+
+				if (!this.isValidXPos(randXpos, world, radius) || !this.isValidYPos(randYpos, world, radius)) {	
+					this.setAdjacantPosition(world, object);
+			}
+			this.setXpos(randXpos);
+			this.setYpos(randYpos);
+			}
 		}
+		else{
+			this.setAdjacantPosition(world, object);
+		}
+			
 	}
+
 	
 	
 		
@@ -86,6 +90,14 @@ public class Position {
 	@Raw
 	public boolean isValidYPos(double pos, World world) {
 		return ! (Double.isNaN(pos)) && pos>0 && pos<world.getHeight();
+	}
+	@Raw
+	public boolean isValidXPos(double pos, World world, double radius) {
+		return !(Double.isNaN(pos)) && (pos)>(0+radius) && pos<(world.getWidth()-radius);
+	}
+	@Raw
+	public boolean isValidYPos(double pos, World world, double radius) {
+		return ! (Double.isNaN(pos)) && (pos)>(0+radius) && pos<(world.getHeight()-radius);
 	}
 		
 	private double xpos;
