@@ -96,6 +96,14 @@ public class Worm extends Object {
 		this.heal(health);
 	
 	}
+	// team
+	
+	public String getTeamName(){
+		return this.teamName;
+	}
+	public void setTeamName(Team team){
+		teamName = team.getName();
+	}
 	//position (defensive)
 	/**
 	 * Returns the x-position of the worm.
@@ -620,6 +628,7 @@ public class Worm extends Object {
 	
 	
 	// variables
+	private String teamName;
 	private Position position;
 //	private double xpos;
 //	private double ypos;

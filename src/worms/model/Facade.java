@@ -302,8 +302,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public String getTeamName(Worm worm) {
-		// TODO Auto-generated method stub
-		return null;
+		return worm.getTeamName();
 	}
 	/**
 	 * Returns the winner of the game.
