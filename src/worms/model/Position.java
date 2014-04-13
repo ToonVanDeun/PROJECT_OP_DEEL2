@@ -13,22 +13,20 @@ public class Position {
 	}
 	
 	public void setAdjacantPosition(World world, Object object) {
-		double randXpos = (Math.random()*world.getWidth());
-		double randYpos = (Math.random()*world.getHeight());
 		
-		if (world.isImpassable(randXpos, randYpos, 1)) {
+		
+		if (world.isImpassable(xpos, ypos, 1)) {
 			double randomDirection = getDirectionToCenter(world);
 			double radius = object.getRadius();
 					
-			while ( (! world.getPassableMap() [(int) randXpos][(int) randYpos]) &&
-					(this.isValidXPos(randXpos, world) && this.isValidYPos(randYpos, world)) ) {
-				randXpos = randXpos + (Math.cos(randomDirection)*radius*0.1);
-				randYpos = randYpos + (Math.sin(randomDirection)*radius*0.1);
+			while ( (! world.getPassableMap() [(int) xpos][(int) ypos]) &&
+					(this.isValidXPos(xpos, world) && this.isValidYPos(ypos, world)) ) {
+				xpos = (Math.random()*world.getWidth()) + (Math.cos(randomDirection)*radius*0.1);
+				ypos = (Math.random()*world.getHeight()) + (Math.sin(randomDirection)*radius*0.1);
 			}
 				
-			if (world.isAjacent(randXpos, randYpos, radius)) {	
-				this.setXpos(randXpos);
-				this.setYpos(randYpos);
+			if (world.isAjacent(xpos, ypos, radius)) {	
+				this.setRandomPosInWorld(world);
 			}
 			else {
 				this.setAdjacantPosition(world, object);
