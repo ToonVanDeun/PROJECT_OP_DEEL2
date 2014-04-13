@@ -36,6 +36,8 @@ public class Position {
 		
 		}
 	}
+	
+	
 		
 	public double getDirectionToCenter(World world) {
 		double centerX = world.getWidth()/2;

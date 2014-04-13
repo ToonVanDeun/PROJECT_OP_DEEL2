@@ -20,8 +20,6 @@ import be.kuleuven.cs.som.annotate.Raw;
  */
 public class World {
 	public World(double width, double height, boolean[][] passableMap, Random random) {
-		System.out.println(width);
-		System.out.println(height);
 		this.setHeight(height);
 		this.setWidth(width);
 		this.setPassableMap(passableMap);
@@ -120,7 +118,7 @@ public class World {
 		return this.upperboundHeight;
 	}
 	public boolean[][] getPassableMap() {
-		return passableMap;
+		return this.passableMap;
 	}
 	public void setPassableMap(boolean[][] passableMap) {
 		int mapWidth = passableMap.length;
