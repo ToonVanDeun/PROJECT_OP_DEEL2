@@ -190,9 +190,6 @@ public class World {
 	}
 	
 	public boolean isAjacent(double x, double y, double radius) {
-		return false;
-		/**
-		 
 		int mapWidth = passableMap[1].length; //eigenlijk height
 		int mapHeight = passableMap.length; //eigenlijk width
 		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
@@ -200,12 +197,12 @@ public class World {
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
 		
 		return ((this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ) &&
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y+radius)*yScale)][(int) Math.round(x*xScale)] ) ||
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y-radius)*yScale)][(int) Math.round(x*xScale)] ) ||
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x+radius)*xScale)] ) ||
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] ));
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y+0.1*radius)*yScale)][(int) Math.round(x*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y-0.1*radius)*yScale)][(int) Math.round(x*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x+0.1*radius)*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-0.1*radius)*xScale)] ));
 						
-		*/
+		
 		
 		/**
 		int mapWidth = passableMap[1].length; //eigenlijk height
