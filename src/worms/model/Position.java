@@ -13,8 +13,6 @@ public class Position {
 	}
 	
 	public void setAdjacantPosition(World world, Object object) {
-		
-		
 		if (world.isImpassable(xpos, ypos, 1)) {
 			double randomDirection = getDirectionToCenter(world);
 			double radius = object.getRadius();
