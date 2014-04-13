@@ -2,7 +2,7 @@ package worms.model;
 import java.util.Collection;
 import java.util.Random;
 
-import worms.gui.Level;
+
 import worms.model.IFacade;
 import worms.model.Worm;
 
@@ -287,8 +287,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public double getRadius(Projectile projectile) {
-		// TODO Auto-generated method stub
-		return 0;
+		return projectile.getRadius();
 	}
 	/**
 	 * Returns the selected weapon.
@@ -333,8 +332,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public double getX(Projectile projectile) {
-		// TODO Auto-generated method stub
-		return 0;
+		return projectile.getXpos();
 	}
 	/**
 	 * Gets the food's y-position.
@@ -348,8 +346,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public double getY(Projectile projectile) {
-		// TODO Auto-generated method stub
-		return 0;
+		return projectile.getYpos();
 	}
 	/**
 	 * Returns whether a food object is active.
