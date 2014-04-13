@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
@@ -22,7 +21,8 @@ public class World {
 	public World(double width, double height, boolean[][] passableMap, Random random) {
 		this.setHeight(height);
 		this.setWidth(width);
-		this.setPassableMap(passableMap);
+		//this.setPassableMap(passableMap);
+		this.passableMap = passableMap;
 		this.perimeter = random;
 		
 	}
@@ -120,7 +120,32 @@ public class World {
 	public boolean[][] getPassableMap() {
 		return this.passableMap;
 	}
+	
 	public void setPassableMap(boolean[][] passableMap) {
+		//bepaald het aantal pixel in de breedte en de hoogte van passableMap
+		int mapWidth = passableMap[1].length; //eigenlijk height
+		int mapHeight = passableMap.length; //eigenlijk width
+		System.out.println("map width " + mapWidth);
+		System.out.println("map height " + mapHeight);
+		// maakt scaledPassableMap aan met hoogte en breetje zoals passableMap 
+		boolean[][] scaledPassableMap = new boolean[mapWidth][mapHeight];
+		//berekent de schalingsfactor
+		double xScale = (this.getWidth() / mapWidth);
+		double yScale = (this.getHeight() / mapHeight);
+		System.out.println("xscale " + xScale);
+		System.out.println("yscale " + yScale);
+		int x=0;
+		int y=0;
+		for (y=0 ; y< mapHeight ; y++){
+			for (x=0 ; x< mapWidth ; x++){
+				scaledPassableMap[x][y] = passableMap[y][x];
+				
+			}
+		}
+	}
+	
+	
+	public void setPassableMap2(boolean[][] passableMap) {
 		int mapWidth = passableMap.length;
 		int mapHeight = passableMap[1].length;
 		System.out.println("mapheight "+mapHeight);
@@ -155,19 +180,25 @@ public class World {
 	
 	
 	public boolean isImpassable(double x, double y, double radius) {
-		return ((! this.getPassableMap() [(int) x][(int) y] ) &&
-				((!this.getPassableMap() [(int) (x+radius)][(int) y]) ||
-				(!this.getPassableMap() [(int) (x-radius)][(int) y]) ||
-				(!this.getPassableMap() [(int) x][(int) (y+radius)]) ||
-				(!this.getPassableMap() [(int) x][(int) (y-radius)])));
+		int mapWidth = passableMap[1].length; //eigenlijk height
+		int mapHeight = passableMap.length; //eigenlijk width
+		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
+		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
+		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
+		
+		return ((! this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale)] ));
 	}
 	
 	public boolean isAjacent(double x, double y, double radius) {
-		return( (this.getPassableMap() [(int) x][(int) y] ) &&
-				((!this.getPassableMap() [(int) (x+0.1*radius)][(int) y]) ||
-				(!this.getPassableMap() [(int) (x-0.1*radius)][(int) y]) ||
-				(!this.getPassableMap() [(int) x][(int) (y+0.1*radius)]) ||
-				(!this.getPassableMap() [(int) x][(int) (y-0.1*radius)])));
+		int mapWidth = passableMap[1].length; //eigenlijk height
+		int mapHeight = passableMap.length; //eigenlijk width
+		double xScale = (mapWidth/this.getWidth());
+		double yScale = (mapHeight/this.getHeight());
+		return ((! this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale)] ) &&
+				((!this.getPassableMap() [(int) Math.round(y*yScale+0.1*radius)][(int) Math.round(x*xScale)]) ||
+				(!this.getPassableMap() [(int) Math.round(y*yScale-0.1*radius)][(int) Math.round(x*xScale)]) ||
+				(!this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale+0.1*radius)]) ||
+				(!this.getPassableMap() [(int) Math.round(y*yScale)][(int) Math.round(x*xScale-0.1*radius)])));
 	}
 	
 	public Random getPerimeter() {
