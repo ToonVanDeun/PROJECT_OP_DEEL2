@@ -52,24 +52,56 @@ public class Position {
 		return direction;
 		
 	}
-
+	/**
+	 * Sets the x-position of the object.
+	 * @param xpos
+	 * 			The (new) x-position of the object
+	 * @post	the given x-position is the new x-position of the object.
+	 * 			| new.getXpos() == xpos
+	 * @throws	IllegalArgumentException
+	 * 			If xpos isn't a valid x-position the exception is thrown.
+	 * 			| ! isValidPos(xpos)
+	 */
 	public void setXpos(double xpos) throws IllegalArgumentException {
 		if (! isValidPos(xpos))
 			throw new IllegalArgumentException();
 		this.xpos = xpos;
 	}
-	
+	/**
+	 * Returns the x-position of the object.
+	 */
 	public double getXpos() {
 		return this.xpos;
 	}
+	/**
+	 * Sets the y-position of the object.
+	 * @param ypos
+	 * 			The (new) y-position of the object
+	 * @post	the given y-position is the new y-position of the object.
+	 * 			| new.getYpos() == ypos
+	 * @throws	IllegalArgumentException
+	 * 			If ypos isn't a valid y position the exception is thrown.
+	 * 			| ! isValidPos(ypos)
+	 */
 	public void setYpos(double ypos) throws IllegalArgumentException {
 		if (! isValidPos(ypos))
 			throw new IllegalArgumentException();
 		this.ypos = ypos;
 	}
+	/**
+	 * Returns the y-position of the object.
+	 */
 	public double getYpos() {
 		return this.ypos;
 	}
+	/**
+	 * Checks whether the given position is a valid position.
+	 * @param	pos
+	 * 			The positions that needs to be checked.
+	 * @return 	True if the given position (pos) is a valid position.
+	 * 			If the given position isn't a valid position (not a number (NaN),
+	 * 			the method returns false.
+	 */
 	@Raw
 	public boolean isValidPos(double pos) {
 		return ! (Double.isNaN(pos));

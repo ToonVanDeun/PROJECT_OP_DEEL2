@@ -120,7 +120,7 @@ public class Worm extends Object {
 	 * 			| new.getXpos() == xpos
 	 * @throws	IllegalArgumentException
 	 * 			If xpos isn't a valid x-position the exception is thrown.
-	 * 			| ! isValidXpos(xpos)
+	 * 			| ! isValidPos(xpos)
 	 */
 	@Raw
 	private void setXpos(double xpos) {
@@ -158,6 +158,15 @@ public class Worm extends Object {
 	@Raw
 	public boolean isValidPos(double pos) {
 		return ! (Double.isNaN(pos));
+	}
+	
+	public boolean canFall() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	public void fall() {
+		// TODO Auto-generated method stub
 	}
 	
 	//direction (nominal)

@@ -48,16 +48,44 @@ import be.kuleuven.cs.som.annotate.Raw;
 		public double getRadius() {
 			return this.radius;
 		}
+		
+		//position (defensive)
+		
+		/**
+		 * Sets the x-position of the food.
+		 * @param xpos
+		 * 			The (new) x-position of the food
+		 * @post	the given x-position is the new x-position of the food.
+		 * 			| new.getXpos() == xpos
+		 * @throws	IllegalArgumentException
+		 * 			If xpos isn't a valid x-position the exception is thrown.
+		 * 			| ! position.isValidXpos(xpos)
+		 */
 		public void setXpos(double xpos) {
 			position.setXpos(xpos);
 		}
-		
+		/**
+		 * Returns the x-position of the food.
+		 */
 		public double getXpos() {
 			return position.getXpos();
 		}
+		/**
+		 * Returns the y-position of the food.
+		 */
 		public double getYpos() {
 			return position.getYpos();
 		}
+		/**
+		 * Sets the y-position of the food.
+		 * @param ypos
+		 * 			The (new) y-position of the food
+		 * @post	the given y-position is the new y-position of the food.
+		 * 			| new.getYpos() == ypos
+		 * @throws	IllegalArgumentException
+		 * 			If ypos isn't a valid y-position the exception is thrown.
+		 * 			| ! position.isValidYpos(ypos)
+		 */
 		public void setYpos(double ypos) {
 			position.setYpos(ypos);
 		}
