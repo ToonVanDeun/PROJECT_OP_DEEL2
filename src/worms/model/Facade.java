@@ -367,7 +367,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean isAdjacent(World world, double x, double y, double radius) {
-		return world.isAjacent(x, y, radius);
+		return world.isAdjacent(x, y, radius);
 	}
 	/**
 	 * Returns whether a worm is alive.
