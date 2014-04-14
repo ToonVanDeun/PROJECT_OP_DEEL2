@@ -14,8 +14,8 @@ public class Position {
 	
 	public void setAdjacantPosition(World world, Object object) {
 		double radius = object.getRadius();
-		double randXpos = (Math.random()*world.getWidth());
-		double randYpos = (Math.random()*world.getHeight());
+		double randXpos = 1*radius+ (Math.random()*(world.getWidth()-2*radius));
+		double randYpos = 1*radius+ (Math.random()*(world.getHeight()-2*radius));
 		
 		double toOrFromCenter = (Math.random()*1);
 		
