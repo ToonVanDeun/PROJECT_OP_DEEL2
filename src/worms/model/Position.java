@@ -40,40 +40,7 @@ public class Position {
 			this.setYpos(randYpos);
 		}
 	}
-//		double radius = object.getRadius();
-//		double randXpos = 1*radius+ (Math.random()*(world.getWidth()-2*radius));
-//		double randYpos = 1*radius+ (Math.random()*(world.getHeight()-2*radius));
-//		
-//		double toOrFromCenter = (Math.random()*1);
-//		
-//		if (!world.isImpassable(randXpos, randYpos, radius)) {
-//			double randomDirection = getDirectionToCenter(world)+Math.PI*toOrFromCenter;
-//					
-//			while (	!world.isAdjacent(randXpos, randYpos, radius) 
-//					&& (this.isValidXPos(randXpos, world, radius) 
-//					&& (this.isValidYPos(randYpos, world, radius)))) {
-//				randXpos = (Math.random()*world.getWidth()) 
-//						+ (Math.cos(randomDirection)*radius*0.1);
-//				randYpos = (Math.random()*world.getHeight())
-//						+ (Math.sin(randomDirection)*radius*0.1);
-//
-//				if (!this.isValidXPos(randXpos, world, radius) ||
-//						!this.isValidYPos(randYpos, world, radius)) {	
-//					this.setAdjacantPosition(world, object);
-//			}
-//			this.setXpos(randXpos);
-//			this.setYpos(randYpos);
-//			}
-//		}
-//		else {
-//			this.setAdjacantPosition(world, object);
-//		}
-//			
-//	}
 
-	
-	
-		
 	public double getDirectionToCenter(World world) {
 		double centerX = world.getWidth()/2;
 		double centerY = world.getHeight()/2;
@@ -84,12 +51,6 @@ public class Position {
 			direction = direction + Math.PI;
 		return direction;
 		
-	}
-		
-
-	private void setRandomPosInWorld(World world) {
-		setXpos(Math.random()*world.getWidth());
-		setYpos(Math.random()*world.getHeight());
 	}
 
 	public void setXpos(double xpos) throws IllegalArgumentException {
