@@ -635,6 +635,14 @@ public class Worm extends Object {
 		return step;
 	}
 	
+	//Eating food
+	
+//	public void eatFood(World world, Food food){
+//		if ((this.getXpos()+this.getRadius()) == (food.getXpos()+food.getRadius()) || 
+//				(this.getYpos()+this.getRadius()) == (food.getYpos()+food.getRadius())) {
+//			
+//		}
+//	}
 	
 	// variables
 	private String teamName;
