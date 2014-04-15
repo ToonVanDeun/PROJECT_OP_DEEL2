@@ -502,26 +502,28 @@ public class Worm extends Object {
 		double minS = this.getDirection();
 		
 		
-			for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
-				x2 = x+Math.cos(direction)*a;
-				y2 = y+Math.sin(direction)*a;
-				if (world.isAdjacent(x2, y2, this.getRadius())) {
-					double d = Math.sqrt(Math.pow((x-x2),2)+Math.pow((y-y2),2));
-					double s = Math.atan((x-x2)/(y-y2));
-					if ((d>=maxD) && (s<minS)) {
-						minS=s;
-						maxD=d;
-						x2Max = x2;
-						y2Max= y2;
-					}
+		for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
+			x2 = x+Math.cos(direction)*a;
+			y2 = y+Math.sin(direction)*a;
+			if (world.isAdjacent(x2, y2, this.getRadius()) &&
+					!world.isImpassable(x2, y2, this.getRadius())) {
+				double d = Math.sqrt(Math.pow((x-x2),2)+Math.pow((y-y2),2));
+				double s = Math.atan((x-x2)/(y-y2));
+				if ((d>=maxD) && (s<minS)) {
+					minS=s;
+					maxD=d;
+					x2Max = x2;
+					y2Max= y2;
+					this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
 				}
 			}
-			direction = direction +0.0175;
+		}
+		direction = direction +0.0175;
 		
 		this.setXpos(x2Max);
 		this.setYpos(y2Max);
 		
-		//this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
+		
 	}
 	
 	// move ~ actionpoints (total)
