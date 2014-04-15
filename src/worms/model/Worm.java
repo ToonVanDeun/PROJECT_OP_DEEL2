@@ -73,7 +73,7 @@ public class Worm extends Object {
 		this.setName(name);
 		this.setActionPoints(maxActionPoints);
 		this.setHitPoints(maxHitPoints);
-		this.setIsAlive(true);
+		//this.setIsAlive();
 	}
 
 	
@@ -87,15 +87,14 @@ public class Worm extends Object {
 		this.setName("Worm");
 		this.setActionPoints(this.getMaxActionPoints());
 		this.setHitPoints(this.getMaxHitPoints());
-		this.setIsAlive(true);
+		//this.setIsAlive();
 		
 	}
 	
 	public void newRound(){
-		
-		this.renewActionPoints();
-		this.heal(health);
-	
+		if (this.alive == true)
+			this.renewActionPoints();
+			this.heal(health);
 	}
 	// team
 	
@@ -175,8 +174,13 @@ public class Worm extends Object {
 				this.setYpos(this.getYpos()-this.getRadius());
 				distance += this.getRadius();
 				this.setHitPoints(hitPoints-(3*(int) Math.floor(distance)));
+				this.setIsAlive();
+				this.deleteWorm(world);
 			}
 		}
+		System.out.println("fall ok");
+		
+		
 	}
 	
 	//direction (nominal)
@@ -455,23 +459,42 @@ public class Worm extends Object {
 	 * 			|new.getHitPoint() >= 0
 	 */
 	private void setHitPoints(int hitPoints){
-		if (hitPoints >= (this.getMaxHitPoints()))
+		if (hitPoints >= (this.getMaxHitPoints())) {
 			this.hitPoints = this.getMaxHitPoints();
-		else if (hitPoints <0)
-			this.hitPoints = 0;
-		else 
-			this.hitPoints = hitPoints;
+			System.out.println("Sethit 1 ok");
+		} else if (hitPoints <0) {
+				this.hitPoints = 0;
+				System.out.println("Sethit 2 ok");
+		} else if (hitPoints < this.getMaxHitPoints()) {
+				this.hitPoints = hitPoints;
+				System.out.println("Sethit 3 ok");
+		} 
+		this.setIsAlive();
+		System.out.println("setHitPoints Helemaal ok");
 	}
-	public void setIsAlive(boolean alive){
-		this.alive = alive;
+	public void setIsAlive(){
+		if(this.getHitPoints()==0) {
+			this.alive = false;
+			System.out.println("SetAlive 1 ok");
+		}
+		else if(this.getHitPoints() > 0){
+			this.alive = true;
+			System.out.println("SetAlive 2 ok");
+		}
+		System.out.println("SetAlive ok");
 	}
 
 	public boolean getIsAlive(){
 		return this.alive;
 	}
+	public void deleteWorm(World world){
+		if (this.getIsAlive() == false)
+			world.deleteWorm();
+	}
 	
 	public void heal(int amount){
-		this.setHitPoints(this.getHitPoints()+amount);
+		if (this.alive)
+			this.setHitPoints(this.getHitPoints()+amount);
 	}
 	//move (defensive)
 	/**

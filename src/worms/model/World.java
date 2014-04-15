@@ -394,6 +394,10 @@ public class World {
 		}
 		return worms;
 	}
+	
+	public void deleteWorm(){
+		((Collection<Worm>) getWorms()).remove(this.getCurrentWorm());
+	}
 
 	/**
 	 * Return a list of all the objects that is food of this world.
