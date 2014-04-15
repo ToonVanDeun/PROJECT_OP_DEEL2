@@ -99,8 +99,8 @@ public abstract class Object {
 	 */	
 	public void setWorldTo(World world)
 			throws IllegalArgumentException, IllegalStateException {
-		if ((world == null)
-				|| (!world.canHaveAsObjectAt(this, world.getNbObjects()+1)))
+		if ((world == null))
+				//|| (!world.canHaveAsObjectAt(this, world.getNbObjects()+1)))
 			throw new IllegalArgumentException();
 		if (this.hasWorld())
 			throw new IllegalStateException("Already belongs to a world!");

@@ -79,6 +79,7 @@ public class Worm extends Object {
 	
 	public Worm(World world){
 		super(world);
+		this.setWorldTo(world);
 		Random perimeter = world.getPerimeter();
 		this.setRadius(radiusLowerBound);
 		this.position = new Position(world, this);
@@ -484,6 +485,43 @@ public class Worm extends Object {
 		this.setXpos(this.getXpos() + (Math.cos(this.getDirection())*this.getRadius()));
 		this.setYpos(this.getYpos() + (Math.sin(this.getDirection())*this.getRadius()));
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
+	}
+	
+	public void move2() {
+		World world = this.getWorld(); //werled waarin de worm zich bevind.
+		double x = this.getXpos();
+		double y = this.getYpos();
+		double x2 = x;
+		double y2 = y;
+		double x2Max = x2;
+		double y2Max= y2;
+		double c=-0.7875;
+		double direction = this.getDirection() + c;
+		
+		double maxD = 0;
+		double minS = this.getDirection();
+		
+		while (c<=0.7875) {
+			for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
+				x2 = x+Math.cos(direction)*a;
+				y2 = y+Math.sin(direction)*a;
+				if (world.isAdjacent(x2, y2, this.getRadius())) {
+					double d = Math.sqrt(Math.pow((x-x2),2)+Math.pow((y-y2),2));
+					double s = Math.atan((x-x2)/(y-y2));
+					if ((d>=maxD) && (s<minS)) {
+						minS=s;
+						maxD=d;
+						x2Max = x2;
+						y2Max= y2;
+					}
+				}
+			}
+			direction = direction +0.0175;
+		}
+		this.setXpos(x2Max);
+		this.setYpos(y2Max);
+		
+		//this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
 	}
 	
 	// move ~ actionpoints (total)

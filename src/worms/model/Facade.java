@@ -417,7 +417,7 @@ public  class Facade implements IFacade {
 	@Override
 	public void move(Worm worm) {
 		try{
-			worm.move();
+			worm.move2();
 		} catch (IllegalArgumentException exc) {
 			throw new ModelException("not allowed to move");
 		}

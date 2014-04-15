@@ -142,11 +142,15 @@ public class World {
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
 		
+		if (((x-1.1*radius)<0) || ((x+1.1*radius)>this.getWidth()) || ((y-1.1*radius)<0) || ((y+1.1*radius)>this.getHeight())) {
+			return false;
+		}
+		
 		return ((this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ) &&
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y+0.1*radius)*yScale)][(int) Math.round(x*xScale)] ) ||
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y-0.1*radius)*yScale)][(int) Math.round(x*xScale)] ) ||
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x+0.1*radius)*xScale)] ) ||
-						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-0.1*radius)*xScale)] ));
+						(!this.getPassableMap() [(int) Math.floor((this.getHeight()-y+1.1*radius)*yScale)][(int) Math.round(x*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.floor((this.getHeight()-y-1.1*radius)*yScale)][(int) Math.round(x*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.floor((x+1.1*radius)*xScale)] ) ||
+						(!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-1.1*radius)*xScale)] ));
 	}
 	
 	public Random getPerimeter() {
