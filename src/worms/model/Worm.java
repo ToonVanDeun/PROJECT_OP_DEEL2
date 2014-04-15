@@ -162,12 +162,21 @@ public class Worm extends Object {
 	}
 	
 	public boolean canFall() {
-		// TODO Auto-generated method stub
-		return true;
+		World world = this.getWorld();
+		return( !world.isImpassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
+				!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
 	
-	public void fall() {
-		// TODO Auto-generated method stub
+	public void fall() throws IllegalArgumentException{
+		World world = this.getWorld();
+		double distance = 0;
+		if ( canFall()) {
+			while (!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
+				this.setYpos(this.getYpos()-this.getRadius());
+				distance += this.getRadius();
+				this.setHitPoints(hitPoints-(3*(int) Math.floor(distance)));
+			}
+		}
 	}
 	
 	//direction (nominal)
@@ -487,7 +496,9 @@ public class Worm extends Object {
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
 	}
 	
-	public void move2() {
+	public void move2() throws IllegalArgumentException {
+		if ( ! isValidStep())
+			throw new IllegalArgumentException();
 		World world = this.getWorld(); //wereld waarin de worm zich bevind.
 		double x = this.getXpos();
 		double y = this.getYpos();
@@ -522,8 +533,6 @@ public class Worm extends Object {
 		
 		this.setXpos(x2Max);
 		this.setYpos(y2Max);
-		
-		
 	}
 	
 	// move ~ actionpoints (total)
@@ -611,6 +620,7 @@ public class Worm extends Object {
 			throw new IllegalStateException();
 		this.setXpos(this.getXpos()+this.jumpDistance());
 		this.setActionPoints(0);
+		this.fall();
 	}
 	//~jump ~actionpoints (total)
 	/**

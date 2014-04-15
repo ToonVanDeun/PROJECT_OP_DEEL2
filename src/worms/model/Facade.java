@@ -168,8 +168,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean canFall(Worm worm) {
-		// TODO Auto-generated method stub
-		return false;
+		return worm.canFall();
 	}
 	/**
 	 * Checks whether a given worm can move over a given number of steps.
@@ -208,8 +207,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void fall(Worm worm) {
-		// TODO Auto-generated method stub
-		
+		worm.fall();
 	}
 	/**
 	 * Returns which projectile is active in the world.
@@ -409,7 +407,6 @@ public  class Facade implements IFacade {
 		} catch (IllegalStateException exc) {
 			throw new ModelException("can't jump");
 		}
-		
 	}
 	/**
 	 * Makes a given worm move (in the current direction).
