@@ -151,6 +151,7 @@ public abstract class Object {
 		assert canHaveAsWorld(world);
 		this.world = world;
 	}
+	
 
 	/**
 	 * Variable referencing the world of this object.

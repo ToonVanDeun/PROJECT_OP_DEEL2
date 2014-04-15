@@ -80,9 +80,9 @@ public class Worm extends Object {
 	public Worm(World world){
 		super(world);
 		Random perimeter = world.getPerimeter();
+		this.setRadius(radiusLowerBound);
 		this.position = new Position(world, this);
 		this.setDirection(perimeter.nextDouble()*2*Math.PI);
-		this.setRadius(radiusLowerBound);
 		this.setName("Worm");
 		this.setActionPoints(this.getMaxActionPoints());
 		this.setHitPoints(this.getMaxHitPoints());

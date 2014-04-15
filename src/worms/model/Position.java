@@ -14,44 +14,49 @@ public class Position {
 	
 	public void setAdjacantPosition(World world, Object object) {
 		double radius = object.getRadius();
-		double randXpos = 1*radius+ (Math.random()*(world.getWidth()-2*radius));
-		double randYpos = 1*radius+ (Math.random()*(world.getHeight()-2*radius));
+		double randXpos = radius+ (Math.random()*(world.getWidth()-radius));
+		double randYpos = radius+ (Math.random()*(world.getHeight()-radius));
 		
-		double toOrFromCenter = (Math.random()*1);
+		//double toOrFromCenter = (Math.random()*1);
 		
 		if (world.isImpassable(randXpos, randYpos, radius) ||
-				randXpos>=world.getWidth() || randYpos>=world.getHeight()) {
+				!isValidXPos(randXpos, world) || !isValidYPos(randYpos, world)) {
 			setAdjacantPosition(world,object);
 		}
-		if (!world.isImpassable(randXpos, randYpos, radius) && 
-				(this.isValidXPos(randYpos, world)
-				&& this.isValidYPos(randYpos, world) )) {
-			double randomDirection = getDirectionToCenter(world)+Math.PI*toOrFromCenter;
+		else {
+			//double randomDirection = getDirectionFromCenter(world);
+			double randomDirection = Math.random()*(2*Math.PI);
 			
-			while ((world.isAdjacent(randXpos, randYpos, radius)
-					&& randXpos<world.getWidth() 
-					&& randYpos<world.getHeight()) ) {
-				randXpos = (Math.random()*world.getWidth()) + 
-						(Math.cos(randomDirection)*radius*0.1);
-				randYpos = (Math.random()*world.getHeight())
-						+ (Math.sin(randomDirection)*radius*0.1);
+			while (this.isValidXPos(randXpos, world, radius) 
+					&& this.isValidYPos(randYpos, world, radius) ) {
+				if (world.isAdjacent(randXpos, randYpos, radius)) {
+					break;
+				}
+				else {
+					randXpos += (Math.cos(randomDirection)*radius*0.1);
+					randYpos += (Math.sin(randomDirection)*radius*0.1);
+				}
 			}
 			this.setXpos(randXpos);
 			this.setYpos(randYpos);
 		}
 	}
 
-	public double getDirectionToCenter(World world) {
+	/**
+	 * public double getDirectionFromCenter(World world) {
+		//nog rekening houden met deling door 0
 		double centerX = world.getWidth()/2;
 		double centerY = world.getHeight()/2;
-		double diffX = (centerX - this.getXpos());
-		double diffY = (centerY - this.getYpos());
+		double diffX = (this.getXpos()-centerX);
+		double diffY = (this.getYpos()-centerY);
 		double direction = Math.atan(diffY/diffX);
 		if (diffX < 0)
 			direction = direction + Math.PI;
 		return direction;
 		
 	}
+	*/
+	
 	/**
 	 * Sets the x-position of the object.
 	 * @param xpos
@@ -94,6 +99,7 @@ public class Position {
 	public double getYpos() {
 		return this.ypos;
 	}
+	
 	/**
 	 * Checks whether the given position is a valid position.
 	 * @param	pos
@@ -108,11 +114,11 @@ public class Position {
 	}
 	@Raw
 	public boolean isValidXPos(double pos, World world) {
-		return !(Double.isNaN(pos)) && pos>0 && pos<world.getWidth();
+		return !(Double.isNaN(pos)) && pos>=0 && pos<=world.getWidth();
 	}
 	@Raw
 	public boolean isValidYPos(double pos, World world) {
-		return ! (Double.isNaN(pos)) && pos>0 && pos<world.getHeight();
+		return ! (Double.isNaN(pos)) && pos>=0 && pos<=world.getHeight();
 	}
 	@Raw
 	public boolean isValidXPos(double pos, World world, double radius) {

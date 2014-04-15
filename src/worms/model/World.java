@@ -131,6 +131,10 @@ public class World {
 		return ((! this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ));
 	}
 	
+	public boolean isPassable(double x, double y, double radius) {
+		return !isImpassable(x,y,radius);
+	}
+	
 	public boolean isAdjacent(double x, double y, double radius) {
 		int mapWidth = passableMap[1].length; //eigenlijk height
 		int mapHeight = passableMap.length; //eigenlijk width
