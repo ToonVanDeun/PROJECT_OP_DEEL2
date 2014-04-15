@@ -488,7 +488,7 @@ public class Worm extends Object {
 	}
 	
 	public void move2() {
-		World world = this.getWorld(); //werled waarin de worm zich bevind.
+		World world = this.getWorld(); //wereld waarin de worm zich bevind.
 		double x = this.getXpos();
 		double y = this.getYpos();
 		double x2 = x;
@@ -501,7 +501,7 @@ public class Worm extends Object {
 		double maxD = 0;
 		double minS = this.getDirection();
 		
-		while (c<=0.7875) {
+		
 			for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
 				x2 = x+Math.cos(direction)*a;
 				y2 = y+Math.sin(direction)*a;
@@ -517,7 +517,7 @@ public class Worm extends Object {
 				}
 			}
 			direction = direction +0.0175;
-		}
+		
 		this.setXpos(x2Max);
 		this.setYpos(y2Max);
 		
