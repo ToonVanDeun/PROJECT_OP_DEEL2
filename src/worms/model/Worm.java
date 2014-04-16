@@ -542,6 +542,8 @@ public class Worm extends Object {
 			World world = this.getWorld(); //wereld waarin de worm zich bevind.
 			double x = this.getXpos();
 			double y = this.getYpos();
+			double prevx = x;
+			double prevy = y;
 			double x2 = x;
 			double y2 = y;
 			double x2Max = x2;
@@ -572,7 +574,7 @@ public class Worm extends Object {
 			}
 			this.setXpos(x2Max);
 			this.setYpos(y2Max);
-			this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
+			this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
 			
 			// geval2: Er werd in direction+-45° geen geschikte plaats gevonden
 			//			nagaan of er in direction naar een passable locatie kan verplaatst worden,
@@ -588,6 +590,7 @@ public class Worm extends Object {
 					this.setYpos(pasYpos);
 					//this.setYpos(5); // hier moet Fall() komen, maar dat werkt nog niet
 					this.fall();
+					this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
 				}
 				
 			} 
@@ -618,6 +621,11 @@ public class Worm extends Object {
 	private int computeCostStep(int steps){
 		return Math.abs((int) Math.round((steps)*(Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4.0*Math.sin(this.getDirection()))))));
+	}
+	
+	private int computeCost2(double prevXpos, double prevYpos){
+		return (int) (Math.round(Math.abs(this.getXpos()-prevXpos))
+				+Math.round(4*Math.abs(this.getYpos()-prevYpos)));
 	}
 	/**
 	 * Checks whether a given step in the current direction is a valid step.
