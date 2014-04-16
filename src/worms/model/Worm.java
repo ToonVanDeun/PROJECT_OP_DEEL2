@@ -173,10 +173,10 @@ public class Worm extends Object {
 			while (!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
 				this.setYpos(this.getYpos()-this.getRadius());
 				distance += this.getRadius();
-				this.setHitPoints(hitPoints-(3*(int) Math.floor(distance)));
-				this.setIsAlive();
-				this.deleteWorm(world);
 			}
+			this.setHitPoints(hitPoints-(3*(int) Math.floor(distance)));
+			this.setIsAlive();
+			this.deleteWorm(world);
 		}
 		System.out.println("fall ok");
 		
@@ -535,25 +535,46 @@ public class Worm extends Object {
 		double maxD = 0;
 		double minS = this.getDirection();
 		
-		
-		for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
-			x2 = x+Math.cos(direction)*a;
-			y2 = y+Math.sin(direction)*a;
-			if (world.isAdjacent(x2, y2, this.getRadius()) &&
-					!world.isImpassable(x2, y2, this.getRadius())) {
-				double d = Math.sqrt(Math.pow((x-x2),2)+Math.pow((y-y2),2));
-				double s = Math.atan((x-x2)/(y-y2));
-				if ((d>=maxD) && (s<minS)) {
-					minS=s;
-					maxD=d;
-					x2Max = x2;
-					y2Max= y2;
+		if (canMove2()) {
+			for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
+				x2 = x+Math.cos(direction)*a;
+				y2 = y+Math.sin(direction)*a;
+				if (world.isAdjacent(x2, y2, this.getRadius()) &&
+						world.isPassable(x2, y2, this.getRadius())) {
+					double d = Math.sqrt(Math.pow((x-x2),2)+Math.pow((y-y2),2));
+					double s = Math.atan((x-x2)/(y-y2));
+					if ((d>=maxD) && (s<minS)) {
+						minS=s;
+						maxD=d;
+						x2Max = x2;
+						y2Max= y2;
+					}
 				}
+				direction = direction +0.0175;
 			}
-			direction = direction +0.0175;
+			this.setXpos(x2Max);
+			this.setYpos(y2Max);
+			
+			
+			if ((x2Max == x) && (y2Max == y)) {
+				double pasXpos = x;
+				double pasYpos = y;
+				
+				pasXpos = (x + (Math.cos(this.getDirection())*this.getRadius()));
+				pasYpos = (y + (Math.sin(this.getDirection())*this.getRadius()));
+				if (!world.isAdjacent(pasXpos, pasYpos, this.getRadius()) && world.isPassable(pasXpos, pasYpos, this.getRadius())) {
+					this.setXpos(pasXpos);
+					this.setYpos(pasYpos);
+					this.setYpos(5); // hier moet eigelijk de methode fall() komen, maar die werkt nog niet.
+				}
+				
+			} 
 		}
-		this.setXpos(x2Max);
-		this.setYpos(y2Max);
+	}
+	
+	public boolean canMove2() {
+		World world = this.getWorld();
+		return world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius());
 	}
 	
 	// move ~ actionpoints (total)
