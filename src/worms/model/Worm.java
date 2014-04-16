@@ -170,17 +170,28 @@ public class Worm extends Object {
 		World world = this.getWorld();
 		double distance = 0;
 		if ( canFall()) {
-			while (!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
+			while (world.isPassable(this.getXpos(), this.getYpos(), this.getRadius())){
 				this.setYpos(this.getYpos()-this.getRadius());
 				distance += this.getRadius();
+				if (this.getYpos()<0){
+					this.setYpos(0);
+					this.alive = false;
+					this.deleteWorm(world);
+					break;
+				}
 			}
-			this.setHitPoints(hitPoints-(3*(int) Math.floor(distance)));
-			this.setIsAlive();
-			this.deleteWorm(world);
+			
+			if ((this.getYpos()>=0) && this.getIsAlive()){
+				while (!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
+					this.setYpos(this.getYpos()+0.1*this.getRadius());
+					distance -= 0.1*this.getRadius();
+				}
+				this.setHitPoints(hitPoints-(3*(int) Math.floor(distance)));
+				this.setIsAlive();
+				this.deleteWorm(world);
+			}			
 		}
-		System.out.println("fall ok");
-		
-		
+		System.out.println("fall ok");		
 	}
 	
 	//direction (nominal)
@@ -522,20 +533,22 @@ public class Worm extends Object {
 	public void move2() throws IllegalArgumentException {
 		if ( ! isValidStep())
 			throw new IllegalArgumentException();
-		World world = this.getWorld(); //wereld waarin de worm zich bevind.
-		double x = this.getXpos();
-		double y = this.getYpos();
-		double x2 = x;
-		double y2 = y;
-		double x2Max = x2;
-		double y2Max= y2;
-		double c=-0.7875;
-		double direction = this.getDirection() + c;
+		if (canMove2()) { 
+			World world = this.getWorld(); //wereld waarin de worm zich bevind.
+			double x = this.getXpos();
+			double y = this.getYpos();
+			double x2 = x;
+			double y2 = y;
+			double x2Max = x2;
+			double y2Max= y2;
+			double c=-0.7875;
+			double direction = this.getDirection() + c;
+			
+			double maxD = 0;
+			double minS = this.getDirection();
 		
-		double maxD = 0;
-		double minS = this.getDirection();
-		
-		if (canMove2()) {
+			// geval 1: na gaan of in direction+-45° er een gischike volgende positie is
+			//			en zo ja, ernaar verplaatsen.
 			for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
 				x2 = x+Math.cos(direction)*a;
 				y2 = y+Math.sin(direction)*a;
@@ -555,7 +568,9 @@ public class Worm extends Object {
 			this.setXpos(x2Max);
 			this.setYpos(y2Max);
 			
-			
+			// geval2: Er werd in direction+-45° geen geschikte plaats gevonden
+			//			nagaan of er in direction naar een passable locatie kan verplaatst worden,
+			//			daarnaar verplaatsen en dan vallen (fall).
 			if ((x2Max == x) && (y2Max == y)) {
 				double pasXpos = x;
 				double pasYpos = y;
@@ -565,13 +580,19 @@ public class Worm extends Object {
 				if (!world.isAdjacent(pasXpos, pasYpos, this.getRadius()) && world.isPassable(pasXpos, pasYpos, this.getRadius())) {
 					this.setXpos(pasXpos);
 					this.setYpos(pasYpos);
-					this.setYpos(5); // hier moet Fall() komen, maar dat werkt nog niet
+					//this.setYpos(5); // hier moet Fall() komen, maar dat werkt nog niet
+					this.fall();
 				}
 				
 			} 
 		}
 	}
 	
+	/**
+	 * 
+	 * @return Returns true if the worm is positioned in passable terrain 
+	 * 			and adjacent to impassable terrain.
+	 */
 	public boolean canMove2() {
 		World world = this.getWorld();
 		return world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius());
