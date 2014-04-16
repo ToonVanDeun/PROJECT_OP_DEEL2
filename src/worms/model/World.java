@@ -406,18 +406,14 @@ public class World {
 	/**
 	 * Return a list of all the objects that is food of this world.
 	 * 
-	 * @return The size of the resulting list is smaller than or equal to the number of
+	 * @post The size of the resulting list is smaller than or equal to the number of
 	 *         objects in this world.
 	 *       | result.size() <= getNbObjects()
 	 * @return Each object in the resulting list is food.
-	 *       | for each index in 0..result-size()-1 :
+	 *       | for each index in 0..result.size()-1 :
 	 *       |   result.get(index) == ..........
 	 *       
 	 */
-	
-	//List of Food
-	
-	
 	public Collection<Food> getFood() {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Food> food = new ArrayList<Food>();
@@ -429,6 +425,30 @@ public class World {
 		}
 		return food;
 	}
+	
+	/**
+	 * Return a list of all the objects that is a team in this world.
+	 * 
+	 * @post The size of the resulting list is smaller than or equal to the number of
+	 *         objects in this world.
+	 *       | result.size() <= getNbObjects()
+	 * @return Each object in the resulting list is a team.
+	 *       | for each index in 0..result.size()-1 :
+	 *       |   result.get(index) instanceof Team
+	 *       
+	 */	
+	public Collection<Team> getTeams() {
+		ArrayList<Object> lijst = (ArrayList<Object>) objects;
+		Collection<Team> teams = new ArrayList<Team>();
+		
+		
+		for (int i = 0; i < lijst.size(); i++) {
+			if (lijst.get(i) instanceof Team)
+				teams.add((Team) lijst.get(i));
+		}
+		return teams;
+	}
+	
 
 
 

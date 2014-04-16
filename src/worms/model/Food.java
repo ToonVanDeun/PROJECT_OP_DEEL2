@@ -51,6 +51,20 @@ import be.kuleuven.cs.som.annotate.Raw;
 		
 		//position (defensive)
 		
+		
+		/**
+		 * Returns the x-position of the food.
+		 */
+		public double getXpos() {
+			return position.getXpos();
+		}
+		/**
+		 * Returns the y-position of the food.
+		 */
+		public double getYpos() {
+			return position.getYpos();
+		}
+		
 		/**
 		 * Sets the x-position of the food.
 		 * @param xpos
@@ -64,18 +78,8 @@ import be.kuleuven.cs.som.annotate.Raw;
 		public void setXpos(double xpos) {
 			position.setXpos(xpos);
 		}
-		/**
-		 * Returns the x-position of the food.
-		 */
-		public double getXpos() {
-			return position.getXpos();
-		}
-		/**
-		 * Returns the y-position of the food.
-		 */
-		public double getYpos() {
-			return position.getYpos();
-		}
+		
+		
 		/**
 		 * Sets the y-position of the food.
 		 * @param ypos
@@ -89,6 +93,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 		public void setYpos(double ypos) {
 			position.setYpos(ypos);
 		}
+		
 		private double radius;
 		private Position position;
 		

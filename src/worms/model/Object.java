@@ -25,7 +25,7 @@ public abstract class Object {
 	 *         The world the object is being part of.
 	 * @effect The world of this new object is set to the given
 	 *         world.
-	 *       | setOwnerTo(owner) !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 *       | setWorldTo(world)
 	 */
 	@Raw
 	@Model
@@ -84,7 +84,7 @@ public abstract class Object {
 	 *       | new.getWorld() == world
 	 * @post   The number of objects of the given world
 	 *         is incremented by 1.
-	 *       | (new world).getNbOwnings() == world.getNbOwnings() + 1
+	 *       | (new world).getNbObjects() == world.getNbObjects() + 1
 	 * @post   The given world has this objects as its new last
 	 *         object.
 	 *       | (new world).getObjectAt(getNbObjects()+1) == this
@@ -108,6 +108,22 @@ public abstract class Object {
 		world.addAsObject(this);
 	}
 
+	/**
+	 * Set the owner of this ownable to the given owner.
+	 *
+	 * @param  owner
+	 *         The new owner for this ownable.
+	 * @pre    This ownable can have the given owner as its owner.
+	 *       | canHaveAsOwner(owner)
+	 * @post   The owner of this ownable is the same as the given owner.
+	 *       | new.getOwner() == owner
+	 */
+	@Raw
+	private void setWorld(@Raw World world) {
+		assert canHaveAsWorld(world);
+		this.world = world;
+	}
+	
 	/**
 	 * Unset the world, if any, from this object.
 	 *
@@ -136,26 +152,11 @@ public abstract class Object {
 		return this.radius;
 	}	
 	
-	/**
-	 * Set the owner of this ownable to the given owner.
-	 *
-	 * @param  owner
-	 *         The new owner for this ownable.
-	 * @pre    This ownable can have the given owner as its owner.
-	 *       | canHaveAsOwner(owner)
-	 * @post   The owner of this ownable is the same as the given owner.
-	 *       | new.getOwner() == owner
-	 */
-	@Raw
-	private void setWorld(@Raw World world) {
-		assert canHaveAsWorld(world);
-		this.world = world;
-	}
+	
 
 	/**
 	 * Variable referencing the world of this object.
 	 */
 	private World world;
-		
 	double radius;
 }
