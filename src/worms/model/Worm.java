@@ -565,7 +565,7 @@ public class Worm extends Object {
 				if (!world.isAdjacent(pasXpos, pasYpos, this.getRadius()) && world.isPassable(pasXpos, pasYpos, this.getRadius())) {
 					this.setXpos(pasXpos);
 					this.setYpos(pasYpos);
-					this.setYpos(5); // hier moet eigelijk de methode fall() komen, maar die werkt nog niet.
+					this.setYpos(5); // hier moet Fall() komen, maar dat werkt nog niet
 				}
 				
 			} 
