@@ -7,6 +7,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hamcrest.core.IsAnything;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -696,7 +698,7 @@ public class Worm extends Object {
 	public void jump() throws IllegalStateException {
 		if (! canJump())
 			throw new IllegalStateException();
-		this.setXpos(this.getXpos()+this.jumpDistance());
+		this.setXpos(this.getXpos()+this.jumpXDistance());
 		this.setActionPoints(0);
 		this.fall();
 	}
@@ -724,9 +726,20 @@ public class Worm extends Object {
 	 * Returns the jump distance of a worm.
 	 */
 	@Basic
-	private double jumpDistance() {
+	private double jumpXDistance() {
 		double distance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
 		return distance;	
+		
+	}
+	private double jumpYDistance() {
+		World world = this.getWorld();
+		double yDistance;
+		if (!world.isAdjacent(this.getXpos()+this.jumpXDistance(), this.getYpos(), this.getRadius())) {
+			 yDistance = 10;
+		} else {
+			 yDistance = 0;
+		}
+		return yDistance;
 	}
 	/**
 	 * Returns the time it takes to worm to jump (to his new position).
@@ -742,7 +755,8 @@ public class Worm extends Object {
 		if (this.getDirection() == (Math.PI/2))
 			time = 0;
 		else
-			time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
+			time = Math.sqrt(Math.pow(this.jumpXDistance(),2)+Math.pow(this.jumpYDistance(),2))
+			/(this.jumpVelocity()*Math.cos(this.getDirection()));
 		return time;
 	}
 	/**
