@@ -572,6 +572,7 @@ public class Worm extends Object {
 			}
 			this.setXpos(x2Max);
 			this.setYpos(y2Max);
+			this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
 			
 			// geval2: Er werd in direction+-45° geen geschikte plaats gevonden
 			//			nagaan of er in direction naar een passable locatie kan verplaatst worden,
@@ -696,7 +697,9 @@ public class Worm extends Object {
 	 * Checks whether the worms still has actionpoints and is facing the right direction so he can jump.
 	 */
 	public boolean canJump() {
-		return ((this.getActionPoints() > 0) && ((this.getDirection()<=Math.PI)));
+		World world = this.getWorld();
+		return ((this.getActionPoints() > 0) && ((this.getDirection()<=Math.PI)) &&
+				!world.isImpassable(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
 	//~jump (extra methods used for calculations needed by the method jump.)
 	/**
