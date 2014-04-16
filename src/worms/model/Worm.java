@@ -548,12 +548,10 @@ public class Worm extends Object {
 					maxD=d;
 					x2Max = x2;
 					y2Max= y2;
-					this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
 				}
 			}
+			direction = direction +0.0175;
 		}
-		direction = direction +0.0175;
-		
 		this.setXpos(x2Max);
 		this.setYpos(y2Max);
 	}
