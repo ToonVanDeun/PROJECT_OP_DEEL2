@@ -419,7 +419,7 @@ public class World {
 	
 	
 	public Collection<Food> getFood() {
-		ArrayList<Object> lijst = new ArrayList<Object>(objects);
+		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Food> food = new ArrayList<Food>();
 		
 		

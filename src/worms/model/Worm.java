@@ -1,5 +1,8 @@
 package worms.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -162,31 +165,33 @@ public class Worm extends Object {
 	
 	public boolean canFall() {
 		World world = this.getWorld();
-		return( !world.isImpassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
+		return( world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
 				!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
 	
 	public void fall() throws IllegalArgumentException{
 		World world = this.getWorld();
 		double distance = 0;
+		boolean trigger = false;
 		if ( canFall()) {
 			while (world.isPassable(this.getXpos(), this.getYpos(), this.getRadius())){
 				this.setYpos(this.getYpos()-this.getRadius());
 				distance += this.getRadius();
-				if (this.getYpos()<0){
-					this.setYpos(0);
-					this.alive = false;
-					this.deleteWorm(world);
+				if (this.getYpos()<0) {
+					this.setYpos(0+this.getRadius()*1.1);
+					trigger = true;
+					//this.alive = false;
+					//this.deleteWorm(world);
 					break;
 				}
 			}
 			
-			if ((this.getYpos()>=0) && this.getIsAlive()){
+			if ((this.getYpos()>=0) && !trigger){
 				while (!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
 					this.setYpos(this.getYpos()+0.1*this.getRadius());
 					distance -= 0.1*this.getRadius();
 				}
-				this.setHitPoints(hitPoints-(3*(int) Math.floor(distance)));
+				this.setHitPoints(this.getHitPoints()-(3*(int) Math.floor(distance)));
 				this.setIsAlive();
 				this.deleteWorm(world);
 			}			
@@ -585,6 +590,7 @@ public class Worm extends Object {
 				}
 				
 			} 
+			this.consumeFood();
 		}
 	}
 	
@@ -756,6 +762,40 @@ public class Worm extends Object {
 //			
 //		}
 //	}
+	
+	public void consumeFood() {
+		if (this.canConsumeFood()) {
+			this.setRadius(this.getRadius()*1.1);
+			
+		}
+	}
+	
+	public boolean canConsumeFood() {
+		World world = this.getWorld();
+		double maxDistance = this.getRadius() + 0.2;
+		System.out.println("maxDisctance" + maxDistance);
+		System.out.println("Wx " + this.getXpos());
+		System.out.println("Wy " + this.getYpos());
+		
+		Collection<Food> collection = (world.getFood());
+
+	    for (Food f : collection) {
+	    	System.out.println(f.getXpos());
+	    	System.out.println(f.getYpos());
+	    	if (Math.sqrt(Math.pow(f.getXpos()-this.getXpos(), 2)+
+	    			Math.pow(f.getYpos()-this.getYpos(), 2))<maxDistance) {
+	    		System.out.println("ze overlappen");
+	    		
+	    		//als ze overlappen
+	    		
+	    		return true;
+	    	} else {
+	    		System.out.println("nope");
+	    		return false;
+	    	}
+	    }
+	    return false;
+	}
 	
 	// variables
 	private String teamName;
