@@ -319,8 +319,7 @@ public class Worm extends Object {
 				this.setIsAlive();
 				this.deleteWorm(world);
 			}			
-		}
-		System.out.println("fall ok");		
+		}	
 	}
 	
 	//direction (nominal)
@@ -601,27 +600,20 @@ public class Worm extends Object {
 	private void setHitPoints(int hitPoints){
 		if (hitPoints >= (this.getMaxHitPoints())) {
 			this.hitPoints = this.getMaxHitPoints();
-			System.out.println("Sethit 1 ok");
 		} else if (hitPoints <0) {
 				this.hitPoints = 0;
-				System.out.println("Sethit 2 ok");
 		} else if (hitPoints < this.getMaxHitPoints()) {
 				this.hitPoints = hitPoints;
-				System.out.println("Sethit 3 ok");
 		} 
 		this.setIsAlive();
-		System.out.println("setHitPoints Helemaal ok");
 	}
 	public void setIsAlive(){
 		if(this.getHitPoints()==0) {
 			this.alive = false;
-			System.out.println("SetAlive 1 ok");
 		}
 		else if(this.getHitPoints() > 0){
 			this.alive = true;
-			System.out.println("SetAlive 2 ok");
 		}
-		System.out.println("SetAlive ok");
 	}
 
 	public boolean getIsAlive(){
@@ -817,12 +809,30 @@ public class Worm extends Object {
 	 * 			When the worm has no action point left to jump the exception is thrown.
 	 * 			|! canJump()
 	 */
-	public void jump() throws IllegalStateException {
-		if (! canJump())
+	public void jump(double timeStep) throws IllegalStateException {
+		World world = this.getWorld();
+		System.out.println("jump xpos voor " +this.getXpos());
+		System.out.println("jump ypos voor " +this.getYpos());
+		if (! canJump()) {
 			throw new IllegalStateException();
-		this.setXpos(this.getXpos()+this.jumpXDistance());
-		this.setActionPoints(0);
-		this.fall();
+		}
+		else {
+			System.out.println("jump if");
+			while(world.isPassable(this.jumpXDistance(timeStep), this.jumpYDistance(timeStep), this.getRadius())) {
+				//System.out.println("jump if2");
+				this.setXpos(this.jumpXDistance(timeStep));
+				this.setYpos(this.jumpYDistance(timeStep));
+				this.setActionPoints(0);
+				//System.out.println("jump xpos na " +this.getXpos());
+				//System.out.println("jump ypos na " +this.getYpos());
+			}
+		}
+		System.out.println("jump xpos2 " +this.getXpos());
+		System.out.println("jump ypos2 " +this.getYpos());
+		//this.setXpos(this.jumpStep(this.jumpTime())[0]);
+		//this.setYpos(this.jumpStep(this.jumpTime())[1]);
+		//this.setActionPoints(0);
+		//this.fall();
 	}
 	//~jump ~actionpoints (total)
 	/**
@@ -831,7 +841,7 @@ public class Worm extends Object {
 	public boolean canJump() {
 		World world = this.getWorld();
 		return ((this.getActionPoints() > 0) && ((this.getDirection()<=Math.PI)) &&
-				!world.isImpassable(this.getXpos(), this.getYpos(), this.getRadius()));
+				world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
 	//~jump (extra methods used for calculations needed by the method jump.)
 	/**
@@ -848,19 +858,30 @@ public class Worm extends Object {
 	 * Returns the jump distance of a worm.
 	 */
 	@Basic
-	private double jumpXDistance() {
-		double distance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
-		return distance;	
+	private double jumpXDistance(double timeStep) {
+//		World world = this.getWorld();
+//		if (world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
+//		}
+//		double distance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
+//		return distance;
+		double xDistance = this.jumpStep(timeStep)[0];
+		System.out.println("xdistance " +xDistance);
+		return xDistance;
 		
 	}
-	private double jumpYDistance() {
-		World world = this.getWorld();
-		double yDistance;
-		if (!world.isAdjacent(this.getXpos()+this.jumpXDistance(), this.getYpos(), this.getRadius())) {
-			 yDistance = 10;
-		} else {
-			 yDistance = 0;
-		}
+	private double jumpYDistance(double timeStep) {
+//		World world = this.getWorld();
+//		double yDistance;
+//		if (!world.isAdjacent(this.getXpos()+this.jumpXDistance(), this.getYpos(), this.getRadius())) {
+//			 yDistance = 10;
+//		//	 System.out.println("ydistance1 " +yDistance);
+//		} else {
+//			 yDistance = 0;
+//		//	 System.out.println("ydistance2 " +yDistance);
+//		}
+//		return yDistance;
+		double yDistance = this.jumpStep(timeStep)[1];
+		System.out.println("yDistance " +yDistance);
 		return yDistance;
 	}
 	/**
@@ -870,15 +891,18 @@ public class Worm extends Object {
 	 * 			| ! canJump()
 	 */
 	@Basic
-	public double jumpTime() throws IllegalStateException{
+	public double jumpTime(double timeStep) throws IllegalStateException{
 		double time = 0;
 		if (!this.canJump())
 			throw new IllegalStateException();
 		if (this.getDirection() == (Math.PI/2))
 			time = 0;
 		else
-			time = Math.sqrt(Math.pow(this.jumpXDistance(),2)+Math.pow(this.jumpYDistance(),2))
-			/(this.jumpVelocity()*Math.cos(this.getDirection()));
+			time = Math.sqrt(Math.pow(this.jumpXDistance(timeStep),2)+Math.pow(this.jumpYDistance(timeStep),2))
+			/(this.jumpVelocity()*Math.abs(Math.cos(this.getDirection())));
+//		System.out.println("time x distance" +this.jumpXDistance());
+//		System.out.println("time y distance" +this.jumpYDistance());
+//		System.out.println("time1 " +time);
 		return time;
 	}
 	/**
@@ -892,12 +916,24 @@ public class Worm extends Object {
 	@Basic
 	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
 		double[] step;
+		World world = this.getWorld();
         step = new double[2];
         if (! this.canJump())
         	throw new IllegalStateException();
-        step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
-        step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
-        		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
+        if (!world.isAdjacent(this.getXpos()+this.getRadius(), this.getYpos(), this.getRadius()) 
+        		|| world.isAdjacent(this.getXpos()+this.getRadius(), this.getYpos()+this.getRadius(), this.getRadius()) 
+        		|| world.isAdjacent(this.getXpos()+this.getRadius(), this.getYpos()-this.getRadius(), this.getRadius())
+        		|| world.isAdjacent(this.getXpos(), this.getYpos()+this.getRadius(), this.getRadius())
+        		|| world.isAdjacent(this.getXpos()-this.getRadius(), this.getYpos(), this.getRadius())
+        		|| world.isAdjacent(this.getXpos()-this.getRadius(), this.getYpos()-this.getRadius(), this.getRadius())
+        		|| world.isAdjacent(this.getXpos()-this.getRadius(), this.getYpos()+this.getRadius(), this.getRadius())
+        		|| world.isAdjacent(this.getXpos(), this.getYpos()-this.getRadius(), this.getRadius())) {
+        	step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
+        	step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
+        			0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
+        }
+ //       System.out.println("stap x-as " +step[0]);
+ //       System.out.println("stap y-as " +step[1]);
 		return step;
 	}
 	
