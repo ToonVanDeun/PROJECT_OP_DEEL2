@@ -92,6 +92,7 @@ public class Worm extends Object {
 		this.setName("Worm");
 		this.setActionPoints(this.getMaxActionPoints());
 		this.setHitPoints(this.getMaxHitPoints());
+		this.setTeamRandom();
 		//this.setIsAlive();
 		
 	}
@@ -109,6 +110,127 @@ public class Worm extends Object {
 	public void setTeamName(Team team){
 		teamName = team.getName();
 	}
+	
+	/**
+	 * Return the team of this worm.
+	 *   A null reference is returned if this object is not in a team.
+	 */
+	@Basic
+	@Raw
+	public Team getTeam() {
+		return this.team;
+	}
+
+	/**
+	 * Check whether this worm can have the given team
+	 * as its team.
+	 *
+	 * @param  team
+	 *         The team to check.
+	 * @return True, if the worm is not yet in a team.
+	 * 			| ...
+	 */
+	@Raw
+	public boolean canHaveAsTeam(Team team) {
+		if (team.getAllWorms().contains(this))
+			return false;
+		return true;
+		
+	}
+	/**
+	 * Check whether this worm is in a team.
+	 *
+	 * @return True if and only if the team of this worm is effective.
+	 *       | result == (getTeam() != null)
+	 */
+	@Raw
+	public boolean hasTeam() {
+		return getTeam() != null;
+	}
+
+	/**
+	 * Set the team of this worm to the given team.
+	 *
+	 * @param  team
+	 *         The new team for this worm.
+	 * @post   The team of this worm is the same as the given team.
+	 *       | new.getTeam() == team
+	 * @post   The number of worms of the given team
+	 *         is incremented by 1.
+	 *       | (new team).getNbWorms() == team.getNbWorms() + 1
+	 * @post   The given team has this worm as its new last
+	 *         worm.
+	 *       | (new team).getWormAt(getNbWorms()+1) == this
+	 * @throws IllegalArgumentException
+	 *         The given team is not effective or it cannot have this worm
+	 *         as its new last worm.
+	 *       | (team == null) ||
+	 *       |   (! team.canHaveAsWormAt(this,team.getNbWorms()+1))
+	 * @throws IllegalStateException
+	 *         This worm already belongs to a team.
+	 *       | hasTeam()
+	 */	
+	public void setTeamTo(Team team)
+			throws IllegalArgumentException, IllegalStateException {
+		if ((team == null))
+				//|| (!team.canHaveAsWormAt(this, team.getNbWorms()+1))) 
+			throw new IllegalArgumentException();
+		if (this.hasTeam())
+			throw new IllegalStateException("Already belongs to a world!");
+		setTeam(team);
+		team.addAsWorm(this);
+	}
+
+	/**
+	 * Set the team of this worm to the given team.
+	 *
+	 * @param  team
+	 *         The new team for this worm.
+	 * @pre    This worm can have the given team as its team.
+	 *       | canHaveAsTeam(team)
+	 * @post   The team of this worm is the same as the given team.
+	 *       | new.getTeam() == team
+	 */
+	@Raw
+	private void setTeam(@Raw Team team) {
+		assert canHaveAsTeam(team);
+		this.team = team;
+	}
+	public void setTeamRandom(){
+		World world = this.getWorld();
+		ArrayList<Team> teams = (ArrayList<Team>) world.getTeams();
+		if (!(teams==null)) {
+			int i = teams.size();
+			int randomIndex = (int) (Math.random()*i);
+			this.setTeamTo(teams.get(randomIndex));
+		}
+	
+	}
+	/**
+	 * Unset the team, if any, from this worm.
+	 *
+	 * @post   This worm no longer belongs to a team.
+	 *       | ! new.hasTeam()
+	 * @post   The former team of this worm, if any, no longer
+	 *         has this worm as one of its worms.
+	 *       |    (getTeam() == null)
+	 *       | || (! (new getTeam()).hasAsWorm(worm))
+	 * @post   All worms registered beyond the position at which
+	 *         this worm was registered shift one position to the left.
+	 *       | (getTeam() == null) ||
+	 *       | (for each index in
+	 *       |        getTeam().getIndexOfWorm(worm)+1..getTeam().getNbWorms():
+	 *       |    (new getTeam()).getWormAt(index-1) == getTeam().getWormAt(index) ) 
+	 */
+	public void unsetTeam() {
+		if (hasTeam()) {
+			Team formerTeam = this.getTeam();
+			setTeam(null);
+			formerTeam.removeAsWorm(this);
+		}
+	}
+	
+	
 	//position (defensive)
 	/**
 	 * Returns the x-position of the worm.
@@ -591,8 +713,8 @@ public class Worm extends Object {
 					this.setXpos(pasXpos);
 					this.setYpos(pasYpos);
 					//this.setYpos(5); // hier moet Fall() komen, maar dat werkt nog niet
-					this.fall();
 					this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
+					this.fall();
 				}
 				
 			} 
@@ -824,6 +946,7 @@ public class Worm extends Object {
 	
 	// variables
 	private String teamName;
+	private Team team;
 	private Position position;
 //	private double xpos;
 //	private double ypos;
