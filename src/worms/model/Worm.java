@@ -984,37 +984,42 @@ public class Worm extends Object {
 //	}
 	
 	public void consumeFood() {
-		if (this.canConsumeFood()) {
+		Food food = this.overlappingFood();
+		if (!(food==null)) {
 			this.setRadius(this.getRadius()*1.1);
+			this.setName("Kwetzalkowatel");
+			food.unsetWorld();
 			
 		}
 	}
 	
-	public boolean canConsumeFood() {
+	public Food overlappingFood() {
 		World world = this.getWorld();
 		double maxDistance = this.getRadius() + 0.2;
-		System.out.println("maxDisctance" + maxDistance);
-		System.out.println("Wx " + this.getXpos());
-		System.out.println("Wy " + this.getYpos());
+		Food overlappingFood = null;
+//		System.out.println("maxDisctance" + maxDistance);
+//		System.out.println("Wx " + this.getXpos());
+//		System.out.println("Wy " + this.getYpos());
 		
 		Collection<Food> collection = (world.getFood());
 
 	    for (Food f : collection) {
-	    	System.out.println(f.getXpos());
-	    	System.out.println(f.getYpos());
+//	    	System.out.println(f.getXpos());
+//	    	System.out.println(f.getYpos());
 	    	if (Math.sqrt(Math.pow(f.getXpos()-this.getXpos(), 2)+
-	    			Math.pow(f.getYpos()-this.getYpos(), 2))<maxDistance) {
+	    			Math.pow(f.getYpos()-this.getYpos(), 2))< maxDistance) {
 	    		System.out.println("ze overlappen");
 	    		
 	    		//als ze overlappen
 	    		
-	    		return true;
+	    		overlappingFood = f;
+	    		break;
 	    	} else {
 	    		System.out.println("nope");
-	    		return false;
+	    		overlappingFood = null;
 	    	}
 	    }
-	    return false;
+	    return overlappingFood;
 	}
 	
 	// variables

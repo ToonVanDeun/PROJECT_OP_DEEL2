@@ -143,10 +143,11 @@ public abstract class Object {
 	public void unsetWorld() {
 		if (hasWorld()) {
 			World formerWorld = this.getWorld();
-			setWorld(null);
+			this.world = null;
 			formerWorld.removeAsObject(this);
 		}
 	}
+	
 
 	public double getRadius() {
 		return this.radius;
