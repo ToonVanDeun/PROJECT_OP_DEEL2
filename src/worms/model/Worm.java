@@ -199,11 +199,11 @@ public class Worm extends Object {
 	public void setTeamRandom(){
 		World world = this.getWorld();
 		ArrayList<Team> teams = (ArrayList<Team>) world.getTeams();
-		if (!(teams==null)) {
+		if (!(teams.size()==0)) {
 			int i = teams.size();
 			int randomIndex = (int) (Math.random()*i);
 			this.setTeamTo(teams.get(randomIndex));
-		}
+		} 
 	
 	}
 	/**
@@ -852,6 +852,7 @@ public class Worm extends Object {
 						(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
 					this.setXpos(tempXpos);
 					this.setYpos(tempYpos);
+					this.setActionPoints(0);
 					break;
 				}
 			}
