@@ -846,7 +846,7 @@ public class Worm extends Object {
 			while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
 				tempXpos = this.jumpStep(t)[0];
 				tempYpos = this.jumpStep(t)[1];
-				t += 0.001;
+				t += timeStep;
 				
 				if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
 						(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
