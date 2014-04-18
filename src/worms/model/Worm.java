@@ -834,6 +834,32 @@ public class Worm extends Object {
 		//this.setActionPoints(0);
 		//this.fall();
 	}
+	
+	public void jump2(Double timeStep) {
+		if (this.canJump2()) {
+			World world = this.getWorld();	
+			double origXpos = this.getXpos();
+			double origYpos = this.getYpos();
+			double tempXpos = this.getXpos();
+			double tempYpos = this.getYpos();
+			double t=0;
+			while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
+				tempXpos = this.jumpStep(t)[0];
+				tempYpos = this.jumpStep(t)[1];
+				t += 0.001;
+				
+				if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
+						(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
+					this.setXpos(tempXpos);
+					this.setYpos(tempYpos);
+					break;
+				}
+			}
+			
+			
+		}	
+	}
+	
 	//~jump ~actionpoints (total)
 	/**
 	 * Checks whether the worms still has actionpoints and is facing the right direction so he can jump.
@@ -842,6 +868,13 @@ public class Worm extends Object {
 		World world = this.getWorld();
 		return ((this.getActionPoints() > 0) && ((this.getDirection()<=Math.PI)) &&
 				world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
+	}
+	/**
+	 * Checks whether the worms still has actionpoints is placed in passable terrain.
+	 */
+	public boolean canJump2() {
+		World world = this.getWorld();
+		return ((this.getActionPoints() > 0) && world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
 	//~jump (extra methods used for calculations needed by the method jump.)
 	/**
@@ -885,7 +918,7 @@ public class Worm extends Object {
 	@Basic
 	public double jumpTime(double timeStep) throws IllegalStateException{
 		double time = 0;
-		if (!this.canJump())
+		if (!this.canJump2())
 			throw new IllegalStateException();
 		if (this.getDirection() == (Math.PI/2))
 			time = 0;
@@ -894,6 +927,29 @@ public class Worm extends Object {
 			/(this.jumpVelocity()*Math.abs(Math.cos(this.getDirection())));
 		return time;
 	}
+	
+	public double jumpTime2(double timeStep) {
+		
+		World world = this.getWorld();	
+		double origXpos = this.getXpos();
+		double origYpos = this.getYpos();
+		double tempXpos = this.getXpos();
+		double tempYpos = this.getYpos();
+		double t=0;
+		while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
+			tempXpos = this.jumpStep(t)[0];
+			tempYpos = this.jumpStep(t)[1];
+			t += timeStep;
+			
+			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
+					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
+				return t;
+			}
+		}
+		return t;	
+	}
+	
+	
 	/**
 	 * Returns the worms position during a jump on a given time (after the jump started).
 	 * @param timeAfterLaunch
@@ -906,7 +962,7 @@ public class Worm extends Object {
 	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
 		double[] step;
         step = new double[2];
-        if (! this.canJump())
+        if (! this.canJump2())
         	throw new IllegalStateException();
         
         	step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
