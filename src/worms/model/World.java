@@ -400,7 +400,7 @@ public class World {
 	}
 	
 	public void deleteWorm(){
-		((Collection<Worm>) getWorms()).remove(this.getCurrentWorm());
+		((List<Object>) objects).remove(this.getCurrentWorm());
 	}
 
 	/**
@@ -425,6 +425,7 @@ public class World {
 		}
 		return food;
 	}
+	
 	
 	/**
 	 * Return a list of all the objects that is a team in this world.

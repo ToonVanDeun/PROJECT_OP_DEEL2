@@ -287,6 +287,12 @@ public class Worm extends Object {
 		return ! (Double.isNaN(pos));
 	}
 	
+	public boolean isOutOfTheMap(double xpos, double ypos) {
+		World world= this.getWorld();
+		return !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
+				((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius()))) ;
+	}
+	
 	public boolean canFall() {
 		World world = this.getWorld();
 		return( world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
@@ -390,8 +396,10 @@ public class Worm extends Object {
 	public void setRadius(double radius) throws IllegalArgumentException{
 		if ( ! isValidRadius(radius))
 			throw new IllegalArgumentException();
+		
 		this.radius = radius;
 		this.setMass(this.radius);
+		
 	}
 	/**
 	 * Checks whether a given radius is a valid radius.
@@ -619,6 +627,11 @@ public class Worm extends Object {
 	public boolean getIsAlive(){
 		return this.alive;
 	}
+	public void killWorm() {
+		this.setHitPoints(0);
+		this.setIsAlive();
+		this.deleteWorm(this.getWorld());
+	}
 	public void deleteWorm(World world){
 		if (this.getIsAlive() == false)
 			world.deleteWorm();
@@ -710,8 +723,9 @@ public class Worm extends Object {
 				}
 				
 			} 
-			this.consumeFood();
+			
 		}
+		this.consumeFood();
 	}
 	
 	/**
@@ -848,6 +862,13 @@ public class Worm extends Object {
 				tempYpos = this.jumpStep(t)[1];
 				t += timeStep;
 				
+				
+				if (isOutOfTheMap(tempXpos,tempYpos)) {
+					this.killWorm();
+					break;
+					
+					
+				}
 				if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
 						(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
 					this.setXpos(tempXpos);
@@ -855,6 +876,7 @@ public class Worm extends Object {
 					this.setActionPoints(0);
 					break;
 				}
+				
 			}
 			
 			
@@ -946,6 +968,9 @@ public class Worm extends Object {
 					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
 				return t;
 			}
+			if (isOutOfTheMap(tempXpos,tempYpos)) {
+				return t;
+			}
 		}
 		return t;	
 	}
@@ -986,8 +1011,12 @@ public class Worm extends Object {
 	public void consumeFood() {
 		Food food = this.overlappingFood();
 		if (!(food==null)) {
+			double xpos = this.getXpos(); // om de een of andere vreemde reden, fallt de worm als je zijn radius aanpast...
+			double ypos = this.getYpos();
 			this.setRadius(this.getRadius()*1.1);
-			this.setName("Kwetzalkowatel");
+			this.setXpos(xpos);
+			this.setYpos(ypos);
+			//this.setName("Kwetzalkowatel");
 			food.unsetWorld();
 			
 		}
