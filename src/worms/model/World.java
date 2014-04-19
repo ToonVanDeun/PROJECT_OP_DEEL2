@@ -142,18 +142,23 @@ public class World {
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
 		
-		if (((x-1.1*radius)<0) || ((x+1.1*radius)>this.getWidth()) || ((y-1.1*radius)<0) || ((y+1.1*radius)>this.getHeight())) {
+		if ((Math.floor((x-1.1*radius))<0) || (Math.floor((x+1.1*radius))>this.getWidth()) || (Math.floor((y-1.1*radius))<0) || (Math.floor((y+1.1*radius))>this.getHeight())) {
+			System.out.println("false1");
+			System.out.println("x1 " + Math.floor(x-1.1*radius));
+			System.out.println("x2 " + Math.floor(x+1.1*radius));
+			System.out.println("y1 " + Math.floor(y-1.1*radius));
+			System.out.println("y2 " + Math.floor(y+1.1*radius));
 			return false;
 		}
 		
 		return ((this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ) &&
-					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y+1.1*radius)*yScale)][(int) Math.round(x*xScale)] ) &&
+					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y+(1.1*radius))*yScale)][(int) Math.round(x*xScale)] ) &&
 						(this.getPassableMap() [(int) Math.floor((this.getHeight()-y+radius)*yScale)][(int) Math.round(x*xScale)] )) ||
-					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y-1.1*radius)*yScale)][(int) Math.round(x*xScale)] ) &&
+					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y-(1.1*radius))*yScale)][(int) Math.round(x*xScale)] ) &&
 						(this.getPassableMap() [(int) Math.floor((this.getHeight()-y-radius)*yScale)][(int) Math.round(x*xScale)] )) ||
-					((!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.floor((x+1.1*radius)*xScale)] ) &&
+					((!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.floor((x+(1.1*radius))*xScale)] ) &&
 						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.floor((x+radius)*xScale)] ))||
-					((!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-1.1*radius)*xScale)] ) &&
+					((!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-(1.1*radius))*xScale)] ) &&
 						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] )));
 	}
 	

@@ -1001,19 +1001,23 @@ public class Worm extends Object {
 	
 	//Eating food
 	
-//	public void eatFood(World world, Food food){
-//		if ((this.getXpos()+this.getRadius()) == (food.getXpos()+food.getRadius()) || 
-//				(this.getYpos()+this.getRadius()) == (food.getYpos()+food.getRadius())) {
-//			
-//		}
-//	}
-	
 	public void consumeFood() {
+		World world = this.getWorld();
 		Food food = this.overlappingFood();
+		System.out.println("width " +world.getWidth());
+		System.out.println("height " +world.getHeight());
+		System.out.println("xpos1 " +this.getXpos());
+		System.out.println("ypos1 " +this.getYpos());
+		System.out.println("straal0 " +this.getRadius());
+		System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 		if (!(food==null)) {
 			double xpos = this.getXpos(); // om de een of andere vreemde reden, fallt de worm als je zijn radius aanpast...
 			double ypos = this.getYpos();
 			this.setRadius(this.getRadius()*1.1);
+			System.out.println("xpos " +this.getXpos());
+			System.out.println("ypos " +this.getYpos());
+			System.out.println("straal " +this.getRadius());
+			System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 			this.setXpos(xpos);
 			this.setYpos(ypos);
 			//this.setName("Kwetzalkowatel");
@@ -1037,14 +1041,14 @@ public class Worm extends Object {
 //	    	System.out.println(f.getYpos());
 	    	if (Math.sqrt(Math.pow(f.getXpos()-this.getXpos(), 2)+
 	    			Math.pow(f.getYpos()-this.getYpos(), 2))< maxDistance) {
-	    		System.out.println("ze overlappen");
+	    		//System.out.println("ze overlappen");
 	    		
 	    		//als ze overlappen
 	    		
 	    		overlappingFood = f;
 	    		break;
 	    	} else {
-	    		System.out.println("nope");
+	    		//System.out.println("nope");
 	    		overlappingFood = null;
 	    	}
 	    }
