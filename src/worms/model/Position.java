@@ -110,7 +110,7 @@ public class Position {
 	 */
 	@Raw
 	public boolean isValidPos(double pos) {
-		return ! (Double.isNaN(pos));
+		return (! (Double.isNaN(pos))) ;
 	}
 	@Raw
 	public boolean isValidXPos(double pos, World world) {
@@ -128,7 +128,8 @@ public class Position {
 	public boolean isValidYPos(double pos, World world, double radius) {
 		return ! (Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getHeight()-2*radius);
 	}
-		
+	
+	
 	private double xpos;
 	private double ypos;
 

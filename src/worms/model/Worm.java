@@ -1055,6 +1055,7 @@ public class Worm extends Object {
 	    return overlappingFood;
 	}
 	
+	
 	// variables
 	private String teamName;
 	private Team team;

@@ -150,9 +150,9 @@ public class World {
 			System.out.println("y2 " + Math.floor(y+1.1*radius));
 			return false;
 		}
-		
+		System.out.println("isadjacent2 ");
 		return ((this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ) &&
-					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y+(1.1*radius))*yScale)][(int) Math.round(x*xScale)] ) &&
+					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y+(1*radius))*yScale)][(int) Math.round(x*xScale)] ) &&
 						(this.getPassableMap() [(int) Math.floor((this.getHeight()-y+radius)*yScale)][(int) Math.round(x*xScale)] )) ||
 					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y-(1.1*radius))*yScale)][(int) Math.round(x*xScale)] ) &&
 						(this.getPassableMap() [(int) Math.floor((this.getHeight()-y-radius)*yScale)][(int) Math.round(x*xScale)] )) ||

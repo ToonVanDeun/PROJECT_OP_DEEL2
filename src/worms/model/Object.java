@@ -151,13 +151,20 @@ public abstract class Object {
 
 	public double getRadius() {
 		return this.radius;
-	}	
+	}
 	
+	public double getXpos() {
+		return position.getXpos();
+	}
+	public double getYpos(){
+		return position.getYpos();
+	}
 	
 
 	/**
 	 * Variable referencing the world of this object.
 	 */
 	private World world;
+	private Position position;
 	double radius;
 }
