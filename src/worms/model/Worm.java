@@ -277,6 +277,11 @@ public class Worm extends Object {
 	private void setYpos(double ypos) {
 		position.setYpos(ypos);
 	}
+	
+	public void setNearestAdjacent(double xpos, double ypos){
+		position.setNearestAdjacent(this.getWorld(), xpos, ypos, this.getRadius());
+	}
+	
 	/**
 	 * Checks whether the given position is a valid position.
 	 * @param	pos
@@ -402,7 +407,7 @@ public class Worm extends Object {
 			throw new IllegalArgumentException();
 		
 		this.radius = radius;
-		this.setMass(this.radius);
+		this.setMass(radius);
 		
 	}
 	/**
@@ -728,6 +733,7 @@ public class Worm extends Object {
 			} 
 			this.consumeFood();
 			
+			
 		}
 	}
 	
@@ -1010,21 +1016,11 @@ public class Worm extends Object {
 		double ypos = this.getYpos();
 		World world = this.getWorld();
 		Food food = this.overlappingFood();
-//		System.out.println("width " +world.getWidth());
-//		System.out.println("height " +world.getHeight());
-//		System.out.println("xpos1 " +this.getXpos());
-//		System.out.println("ypos1 " +this.getYpos());
-//		System.out.println("straal0 " +this.getRadius());
-//		System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 		if (!(food==null)) {
+			
 			this.setRadius(this.getRadius()*1.1);
-//			System.out.println("xpos " +this.getXpos());
-//			System.out.println("ypos " +this.getYpos());
-//			System.out.println("straal " +this.getRadius());
-//			System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
-			this.setXpos(xpos);
-			this.setYpos(ypos);
-			//this.setName("Kwetzalkowatel");
+			
+			this.setNearestAdjacent(xpos, ypos);			
 			food.unsetWorld();	
 		}
 	}
