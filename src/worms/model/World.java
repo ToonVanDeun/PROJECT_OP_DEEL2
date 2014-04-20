@@ -25,6 +25,14 @@ public class World {
 		this.perimeter = random;
 	}
 	
+	//init
+	/**
+	 * Returns the perimeter, a random object to determine several random aspects of the world.
+	 */
+	public Random getPerimeter() {
+		return this.perimeter;		
+	}
+	
 	//Width and Hight
 	/**
 	 * Returns the width of the world.
@@ -137,11 +145,13 @@ public class World {
 		return this.passableMap;
 	}
 	/**
-	 * Determines whether an object 
-	 * @param x
-	 * @param y
-	 * @param radius
-	 * @return
+	 * Determines whether an object with given x position, given y position and given radius, 
+	 * is placed in or overlaps with impassable terrain.
+	 * @param x	The given x position
+	 * @param y	The given y position
+	 * @param radius	The given radius
+	 * @return True if the object is positioned in a impassable location
+	 * 			False if the object isn't positioned in impassable terrain.
 	 */
 	public boolean isImpassable(double x, double y, double radius) {
 		int mapWidth = passableMap[1].length; //eigenlijk height
@@ -152,11 +162,30 @@ public class World {
 		
 		return ((! this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ));
 	}
-	
+	/**
+	 * Checks whether an objects with given x position, given y position and given radius, 
+	 * is placed in passable terrain and doesn't overlap with impassable terrain.
+	 * @param x	The given x position
+	 * @param y	The given y position
+	 * @param radius	The given radius
+	 * @return	True if the object isn't placed in impassable terrain.
+	 * 			False if the object is placed in impassable terrain
+	 * 			| !this.isImpassable(x,y,radius)
+	 */
 	public boolean isPassable(double x, double y, double radius) {
 		return !isImpassable(x,y,radius);
 	}
-	
+	/**
+	 * Checks whether an objects with given x position, given y position and given radius, 
+	 * is placed in adjacent terrain.
+	 * Adjacent means: Passable and in an x or y direction there is impassable terrain 
+	 * less than 0.1*radius from the objects' radius.
+	 * @param x	The given x position
+	 * @param y	The given y position
+	 * @param radius	The given radius
+	 * @return True if the object is placed on adjacent terrain
+	 * 			False if the object isn't placed on adjacent terrain
+	 */
 	public boolean isAdjacent(double x, double y, double radius) {
 		int mapWidth = passableMap[1].length; //eigenlijk height
 		int mapHeight = passableMap.length; //eigenlijk width
@@ -164,9 +193,6 @@ public class World {
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
 		
-//		if ((Math.floor((x-1.1*radius))<0) || (Math.floor((x+1.1*radius))>this.getWidth()) || (Math.floor((y-1.1*radius))<0) || (Math.floor((y+1.1*radius))>this.getHeight())) {
-//			return false;
-//		}
 		if (((x-1.1*radius)<0) || ((x+1.1*radius)>this.getWidth()) || ((y-1.1*radius)<0) || ((y+1.1*radius)>this.getHeight())) {
 			return false;
 		}
@@ -181,54 +207,64 @@ public class World {
 						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] )));
 	}
 	
-	public Random getPerimeter() {
-		return this.perimeter;		
-	}
-	
 	//Worm Index and Current Worm
-	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	private int getCurrentWormIndex() {
 		return currentWormIndex;
 	}
-
+	/**
+	 * Set the currentWormIndex to currentWormIndex.
+	 * @param currentWormIndex	The new currentWormIndex.
+	 * @pre	The current worm index must be a valid index
+	 * 		| currentWormIndex>=0
+	 * @post The currentWormIndext is set to the given currentWormIndex
+	 * 		|new.getCurrentWormIndex() == currentWormIndex
+	 */
 	private void setCurrentWormIndex(int currentWormIndex) {
+		assert currentWormIndex >=0;
 		this.currentWormIndex = currentWormIndex;
 	}
-
+	/**
+	 * Returns the the worm on position "getCurrentWormIndex" in the list of worms.
+	 */
 	public Worm getCurrentWorm(){
 		return ((ArrayList<Worm>) getWorms()).get(this.getCurrentWormIndex());
 	}
 
-	//Start 
-	
+	//Start and turns
+	/**
+	 * Starts the game.
+	 * (By setting the currentWormINdext to zero.)
+	 */
+	public void	startGame(){
+		setCurrentWormIndex(0);
+	}
+	/**
+	 * Cycles through all worms turn by turn.
+	 * When all worms have had a turn a new round is started.
+	 */
 	public void startNextTurn(){
 		if (getCurrentWormIndex() >= (getWorms().size()-1))
 			startNextRound();
 		else
 			setCurrentWormIndex(getCurrentWormIndex()+1);
-
 	}
-
+	/**
+	 * Starts a new round.
+	 */
 	private void startNextRound(){
-
 		for (Worm worm: getWorms()){
 			worm.newRound();
 		}
 		setCurrentWormIndex(0);
-
-	}
-
-	public void	startGame(){
-		setCurrentWormIndex(0);
 	}
 	
 	//All objects
-	
-	
 	/**
 	 * Return the object of this world at the given index.
-	 * 
 	 * @param  index
 	 *         The index of the owning to return.
 	 * @throws IndexOutOfBoundsException
@@ -268,7 +304,6 @@ public class World {
 	/**
 	 * Check whether this world can have the given object
 	 * as one of its objects at the given index.
-	 * 
 	 * @param  object
 	 *         The object to check.
 	 * @param  index
@@ -301,7 +336,6 @@ public class World {
 	/**
 	 * Check whether this world has the given object as one of
 	 * its objects.
-	 *
 	 * @param  object
 	 *         The object to check.
 	 * @return True if and only if this world has the given object
@@ -317,7 +351,6 @@ public class World {
 	/**
 	 * Return the index at which the given object is registered
 	 * in the list of objects for this world.
-	 *  
 	 * @param  object
 	 *         The object to search for.
 	 * @return If this world has the given object as one of its
@@ -333,7 +366,6 @@ public class World {
 	}
 	/**
 	 * Return a list of all the objects of this world.
-	 * 
 	 * @return The size of the resulting list is equal to the number of
 	 *         objects in this world.
 	 *       | result.size() == getNbObjects()
@@ -348,7 +380,6 @@ public class World {
 	/**
 	 * Add the given object at the end of the list of
 	 * objects of this world.
-	 * 
 	 * @param  object
 	 *         The object to be added.
 	 * @pre    The given object is effective and already references
@@ -397,21 +428,17 @@ public class World {
 		assert (hasAsObject(object));
 		objects.remove(object);
 	}
-	/**
-	 * Return a list of all the objects that are worms of this world.
-	 * 
-	 * @return The size of the resulting list is smaller than or equal to the number of
-	 *         objects in this world.
-	 *       | result.size() <= getNbObjects()
-	 * @return Each object in the resulting list is a worm.
-	 *       | for each index in 0..result-size()-1 :
-	 *       |   result.get(index) == ..........
-	 *       
-	 */
+	
 	
 	//List of Worms
-	
-	
+	/**
+	 * Returns a collection of all the worms in the world.
+	 * @post the size of the collection must be equal to or less than het size of all the objects in the world.
+	 * 			| result.size()<=this.objects.size()
+	 * @post the collection only contains objects of the class Worm
+	 * 			| for each index in 0..result.size()-1:
+	 *      	|   (result.get(i) instanceof Worm) == true
+	 */
 	public Collection<Worm> getWorms() {
 		ArrayList<Object> lijst = new ArrayList<Object>(objects);
 		Collection<Worm> worms = new ArrayList<Worm>(); 
@@ -422,20 +449,22 @@ public class World {
 		}
 		return worms;
 	}
-	
+	/**
+	 * Deletes a worm from the list of all objects in this world.
+	 */
 	public void deleteWorm(){
 		((List<Object>) objects).remove(this.getCurrentWorm());
 	}
-
+	
+	//List of Food
 	/**
 	 * Return a list of all the objects that is food of this world.
-	 * 
 	 * @post The size of the resulting list is smaller than or equal to the number of
 	 *         objects in this world.
 	 *       | result.size() <= getNbObjects()
 	 * @return Each object in the resulting list is food.
 	 *       | for each index in 0..result.size()-1 :
-	 *       |   result.get(index) == ..........
+	 *       |   result.get(index) instanceof Food = true
 	 *       
 	 */
 	public Collection<Food> getFood() {
@@ -450,22 +479,19 @@ public class World {
 		return food;
 	}
 	
-	
+	//List of Teams
 	/**
 	 * Return a list of all the objects that is a team in this world.
-	 * 
 	 * @post The size of the resulting list is smaller than or equal to the number of
 	 *         objects in this world.
 	 *       | result.size() <= getNbObjects()
 	 * @return Each object in the resulting list is a team.
 	 *       | for each index in 0..result.size()-1 :
-	 *       |   result.get(index) instanceof Team
-	 *       
+	 *       |   result.get(index) instanceof Team == true      
 	 */	
 	public Collection<Team> getTeams() {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Team> teams = new ArrayList<Team>();
-		
 		
 		for (int i = 0; i < lijst.size(); i++) {
 			if (lijst.get(i) instanceof Team)
@@ -477,8 +503,7 @@ public class World {
 
 
 
-
-
+	//Variables
 	/**
 	 * Variable referencing a list collecting all the objects of
 	 * this world.
