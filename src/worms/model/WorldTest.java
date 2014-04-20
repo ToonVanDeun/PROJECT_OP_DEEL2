@@ -2,6 +2,8 @@ package worms.model;
 
 import static org.junit.Assert.*;
 
+import java.util.Random;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,15 +25,39 @@ public class WorldTest {
 	@Before
 	public void setUp() throws Exception {
 	
-	world = new World(100, 100, passableMap, random);
+	Random random = null;
+	world = new World(100, 100, passableMap, random  );
 	}
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	//Width and Height
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void test_setWidth_valid1() {
+		world.setUpperboundWidth(300);
+		world.setWidth(200);
+		assert world.getWidth() == 200;
 	}
+	@Test(expected = IllegalArgumentException.class)
+	public void test_setWidth_fails() {
+		world.setWidth(200);
+		assert world.getWidth() == 200;
+	}
+	@Test
+	public void test_setUpperboundWidth_valid1() {
+		world.setUpperboundWidth(300);
+		world.setWidth(250);
+		assert world.getWidth() == 250;
+		assert world.getUpperboundWidth() == 300;
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void test_setUpperboundWidth_fails() {
+		world.setUpperboundWidth(300);
+		world.setWidth(350);
+		assert world.getWidth() == 350;
+		assert world.getUpperboundWidth() == 300;
+	}
+	
 
 }

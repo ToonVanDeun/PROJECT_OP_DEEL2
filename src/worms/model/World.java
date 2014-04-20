@@ -19,6 +19,8 @@ import be.kuleuven.cs.som.annotate.Raw;
  */
 public class World {
 	public World(double width, double height, boolean[][] passableMap, Random random) {
+		this.setUpperboundHeight(height);
+		this.setUpperboundWidth(width);
 		this.setHeight(height);
 		this.setWidth(width);
 		this.passableMap = passableMap;
@@ -60,11 +62,12 @@ public class World {
 	 * @param	width
 	 * 			The width that needs to be checked.
 	 * @return 	True if the given width is a valid width.
-	 * 			If the given width isn't a valid width (smaller then 0 or bigger then Double.MAX_VALUE),
+	 * 			If the given width isn't a valid width 
+	 * 			(smaller then 0 or bigger then Double.MAX_VALUE or bigger than upperBoundWidth),
 	 * 			the method returns false.
 	 */
-	public boolean isValidWidth(double width){
-		return ((0<= width) && (width<=Double.MAX_VALUE));
+	private boolean isValidWidth(double width){
+		return ((0<= width) && (width<=Double.MAX_VALUE) && (width<=this.getUpperboundWidth()));
 	}
 	/**
 	 * Returns the upper bound width of the world.
@@ -81,7 +84,7 @@ public class World {
 	 * 			if the upperboundWidth is not a valid width.
 	 */
 	public void setUpperboundWidth(double upperboundWidth) throws IllegalArgumentException {
-		if ((! isValidWidth(width)) || (upperboundWidth>this.getWidth()))
+		if ( upperboundWidth<this.getWidth())
 			throw new IllegalArgumentException();
 		this.upperboundWidth = upperboundWidth;
 	}
@@ -111,11 +114,12 @@ public class World {
 	 * @param	height
 	 * 			The height that needs to be checked.
 	 * @return 	True if the given height is a valid height.
-	 * 			If the given height isn't a valid height (smaller then 0 or bigger then Double.MAX_VALUE),
+	 * 			If the given height isn't a valid height 
+	 * 			(smaller then 0 or bigger then Double.MAX_VALUE or bigger that upperboundHeight),
 	 * 			the method returns false.
 	 */
-	public boolean isValidHeight(double height){
-		return ((0<= height) && (height<=Double.MAX_VALUE));
+	private boolean isValidHeight(double height){
+		return ((0<= height) && (height<=Double.MAX_VALUE) && (height<=this.getUpperboundHeight()));
 	}
 	/**
 	 * Returns the upper bound height of the world.
@@ -132,7 +136,7 @@ public class World {
 	 * 			if the upperboundHeight is not a valid height.
 	 */
 	public void setUpperboundHeight(double upperboundHeight) throws IllegalArgumentException {
-		if (! isValidHeight(height))
+		if (upperboundHeight<this.getHeight())
 			throw new IllegalArgumentException();
 		this.upperboundHeight = upperboundHeight;
 	}
