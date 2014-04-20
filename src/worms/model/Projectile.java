@@ -13,7 +13,7 @@ public class Projectile extends Object{
 		super(world);
 		this.position = new Position(world,this);
 		this.setDirection(worm);
-		this.setMass(mass);
+		this.setMass();
 	}
 	
 	/**
@@ -62,14 +62,19 @@ public class Projectile extends Object{
 	public double getDirection(){
 		return this.direction;
 	}
-	public void setMass(int mass){
-		this.mass = mass;
+	public void setMass(){
+		if (worm.getSelectedWeapon()=="Rifle"){
+			this.mass = 10;
+		}
+		else {
+			this.mass = 300;
+		}
 	}
 	public int getMass(){
 		return this.mass;
 	}
 	public void setRadius() {
-		this.radius = Math.pow((3.0/4.0)*(getMass()/(density*Math.PI)) ,1.0/3.00);
+		this.radius = Math.pow((3.0/4.0)*(this.getMass()/(density*Math.PI)) ,1.0/3.0);
 	}
 	public double getRadius() {
 		return this.radius;
