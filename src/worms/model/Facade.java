@@ -292,8 +292,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public String getSelectedWeapon(Worm worm) {
-		// TODO Auto-generated method stub
-		return null;
+		return worm.getSelectedWeapon();
 	}
 	/**
 	 * returns the name of a team a worm is in.
@@ -425,7 +424,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void selectNextWeapon(Worm worm) {
-		// TODO Auto-generated method stub
+		worm.selectNextWeapon();
 		
 	}
 	/**

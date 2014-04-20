@@ -15,6 +15,7 @@ public class Projectile extends Object{
 		this.setDirection(worm);
 		this.setMass(mass);
 	}
+	
 	/**
 	 * Sets the x-position of the projectile.
 	 * @param xpos
@@ -26,7 +27,7 @@ public class Projectile extends Object{
 	 * 			| ! position.isValidPos(xpos)
 	 */
 	public void setXpos(Worm worm){
-		this.xpos = worm.getXpos()+worm.getRadius();
+		this.xpos = worm.getXpos()+(worm.getRadius()*Math.cos(this.direction));
 		position.setXpos(xpos);
 	}
 	/**
@@ -46,7 +47,7 @@ public class Projectile extends Object{
 	 * 			| ! isValidPos(ypos)
 	 */
 	public void setYpos(Worm worm){
-		this.ypos = worm.getYpos()+worm.getRadius();
+		this.ypos = worm.getYpos()+(worm.getRadius()*Math.sin(this.direction));
 		position.setYpos(ypos);
 	}
 	/**
@@ -67,10 +68,20 @@ public class Projectile extends Object{
 	public int getMass(){
 		return this.mass;
 	}
+	public void setRadius() {
+		this.radius = Math.pow((3.0/4.0)*(getMass()/(density*Math.PI)) ,1.0/3.00);
+	}
+	public double getRadius() {
+		return this.radius;
+	}
+	public boolean canJump() {
+		World world = this.getWorld();
+		return ( world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()));
+	}
 	
-	
-	
-	
+	private double density = 7800;
+	private double radius;
+	private Worm worm;
 	private Position position;
 	private double xpos;
 	private double ypos;

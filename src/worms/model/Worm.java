@@ -3,6 +3,7 @@ package worms.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +30,8 @@ import be.kuleuven.cs.som.annotate.*;
  * @version 1.0
  */
 public class Worm extends Object {
+	
+	
 	
 	/**
 	 * Initialize a worm with a x-and -position (meters), direction (radians), radius (meters) and a name.
@@ -1055,6 +1058,86 @@ public class Worm extends Object {
 	    return overlappingFood;
 	}
 	
+	// shoot
+	
+	public boolean isValidPropulsion(int propulsion) {
+		return (propulsion >= 0 && propulsion <= 100);
+	}
+	
+	public void setPropulsionYield(int propulsion) throws IllegalArgumentException {
+		if (isValidPropulsion(propulsion)) {
+			this.propulsion = propulsion;
+		} else 
+			throw new IllegalArgumentException();
+	}
+	public int getPropulsionYield(){
+		return this.propulsion;
+	}
+	
+	
+	public void Rifle() {
+		this.weapon1 = new Rifle();
+		System.out.println("state rifle "+weapon1.getState());
+	}
+	public void Bazooka(){
+		this.weapon = new Bazooka();
+		System.out.println("state bazooka "+weapon.getState());
+	}
+	
+	public String getSelectedWeapon() {
+		this.weapon1 = new Rifle();
+		this.weapon = new Bazooka();
+		if (this.weapon1.getState()==true){
+			System.out.println("state rifle "+weapon1.getState());
+			return Rifle.getName();
+		} if (this.weapon.getState()==true){
+			System.out.println("state bazooka "+weapon.getState());
+			return Bazooka.getName();
+		}
+		return "No weapon Selected";
+	}
+	public void selectNextWeapon() {
+		this.weapon1 = new Rifle();
+		this.weapon = new Bazooka();
+		if (this.weapon1.getState()==true){
+			this.weapon.setState(true);
+			this.weapon1.setState(false);
+		} if (this.weapon.getState()==true){
+			this.weapon.setState(false);
+			this.weapon1.setState(true);
+		}getSelectedWeapon();
+	}
+//	public void selectNextWeapon() {
+//		if (this.getSelectedWeapon() == "Rifle"){
+//			this.weapon = new Bazooka();
+//		}
+//	}
+//	private int getCurrentWeaponIndex() {
+//		return currentWeaponIndex;
+//	}
+//
+//	private void setCurrentWeaponIndex(int currentWeaponIndex) {
+//		this.currentWeaponIndex = currentWeaponIndex;
+//	}
+//	public Collection<Projectile> getWeapon() {
+//		ArrayList<Object> lijst = (ArrayList<Object>) objects;
+//		Collection<Projectile> weapon = new ArrayList<Projectile>();
+//		
+//		
+//		for (int i = 0; i < lijst.size(); i++) {
+//			if (lijst.get(i) instanceof Projectile)
+//				weapon.add((Projectile) lijst.get(i));
+//		}
+//		return weapon;
+//	}
+//
+//	public Projectile getCurrentWeapon(){
+//		return ((ArrayList<Projectile>) getWeapon()).get(this.getCurrentWeaponIndex());
+//	}
+//	
+//	public String selectWeapon(){
+//		return (String)getCurrentWeapon().getName();
+//	}
 	
 	// variables
 	private String teamName;
@@ -1073,6 +1156,11 @@ public class Worm extends Object {
 	private String name;
 	private int  health = 10;
 	private boolean alive;
+	private int propulsion;
+	private Bazooka weapon;
+	private Rifle weapon1;
+	//private int currentWeaponIndex;
+	//private  List<Object> objects = new ArrayList<Object>();
 	//constants
 	private static final int DENSITY = 1062;
 	private static final double G = 9.80665;
