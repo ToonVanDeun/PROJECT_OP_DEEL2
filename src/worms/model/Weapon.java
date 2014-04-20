@@ -2,27 +2,22 @@ package worms.model;
 
 public class Weapon {
 	
-	private Object activeWeapon;
+	
 	public Weapon(){
-		this.setNameRifle();
+		this.setName("Rifle");
+		this.getName();
 	}
 	
-	public void setNameRifle(){
-		this.name = "rifle";
-		this.stateRifle = true;
-		this.stateBazooka = false;
+	public void setName(String name){
+		this.name = name;
 	}
-	public void setNameBazooka(){
-		this.name = "Bazooka";
-		this.stateBazooka = true;
-		this.stateRifle = false;
-	}
+
 	public String getName(){
 		return this.name;
 	}
 	
 	public void setMass(){
-		if (this.stateRifle == true){
+		if (this.name == "Rifle"){
 			this.mass = 10;
 		} else {
 			this.mass = 300;
@@ -32,7 +27,7 @@ public class Weapon {
 		return this.mass;
 	}
 	public void setForce(){
-		if (this.stateRifle == true){
+		if (this.name == "Rifle"){
 			this.force = 1.5;
 		} else {
 			this.force = 2.5+(worm.getPropulsionYield()*0.07);
@@ -42,7 +37,7 @@ public class Weapon {
 		return this.force;
 	}
 	public void setCost(){
-		if (this.stateRifle == true){
+		if (this.name == "Rifle"){
 			this.cost = 10;
 		} else {
 			this.cost = 50;
@@ -52,7 +47,7 @@ public class Weapon {
 		return this.cost;
 	}
 	public void setDamage(){
-		if (this.stateRifle == true){
+		if (this.name == "Rifle"){
 			this.damage = 20;
 		} else {
 			this.damage = 80;
@@ -62,16 +57,20 @@ public class Weapon {
 		return this.damage;
 	}
 	public void changeWeapon(){
-		if (this.stateRifle == true){
-			this.setNameBazooka();
-		} else {
-			this.setNameRifle();
+		System.out.println("naam "+this.name);
+		if (this.name == "Rifle"){
+			System.out.println("if_naam1 "+this.name);
+			this.setName("Bazooka");
+			System.out.println("if_naam2 "+this.name);
+			this.getName();
+			System.out.println("if_naam3 "+this.name);
+		}  else {
+			System.out.println("else_naam1 "+this.name);
+			this.setName("Rifle");
+			this.getName();
+			System.out.println("else_naam2 "+this.name);
 		}
-	}
-	public boolean getstate(){
-		if (this.stateBazooka = true) {
-			this.activeWeapon = bazooka;
-		}
+		System.out.println("naam1 "+this.name);
 	}
 	
 	private Worm worm;
@@ -80,8 +79,7 @@ public class Weapon {
 	private double force;
 	private int cost;
 	private int damage;
-	private boolean stateRifle;
-	private boolean stateBazooka;
+	
 
 
 }

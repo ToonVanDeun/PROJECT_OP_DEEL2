@@ -1070,14 +1070,19 @@ public class Worm extends Object {
 		return this.propulsion;
 	}
 	
+	
+	Weapon weapon = new Weapon();
 	public String getSelectedWeapon(){
 		return weapon.getName();
+	}
+	public void selectNextWeapon(){
+		weapon.changeWeapon();
 	}
 
 
 	
 	// variables
-	private Weapon weapon;
+	
 	private String teamName;
 	private Team team;
 	private Position position;
