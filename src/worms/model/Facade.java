@@ -349,7 +349,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean isActive(Food food) {
-		return true;
+		return food.isActive();
 	}
 	/**
 	 * Returns whether a projectile object is active.

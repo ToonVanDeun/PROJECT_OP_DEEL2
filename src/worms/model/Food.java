@@ -93,6 +93,15 @@ import be.kuleuven.cs.som.annotate.Raw;
 		public void setYpos(double ypos) {
 			position.setYpos(ypos);
 		}
+		public boolean isActive(){
+			if (this.getWorld()==null){
+				return false;
+			}
+			return true;
+		}
+		public void deleteFood(World world){
+			world.deleteFood(this);
+		}
 		
 		private double radius;
 		private Position position;

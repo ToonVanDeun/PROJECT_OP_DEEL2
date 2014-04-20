@@ -1025,9 +1025,7 @@ public class Worm extends Object {
 			this.setXpos(xpos);
 			this.setYpos(ypos);
 			//this.setName("Kwetzalkowatel");
-			//food.unsetWorld();
-			world.deleteFood(food);
-			
+			food.unsetWorld();	
 		}
 	}
 	
