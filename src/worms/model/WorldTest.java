@@ -21,12 +21,30 @@ public class WorldTest {
 	}
 	private static World world;
 	public static boolean[][] passableMap;
+	public static boolean[][] passableMap1;
 
 	@Before
 	public void setUp() throws Exception {
 	
+	//initialization
 	Random random = null;
-	world = new World(100, 100, passableMap, random  );
+		//passable map
+		boolean[][] passableMap = new boolean[50][50];
+		boolean[][] passableMap1 = new boolean[50][50];
+		
+		for (int i=0;i<50;i++){
+			for (int j=0;j<50;j++){
+				passableMap[i][j] = true;
+			}
+		}
+		passableMap1=passableMap;
+		for (int i=0;i<25;i++){
+			for (int j=0;j<50;j++){
+				passableMap1[i][j] = false;
+			}
+		}
+		//world
+		world = new World(100, 100, passableMap1, random  );
 	}
 	@After
 	public void tearDown() throws Exception {
@@ -59,5 +77,41 @@ public class WorldTest {
 		assert world.getUpperboundWidth() == 300;
 	}
 	
+	//passableMap
+	@Test
+	public void test_isImpassable_valid1() {
+		assertEquals(world.isImpassable(10, 70, 2),true);
+	}
+	@Test(expected = AssertionError.class)
+	public void test_isImpassable_fails() {
+		assertEquals(world.isImpassable(10, 30, 2),true);
+	}
+	@Test
+	public void test_isPassable_valid1() {
+		assertEquals(world.isPassable(10, 30, 2),true);
+	}
+	@Test(expected = AssertionError.class)
+	public void test_isPassable_fails() {
+		assertEquals(world.isPassable(10, 70, 2),true);
+	}
+	@Test
+	public void test_isAdjacent() {
+		//shit werkt nog ni....
+		for (double i=0;i<100;i+=0.1){
+			for (double j=0;j<100;j+=0.1){
+				if (world.isAdjacent(i, j, 5)) {
+					System.out.println("i: "+i+"j: "+j+"true"+world.isAdjacent(i, j, 2));
+				}
+				
+				
+			}
+		}
+		//assertEquals(world.isAdjacent(10, 48, 2),true);
+	}
+	
+	//worm index etc
+	//Start and turns
+	
+	//lists of objects
 
 }

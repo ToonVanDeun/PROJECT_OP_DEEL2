@@ -158,8 +158,8 @@ public class World {
 	 * 			False if the object isn't positioned in impassable terrain.
 	 */
 	public boolean isImpassable(double x, double y, double radius) {
-		int mapWidth = passableMap[1].length; //eigenlijk height
-		int mapHeight = passableMap.length; //eigenlijk width
+		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
+		int mapHeight = this.getPassableMap().length; //eigenlijk width
 		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
@@ -191,8 +191,8 @@ public class World {
 	 * 			False if the object isn't placed on adjacent terrain
 	 */
 	public boolean isAdjacent(double x, double y, double radius) {
-		int mapWidth = passableMap[1].length; //eigenlijk height
-		int mapHeight = passableMap.length; //eigenlijk width
+		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
+		int mapHeight = this.getPassableMap().length; //eigenlijk width
 		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
