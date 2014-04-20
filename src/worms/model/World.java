@@ -471,12 +471,17 @@ public class World {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Food> food = new ArrayList<Food>();
 		
-		
 		for (int i = 0; i < lijst.size(); i++) {
 			if (lijst.get(i) instanceof Food)
 				food.add((Food) lijst.get(i));
 		}
 		return food;
+	}
+	/**
+	 * Removes the given food.
+	 */
+	public void deleteFood(Food food){
+		((List<Object>) objects).remove(food);
 	}
 	
 	//List of Teams

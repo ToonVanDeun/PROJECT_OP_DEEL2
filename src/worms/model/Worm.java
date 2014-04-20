@@ -324,10 +324,11 @@ public class Worm extends Object {
 					this.setYpos(this.getYpos()+0.1*this.getRadius());
 					distance -= 0.1*this.getRadius();
 				}
-				this.setHitPoints(this.getHitPoints()-(3*(int) Math.floor(distance)));
-				this.setIsAlive();
-				this.deleteWorm(world);
-			}			
+				
+			}
+			this.setHitPoints(this.getHitPoints()-(3*(int) Math.floor(distance)));
+			this.setIsAlive();
+			this.deleteWorm(world);
 		}	
 	}
 	
@@ -720,15 +721,14 @@ public class Worm extends Object {
 				if (!world.isAdjacent(pasXpos, pasYpos, this.getRadius()) && world.isPassable(pasXpos, pasYpos, this.getRadius())) {
 					this.setXpos(pasXpos);
 					this.setYpos(pasYpos);
-					//this.setYpos(5); // hier moet Fall() komen, maar dat werkt nog niet
 					this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
 					this.fall();
 				}
 				
 			} 
+			this.consumeFood();
 			
 		}
-		this.consumeFood();
 	}
 	
 	/**
@@ -876,6 +876,7 @@ public class Worm extends Object {
 						(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
 					this.setXpos(tempXpos);
 					this.setYpos(tempYpos);
+					this.consumeFood();
 					this.setActionPoints(0);
 					break;
 				}
@@ -1005,26 +1006,27 @@ public class Worm extends Object {
 	//Eating food
 	
 	public void consumeFood() {
+		double xpos = this.getXpos(); // om de een of andere vreemde reden, fallt de worm als je zijn radius aanpast...
+		double ypos = this.getYpos();
 		World world = this.getWorld();
 		Food food = this.overlappingFood();
-		System.out.println("width " +world.getWidth());
-		System.out.println("height " +world.getHeight());
-		System.out.println("xpos1 " +this.getXpos());
-		System.out.println("ypos1 " +this.getYpos());
-		System.out.println("straal0 " +this.getRadius());
-		System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
+//		System.out.println("width " +world.getWidth());
+//		System.out.println("height " +world.getHeight());
+//		System.out.println("xpos1 " +this.getXpos());
+//		System.out.println("ypos1 " +this.getYpos());
+//		System.out.println("straal0 " +this.getRadius());
+//		System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 		if (!(food==null)) {
-			double xpos = this.getXpos(); // om de een of andere vreemde reden, fallt de worm als je zijn radius aanpast...
-			double ypos = this.getYpos();
 			this.setRadius(this.getRadius()*1.1);
-			System.out.println("xpos " +this.getXpos());
-			System.out.println("ypos " +this.getYpos());
-			System.out.println("straal " +this.getRadius());
-			System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
+//			System.out.println("xpos " +this.getXpos());
+//			System.out.println("ypos " +this.getYpos());
+//			System.out.println("straal " +this.getRadius());
+//			System.out.println(world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 			this.setXpos(xpos);
 			this.setYpos(ypos);
 			//this.setName("Kwetzalkowatel");
-			food.unsetWorld();
+			//food.unsetWorld();
+			world.deleteFood(food);
 			
 		}
 	}
