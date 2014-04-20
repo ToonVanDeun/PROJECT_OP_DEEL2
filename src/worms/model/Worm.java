@@ -1081,24 +1081,25 @@ public class Worm extends Object {
 	}
 	
 	public String getSelectedWeapon() {
-		this.weapon1 = new Rifle();
-		this.weapon = new Bazooka();
+		this.Rifle();
+		this.Bazooka();
 		if (this.weapon1.getState()==true){
-			System.out.println("state rifle "+weapon1.getState());
+			System.out.println("state rifle1 "+weapon1.getState());
 			return Rifle.getName();
 		} if (this.weapon.getState()==true){
-			System.out.println("state bazooka "+weapon.getState());
+			System.out.println("state bazooka1 "+weapon.getState());
 			return Bazooka.getName();
 		}
 		return "No weapon Selected";
 	}
 	public void selectNextWeapon() {
-		this.weapon1 = new Rifle();
-		this.weapon = new Bazooka();
+		this.Rifle();
+		this.Bazooka();
 		if (this.weapon1.getState()==true){
+			System.out.println("hello");
 			this.weapon.setState(true);
 			this.weapon1.setState(false);
-		} if (this.weapon.getState()==true){
+		} else {
 			this.weapon.setState(false);
 			this.weapon1.setState(true);
 		}getSelectedWeapon();
