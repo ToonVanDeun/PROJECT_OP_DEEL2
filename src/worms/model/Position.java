@@ -3,60 +3,37 @@ package worms.model;
 import be.kuleuven.cs.som.annotate.Raw;
 
 public class Position {
+	//Initialization
+	/**
+	 * Initializes a position for a given object with given x- and y-positions.
+	 * @param xpos	The given x position.
+	 * @param ypos	The given y position.
+	 * @post The newly initialized position is set the the given position.
+	 * 			|new.getXpos() == xpos
+	 * 			|new.getYpos() == ypos
+	 */
 	public Position(double xpos, double ypos) {
 		this.setXpos(xpos);
 		this.setYpos(ypos);
 	}
-	
+	/**
+	 * Initializes a random adjacent position for a given object.
+	 * @param world		The world in which the position is being determined.
+	 * @param object	The object the position in being determined for.
+	 * @post 			The new position is an adjacent position.
+	 * 					|world.isAdjacent(new.getXpos(), new.getYpos, object.getRadius)
+	 */
 	public Position(World world, Object object) {
 		this.setAdjacantPosition(world, object);
 	}
 	
-	public void setAdjacantPosition(World world, Object object) {
-		double radius = object.getRadius();
-		double randXpos = radius+ (Math.random()*(world.getWidth()-radius));
-		double randYpos = radius+ (Math.random()*(world.getHeight()-radius));
-		
-		//double toOrFromCenter = (Math.random()*1);
-		
-		if (world.isImpassable(randXpos, randYpos, radius) ||
-				!isValidXPos(randXpos, world) || !isValidYPos(randYpos, world)) {
-			setAdjacantPosition(world,object);
-		}
-		else {
-			//double randomDirection = getDirectionFromCenter(world);
-			double randomDirection = Math.random()*(2*Math.PI);
-			
-			while (this.isValidXPos(randXpos, world, radius) 
-					&& this.isValidYPos(randYpos, world, radius) ) {
-				if (world.isAdjacent(randXpos, randYpos, radius)) {
-					break;
-				}
-				else {
-					randXpos += (Math.cos(randomDirection)*radius*0.1);
-					randYpos += (Math.sin(randomDirection)*radius*0.1);
-				}
-			}
-			this.setXpos(randXpos);
-			this.setYpos(randYpos);
-		}
-	}
-
+	//Getters and Setters
 	/**
-	 * public double getDirectionFromCenter(World world) {
-		//nog rekening houden met deling door 0
-		double centerX = world.getWidth()/2;
-		double centerY = world.getHeight()/2;
-		double diffX = (this.getXpos()-centerX);
-		double diffY = (this.getYpos()-centerY);
-		double direction = Math.atan(diffY/diffX);
-		if (diffX < 0)
-			direction = direction + Math.PI;
-		return direction;
-		
+	 * Returns the x-position of the object.
+	 */
+	public double getXpos() {
+		return this.xpos;
 	}
-	*/
-	
 	/**
 	 * Sets the x-position of the object.
 	 * @param xpos
@@ -73,10 +50,10 @@ public class Position {
 		this.xpos = xpos;
 	}
 	/**
-	 * Returns the x-position of the object.
+	 * Returns the y-position of the object.
 	 */
-	public double getXpos() {
-		return this.xpos;
+	public double getYpos() {
+		return this.ypos;
 	}
 	/**
 	 * Sets the y-position of the object.
@@ -94,12 +71,44 @@ public class Position {
 		this.ypos = ypos;
 	}
 	/**
-	 * Returns the y-position of the object.
+	 * Finds a passable, adjacent position in the world and sets the position to the newly found position.
+	 * The position in found by randomly selecting a position within the range of the map. 
+	 * Checking if that the position is passable. If not, a new random location is chosen.
+	 * Thereafter new positions get determined stepwise by moving in a random direction,
+	 * until the position is and adjacent position.
+	 * @param world	The world in which the position is being determined.
+	 * @param object	The object the position in being determined for.
+	 * @post The new position is an adjacent position.
+	 * 			|world.isAdjacent(new.getXpos(), new.getYpos, object.getRadius)
 	 */
-	public double getYpos() {
-		return this.ypos;
+	public void setAdjacantPosition(World world, Object object) {
+		double radius = object.getRadius();
+		double randXpos = radius+ (Math.random()*(world.getWidth()-radius));
+		double randYpos = radius+ (Math.random()*(world.getHeight()-radius));
+		
+		if (world.isImpassable(randXpos, randYpos, radius) ||
+				!isValidXPos(randXpos, world) || !isValidYPos(randYpos, world)) {
+			setAdjacantPosition(world,object);
+		}
+		else {
+			double randomDirection = Math.random()*(2*Math.PI);
+			
+			while (this.isValidXPos(randXpos, world, radius) 
+					&& this.isValidYPos(randYpos, world, radius) ) {
+				if (world.isAdjacent(randXpos, randYpos, radius)) {
+					break;
+				}
+				else {
+					randXpos += (Math.cos(randomDirection)*radius*0.1);
+					randYpos += (Math.sin(randomDirection)*radius*0.1);
+				}
+			}
+			this.setXpos(randXpos);
+			this.setYpos(randYpos);
+		}
 	}
 	
+	//Checkers
 	/**
 	 * Checks whether the given position is a valid position.
 	 * @param	pos
@@ -107,29 +116,70 @@ public class Position {
 	 * @return 	True if the given position (pos) is a valid position.
 	 * 			If the given position isn't a valid position (not a number (NaN),
 	 * 			the method returns false.
+	 * 			| !double.isNan(pos)
 	 */
 	@Raw
 	public boolean isValidPos(double pos) {
 		return (! (Double.isNaN(pos))) ;
 	}
+	/**
+	 * Checks whether the given x-position is a valid x-position.
+	 * @param	pos
+	 * 			The x-position that needs to be checked.
+	 * @return 	True if the given x-position (pos) is a valid x-position.
+	 * 			If the given position isn't a valid position (not a number (NaN), 
+	 * 			or the x position lies not in the range from the map (0..width),
+	 * 			the method returns false.
+	 * 			| !(Double.isNaN(pos)) && pos>=0 && pos<=world.getWidth()
+	 */
 	@Raw
 	public boolean isValidXPos(double pos, World world) {
 		return !(Double.isNaN(pos)) && pos>=0 && pos<=world.getWidth();
 	}
+	/**
+	 * Checks whether the given y-position is a valid y-position.
+	 * @param	pos
+	 * 			The y-position that needs to be checked.
+	 * @return 	True if the given y-position (pos) is a valid y-position.
+	 * 			If the given position isn't a valid position (not a number (NaN), 
+	 * 			or the y position lies not in the range from the map (0..height),
+	 * 			the method returns false.
+	 * 			| !(Double.isNaN(pos)) && pos>=0 && pos<=world.getHeight()
+	 */
 	@Raw
 	public boolean isValidYPos(double pos, World world) {
 		return ! (Double.isNaN(pos)) && pos>=0 && pos<=world.getHeight();
 	}
+	/**
+	 * Checks whether the given x-position is a valid x-position.
+	 * @param	pos
+	 * 			The x-position that needs to be checked.
+	 * @return 	True if the given x-position (pos) is a valid y-position.
+	 * 			If the given position isn't a valid position (not a number (NaN), 
+	 * 			or the x position lies not in the range from the map (0..width) the range taken into account,
+	 * 			the method returns false.
+	 * 			| !(Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getWidth()-2*radius)
+	 */
 	@Raw
 	public boolean isValidXPos(double pos, World world, double radius) {
 		return !(Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getWidth()-2*radius);
 	}
+	/**
+	 * Checks whether the given y-position is a valid y-position.
+	 * @param	pos
+	 * 			The y-position that needs to be checked.
+	 * @return 	True if the given y-position (pos) is a valid y-position.
+	 * 			If the given position isn't a valid position (not a number (NaN), 
+	 * 			or the y position lies not in the range from the map (0..height) the range taken into account,
+	 * 			the method returns false.
+	 * 			| !(Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getHeight()-2*radius)
+	 */
 	@Raw
 	public boolean isValidYPos(double pos, World world, double radius) {
 		return ! (Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getHeight()-2*radius);
 	}
 	
-	
+	//Variables
 	private double xpos;
 	private double ypos;
 
