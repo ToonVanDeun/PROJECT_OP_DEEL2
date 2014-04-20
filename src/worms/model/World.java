@@ -21,15 +21,11 @@ public class World {
 	public World(double width, double height, boolean[][] passableMap, Random random) {
 		this.setHeight(height);
 		this.setWidth(width);
-		//this.setPassableMap(passableMap);
 		this.passableMap = passableMap;
 		this.perimeter = random;
-		
 	}
 	
-	//World Setup
-	
-	
+	//Width and Hight
 	/**
 	 * Returns the width of the world.
 	 */
@@ -63,19 +59,23 @@ public class World {
 		return ((0<= width) && (width<=Double.MAX_VALUE));
 	}
 	/**
+	 * Returns the upper bound width of the world.
+	 */
+	public double getUpperboundWidth() {
+		return this.upperboundWidth;
+	}
+	/**
 	 * Sets the upper bound for the width of the world. 
-	 * It must be smaller than the current width.
+	 * @param 	The new upperboundWidth for the world.
+	 * @post 	The upperboundWidth of the world is set to the given upperboundWidth.
+	 * 			|new.getUpperboundWidth() ==uperboundWidth
+	 * @throws IllegalArgumentException
+	 * 			if the upperboundWidth is not a valid width.
 	 */
 	public void setUpperboundWidth(double upperboundWidth) throws IllegalArgumentException {
 		if ((! isValidWidth(width)) || (upperboundWidth>this.getWidth()))
 			throw new IllegalArgumentException();
 		this.upperboundWidth = upperboundWidth;
-	}
-	/**
-	 * Returns the upper bound width of the world.
-	 */
-	public double getUpperboundWidth() {
-		return this.upperboundWidth;
 	}
 	/**
 	 * Returns the height of the world.
@@ -108,19 +108,41 @@ public class World {
 	 */
 	public boolean isValidHeight(double height){
 		return ((0<= height) && (height<=Double.MAX_VALUE));
-	}	
+	}
+	/**
+	 * Returns the upper bound height of the world.
+	 */
+	public double getUpperboundHeight() {
+		return this.upperboundHeight;
+	}
+	/**
+	 * Sets the upper bound for the height of the world.
+	 * @param 	The new upperboundHeight for the world.
+	 * @post 	The upperboundHeight of the world is set to the given upperboundHeight.
+	 * 			|new.getUpperboundHeight() ==uperboundHeight
+	 * @throws IllegalArgumentException
+	 * 			if the upperboundHeight is not a valid height.
+	 */
 	public void setUpperboundHeight(double upperboundHeight) throws IllegalArgumentException {
 		if (! isValidHeight(height))
 			throw new IllegalArgumentException();
 		this.upperboundHeight = upperboundHeight;
 	}
-	public double getUpperboundHeight() {
-		return this.upperboundHeight;
-	}
+	
+	//Passable map
+	/**
+	 * Returns the passable map of the world.
+	 */
 	public boolean[][] getPassableMap() {
 		return this.passableMap;
 	}
-	
+	/**
+	 * Determines whether an object 
+	 * @param x
+	 * @param y
+	 * @param radius
+	 * @return
+	 */
 	public boolean isImpassable(double x, double y, double radius) {
 		int mapWidth = passableMap[1].length; //eigenlijk height
 		int mapHeight = passableMap.length; //eigenlijk width
