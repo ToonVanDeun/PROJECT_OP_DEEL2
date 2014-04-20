@@ -3,6 +3,8 @@
  */
 package worms.model;
 
+import be.kuleuven.cs.som.annotate.Basic;
+
 /**
  * @author Toon
  *
@@ -79,11 +81,136 @@ public class Projectile extends Object{
 	public double getRadius() {
 		return this.radius;
 	}
+	public void setForce(){
+		if (worm.getSelectedWeapon()=="Rifle"){
+			this.force = 1.5;
+		}
+		else {
+			this.force =  2.5+(worm.getPropulsionYield()*0.07);
+		}
+	}
+	public double getForce(){
+		return this.force;
+	}
 	public boolean canJump() {
 		World world = this.getWorld();
 		return ( world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
-	
+	/**
+	 * Returns the jump velocity of a projectile.
+	 * 	this is needed in to calculate the distance over which to projectile can jump.
+	 */
+	@Basic 
+	private double jumpVelocity() {
+		double velocity = ((this.force/this.getMass())*0.5);
+		return velocity;
+	}
+	/**
+	 * Returns the jump distance of a worm.
+	 */
+	@Basic
+	private double jumpXDistance(double timeStep) {
+		World world = this.getWorld();
+		double xDistance;
+		if (world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
+			 xDistance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
+		}
+
+		xDistance = this.jumpStep(timeStep)[0];
+		System.out.println("xdistance " +xDistance);
+		return xDistance;
+		
+	}
+//	private double jumpYDistance(double timeStep) {
+//		double yDistance = this.jumpStep(timeStep)[1];
+//		System.out.println("yDistance " +yDistance);
+//		return yDistance;
+//	}
+	/**
+	 * Returns the worms position during a jump on a given time (after the jump started).
+	 * @param timeAfterLaunch
+	 * 			The time after the jump started
+	 * @throws	IllegalStateException
+	 * 			If the worm can't jump the exception is thrown.
+	 * 			| ! canJump()
+	 */
+	@Basic
+	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
+		double[] step;
+        step = new double[2];
+        if (! this.canJump())
+        	throw new IllegalStateException();
+        
+        	step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
+        	step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
+        			0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
+        
+
+		return step;
+	}
+public double jumpTime2(double timeStep) {
+		
+		World world = this.getWorld();	
+		double origXpos = this.getXpos();
+		double origYpos = this.getYpos();
+		double tempXpos = this.getXpos();
+		double tempYpos = this.getYpos();
+		double t=0;
+		while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
+			tempXpos = this.jumpStep(t)[0];
+			tempYpos = this.jumpStep(t)[1];
+			t += timeStep;
+			
+			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
+					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
+				return t;
+			}
+			if (isOutOfTheMap(tempXpos,tempYpos)) {
+				return t;
+			}
+		}
+		return t;	
+	}
+
+public boolean isOutOfTheMap(double xpos, double ypos) {
+	World world= this.getWorld();
+	return !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
+			((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius()))) ;
+}
+public void jump2(Double timeStep) {
+	if (this.canJump()) {
+		World world = this.getWorld();	
+		double origXpos = this.getXpos();
+		double origYpos = this.getYpos();
+		double tempXpos = this.getXpos();
+		double tempYpos = this.getYpos();
+		double t=0;
+		while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
+			tempXpos = this.jumpStep(t)[0];
+			tempYpos = this.jumpStep(t)[1];
+			t += timeStep;
+			
+			
+			if (isOutOfTheMap(tempXpos,tempYpos)) {
+				//this.killWorm();
+				break;
+				
+				
+			}
+			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
+					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
+				//this.setXpos(tempXpos);
+				//this.setYpos(tempYpos);	
+				break;
+			}
+			
+		}
+		
+		
+	}	
+}
+
+
 	
 	private double density = 7800;
 	private double radius;
@@ -93,5 +220,7 @@ public class Projectile extends Object{
 	private double ypos;
 	private double direction;
 	private int mass;
+	private double force;
+	private static final double G = 9.80665;
 
 }
