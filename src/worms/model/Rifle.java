@@ -1,7 +1,9 @@
 package worms.model;
 
-public class Rifle {
-	public Rifle(){
+public class Rifle extends Object{
+	
+	protected Rifle(World world) throws IllegalArgumentException {
+		super(world);
 		this.setState(true);
 	}
 	public void setState(boolean state){
@@ -10,10 +12,10 @@ public class Rifle {
 	public boolean getState(){
 		return this.state;
 	}
-	public void setName() {
+	public static void setName() {
 		Rifle.name = "Rifle";
 	}
-	public static String getName() {
+	public String getName() {
 		return name;
 	}
 	public void setMass() {

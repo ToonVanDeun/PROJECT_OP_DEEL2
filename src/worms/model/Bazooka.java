@@ -1,8 +1,8 @@
 package worms.model;
 
-public class Bazooka {
-	public Bazooka() {
-		this.setState(false);
+public class Bazooka extends Object {
+	public Bazooka(World world) {
+		super(world);
 	}
 	public void setState(boolean state){
 		this.state = state;
@@ -10,7 +10,7 @@ public class Bazooka {
 	public boolean getState(){
 		return this.state;
 	}
-	public void SetName(){
+	public static void setName(){
 		Bazooka.name = "Bazooka";
 	}
 	public static String getName(){

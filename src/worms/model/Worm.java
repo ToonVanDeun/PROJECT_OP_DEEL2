@@ -1070,73 +1070,14 @@ public class Worm extends Object {
 		return this.propulsion;
 	}
 	
-	
-	public void Rifle() {
-		this.weapon1 = new Rifle();
-		System.out.println("state rifle "+weapon1.getState());
+	public String getSelectedWeapon(){
+		return weapon.getName();
 	}
-	public void Bazooka(){
-		this.weapon = new Bazooka();
-		System.out.println("state bazooka "+weapon.getState());
-	}
-	
-	public String getSelectedWeapon() {
-		this.Rifle();
-		this.Bazooka();
-		if (this.weapon1.getState()==true){
-			System.out.println("state rifle1 "+weapon1.getState());
-			return Rifle.getName();
-		} if (this.weapon.getState()==true){
-			System.out.println("state bazooka1 "+weapon.getState());
-			return Bazooka.getName();
-		}
-		return "No weapon Selected";
-	}
-	public void selectNextWeapon() {
-		this.Rifle();
-		this.Bazooka();
-		if (this.weapon1.getState()==true){
-			System.out.println("hello");
-			this.weapon.setState(true);
-			this.weapon1.setState(false);
-		} else {
-			this.weapon.setState(false);
-			this.weapon1.setState(true);
-		}getSelectedWeapon();
-	}
-//	public void selectNextWeapon() {
-//		if (this.getSelectedWeapon() == "Rifle"){
-//			this.weapon = new Bazooka();
-//		}
-//	}
-//	private int getCurrentWeaponIndex() {
-//		return currentWeaponIndex;
-//	}
-//
-//	private void setCurrentWeaponIndex(int currentWeaponIndex) {
-//		this.currentWeaponIndex = currentWeaponIndex;
-//	}
-//	public Collection<Projectile> getWeapon() {
-//		ArrayList<Object> lijst = (ArrayList<Object>) objects;
-//		Collection<Projectile> weapon = new ArrayList<Projectile>();
-//		
-//		
-//		for (int i = 0; i < lijst.size(); i++) {
-//			if (lijst.get(i) instanceof Projectile)
-//				weapon.add((Projectile) lijst.get(i));
-//		}
-//		return weapon;
-//	}
-//
-//	public Projectile getCurrentWeapon(){
-//		return ((ArrayList<Projectile>) getWeapon()).get(this.getCurrentWeaponIndex());
-//	}
-//	
-//	public String selectWeapon(){
-//		return (String)getCurrentWeapon().getName();
-//	}
+
+
 	
 	// variables
+	private Weapon weapon;
 	private String teamName;
 	private Team team;
 	private Position position;
@@ -1154,10 +1095,6 @@ public class Worm extends Object {
 	private int  health = 10;
 	private boolean alive;
 	private int propulsion;
-	private Bazooka weapon;
-	private Rifle weapon1;
-	//private int currentWeaponIndex;
-	//private  List<Object> objects = new ArrayList<Object>();
 	//constants
 	private static final int DENSITY = 1062;
 	private static final double G = 9.80665;

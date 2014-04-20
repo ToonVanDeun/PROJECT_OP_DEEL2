@@ -79,6 +79,7 @@ public class Projectile extends Object{
 		return ( world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
 	
+	
 	private double density = 7800;
 	private double radius;
 	private Worm worm;
