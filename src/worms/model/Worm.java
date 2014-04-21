@@ -144,7 +144,7 @@ public class Worm extends Object {
 	 *       | result == (getTeam() != null)
 	 */
 	@Raw
-	public boolean hasTeam() {
+	private boolean hasTeam() {
 		return getTeam() != null;
 	}
 
@@ -225,7 +225,7 @@ public class Worm extends Object {
 	public void unsetTeam() {
 		if (hasTeam()) {
 			Team formerTeam = this.getTeam();
-			setTeam(null);
+			this.team=null;
 			formerTeam.removeAsWorm(this);
 		}
 	}
@@ -275,7 +275,7 @@ public class Worm extends Object {
 		position.setYpos(ypos);
 	}
 	
-	public void setNearestAdjacent(double xpos, double ypos){
+	private void setNearestAdjacent(double xpos, double ypos){
 		position.setNearestAdjacent(this.getWorld(), xpos, ypos, this.getRadius());
 	}
 	
@@ -292,7 +292,7 @@ public class Worm extends Object {
 		return ! (Double.isNaN(pos));
 	}
 	
-	public boolean isOutOfTheMap(double xpos, double ypos) {
+	private boolean isOutOfTheMap(double xpos, double ypos) {
 		World world= this.getWorld();
 		return !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
 				((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius()))) ;

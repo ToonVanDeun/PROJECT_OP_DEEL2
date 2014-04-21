@@ -163,7 +163,7 @@ public class Team extends Object {
 	 */
 	@Raw
 	public void removeAsWorm(Worm worm) {
-		assert (worm != null) && (worm.getWorld() == null);
+		assert (worm != null);
 		assert (hasAsWorm(worm));
 		worms.remove(worm);
 	}
