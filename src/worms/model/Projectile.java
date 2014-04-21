@@ -132,27 +132,6 @@ public class Projectile extends Object{
 		return velocity;
 	}
 	/**
-	 * Returns the jump distance of a worm.
-	 */
-	@Basic
-	private double jumpXDistance(double timeStep) {
-		World world = this.getWorld();
-		double xDistance;
-		if (world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
-			 xDistance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
-		}
-
-		xDistance = this.jumpStep(timeStep)[0];
-		System.out.println("xdistance " +xDistance);
-		return xDistance;
-		
-	}
-	private double jumpYDistance(double timeStep) {
-		double yDistance = this.jumpStep(timeStep)[1];
-		System.out.println("yDistance " +yDistance);
-		return yDistance;
-	}
-	/**
 	 * Returns the worms position during a jump on a given time (after the jump started).
 	 * @param timeAfterLaunch
 	 * 			The time after the jump started
