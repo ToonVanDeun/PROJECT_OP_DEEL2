@@ -214,7 +214,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public Projectile getActiveProjectile(World world) {
-		return (Projectile) world.getProjectile();
+		return world.getCurrentProjectile();
 	}
 	/**
 	 * Returns which worm is active in the world.

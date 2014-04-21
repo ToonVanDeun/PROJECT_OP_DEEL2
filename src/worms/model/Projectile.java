@@ -11,12 +11,22 @@ import be.kuleuven.cs.som.annotate.Basic;
  */
 public class Projectile extends Object{
 
-	public Projectile(World world,Worm worm, int mass) {
+	public Projectile(World world, double xpos, double ypos) {
 		super(world);
-		this.position = new Position(world,this);
-		this.setDirection(worm);
+		this.position = new Position(xpos,ypos);
+		this.setDirection();
 		this.setMass();
 		this.setActive(true);
+	}
+	public Projectile(World world){
+		super(world);
+		this.position = new Position(world, this);
+		this.setDirection();
+		this.setMass();
+		this.setActive(true);
+	}
+	public void deleteProjectile(World world){
+		world.deleteProjectile(this);
 	}
 	public void setActive(boolean state){
 		this.active = state;
@@ -64,7 +74,7 @@ public class Projectile extends Object{
 	public double getYpos(){
 		return position.getYpos();
 	}
-	public void setDirection(Worm worm){
+	public void setDirection(){
 		this.direction = worm.getDirection();
 	}
 	public double getDirection(){
@@ -199,7 +209,7 @@ public void jump2(Double timeStep) {
 			
 			
 			if (isOutOfTheMap(tempXpos,tempYpos)) {
-				world.deleteProjectile(this);
+				this.deleteProjectile(world);
 				this.setActive(false);
 				break;
 				

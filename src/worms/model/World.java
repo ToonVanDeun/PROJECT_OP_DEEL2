@@ -567,6 +567,10 @@ public class World {
 		}
 		return teams;
 	}
+	
+	// List of Projectiles
+	
+	
 	public Collection<Projectile> getProjectile() {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Projectile> projectile = new ArrayList<Projectile>();
@@ -579,6 +583,12 @@ public class World {
 	}
 	public void deleteProjectile(Projectile projectile){
 		((List<Object>) objects).remove(projectile);
+	}
+	private int getCurrentProjectileIndex() {
+		return currentProjectileIndex;
+	}
+	public Projectile getCurrentProjectile(){
+		return ((ArrayList<Projectile>) getProjectile()).get(this.getCurrentProjectileIndex());
 	}
 	
 
@@ -602,5 +612,6 @@ public class World {
 	private double upperboundWidth;
 	private double upperboundHeight;
 	private int currentWormIndex;
+	private int currentProjectileIndex;
 	
 }
