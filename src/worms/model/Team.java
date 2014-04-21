@@ -170,6 +170,6 @@ public class Team extends Object {
 	
 	
 	
-	private String name;
+	private String name=null;
 	private  List<Worm> worms = new ArrayList<Worm>();
 }

@@ -106,10 +106,9 @@ public class Worm extends Object {
 	// team
 	
 	public String getTeamName(){
-		return this.getTeam().getName();
-	}
-	public void setTeamName(Team team){
-		teamName = team.getName();
+		if (this.hasTeam())
+			return this.getTeam().getName();
+		return null;
 	}
 	
 	/**
@@ -1116,7 +1115,6 @@ public class Worm extends Object {
 	
 	// variables
 	
-	private String teamName;
 	private Team team;
 	private Position position;
 //	private double xpos;
