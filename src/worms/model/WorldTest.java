@@ -99,7 +99,7 @@ public class WorldTest {
 		//shit werkt nog ni....
 		for (double i=0;i<100;i+=0.1){
 			for (double j=0;j<100;j+=0.1){
-				if (world.isAdjacent(i, j, 5)) {
+				if (world.isAdjacent(i, j, 1)) {
 					System.out.println("i: "+i+"j: "+j+"true"+world.isAdjacent(i, j, 2));
 				}
 				

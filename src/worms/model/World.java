@@ -211,6 +211,29 @@ public class World {
 						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] )));
 	}
 	
+	public boolean isAdjacent2(double x, double y ,double radius){
+		if (this.isPassable(x, y, radius)){
+			
+			double maxDistance = radius*1.1;
+			int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
+			int mapHeight = this.getPassableMap().length; //eigenlijk width
+			double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
+			double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
+			if (((x-radius)<0) 	|| (((x+radius)>this.getWidth()) || ((y-radius)<0) || ((y+radius)>this.getHeight()))) {
+				return false;
+			}
+			for (double dir=0;dir<2*Math.PI;dir+=0.1) {
+				if (this.getPassableMap()[(int) Math.floor((this.getHeight()-(x+radius*Math.cos(dir)))*yScale)][(int) Math.floor((y+radius*Math.sin(dir))*xScale)] &&
+						!this.getPassableMap()[(int) Math.floor((this.getHeight()-(x+maxDistance*Math.cos(dir)))*yScale)][(int) Math.floor((y+maxDistance*Math.sin(dir))*xScale)]) {
+					return true;
+				}
+			}
+				
+
+		}
+		return false;
+	}
+	
 	//Worm Index and Current Worm
 	/**
 	 * 
