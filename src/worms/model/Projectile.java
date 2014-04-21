@@ -128,7 +128,6 @@ public class Projectile extends Object{
 	 */
 	@Basic 
 	private double jumpVelocity() {
-		System.out.println("force " +this.force);
 		double velocity = ((this.force/this.getMass())*0.5);
 		return velocity;
 	}
@@ -207,8 +206,6 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
 		World world = this.getWorld();
-		//new Projectile(world, worm);
-		System.out.println("getWorld ");
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
 		double tempXpos = this.getXpos();
@@ -231,6 +228,8 @@ public void jump2(Double timeStep) {
 					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
 				this.setXpos(tempXpos);
 				this.setYpos(tempYpos);	
+				this.deleteProjectile(world);
+				this.setActive(false);
 				break;
 			}
 			
