@@ -197,6 +197,7 @@ public void jump2(Double timeStep) {
 			
 			
 			if (isOutOfTheMap(tempXpos,tempYpos)) {
+				System.out.println("if1");
 				this.deleteProjectile(world);
 				this.setActive(false);
 				break;
@@ -205,13 +206,16 @@ public void jump2(Double timeStep) {
 			}
 			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
 					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
+				System.out.println("if2");
 				this.setXpos(tempXpos);
 				this.setYpos(tempYpos);	
 				this.deleteProjectile(world);
 				this.setActive(false);
 				break;
 			}
-			
+			System.out.println("geen if");
+			this.deleteProjectile(world);
+			this.setActive(false);
 		}
 		
 		
