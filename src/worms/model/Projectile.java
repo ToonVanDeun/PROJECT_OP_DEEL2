@@ -92,13 +92,13 @@ public class Projectile extends Object{
 	}
 	public void setMass(Worm worm){
 		if (worm.getSelectedWeapon()=="Rifle"){
-			this.mass = 10;
+			this.mass = 0.01;
 		}
 		else {
-			this.mass = 300;
+			this.mass = 0.3;
 		}
 	}
-	public int getMass(){
+	public double getMass(){
 		return this.mass;
 	}
 	public void setRadius() {
@@ -247,7 +247,7 @@ public void jump2(Double timeStep) {
 	private double xpos;
 	private double ypos;
 	private double direction;
-	private int mass;
+	private double mass;
 	private boolean active;
 	private double force;
 	private static final double G = 9.80665;
