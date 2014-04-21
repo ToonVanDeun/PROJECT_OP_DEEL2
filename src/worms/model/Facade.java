@@ -428,8 +428,11 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void shoot(Worm worm, int yield) {
-		worm.shoot(yield);
-		
+		try{
+			worm.shoot(yield);
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException("not enough action points");
+		}
 	}
 	/**
 	 * Makes the game start in a given world.
