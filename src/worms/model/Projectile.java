@@ -16,8 +16,14 @@ public class Projectile extends Object{
 		this.position = new Position(world,this);
 		this.setDirection(worm);
 		this.setMass();
+		this.setActive(true);
 	}
-	
+	public void setActive(boolean state){
+		this.active = state;
+	}
+	public boolean getActive(){
+		return this.active;
+	}
 	/**
 	 * Sets the x-position of the projectile.
 	 * @param xpos
@@ -28,9 +34,9 @@ public class Projectile extends Object{
 	 * 			If xpos isn't a valid x-position the exception is thrown.
 	 * 			| ! position.isValidPos(xpos)
 	 */
-	public void setXpos(Worm worm){
-		this.xpos = worm.getXpos()+(worm.getRadius()*Math.cos(this.direction));
-		position.setXpos(xpos);
+	public void setXpos(double xpos){
+		this.xpos = xpos+(worm.getRadius()*Math.cos(this.direction));
+		position.setXpos(this.xpos);
 	}
 	/**
 	 * Returns the x-position of the projectile.
@@ -48,9 +54,9 @@ public class Projectile extends Object{
 	 * 			If ypos isn't a valid y position the exception is thrown.
 	 * 			| ! isValidPos(ypos)
 	 */
-	public void setYpos(Worm worm){
-		this.ypos = worm.getYpos()+(worm.getRadius()*Math.sin(this.direction));
-		position.setYpos(ypos);
+	public void setYpos(double ypos){
+		this.ypos = ypos+(worm.getRadius()*Math.sin(this.direction));
+		position.setYpos(this.ypos);
 	}
 	/**
 	 * Returns the y-position of the projectile.
@@ -103,6 +109,7 @@ public class Projectile extends Object{
 	@Basic 
 	private double jumpVelocity() {
 		double velocity = ((this.force/this.getMass())*0.5);
+		System.out.println("naam "+ worm.getSelectedWeapon() +" force " +this.force);
 		return velocity;
 	}
 	/**
@@ -192,15 +199,16 @@ public void jump2(Double timeStep) {
 			
 			
 			if (isOutOfTheMap(tempXpos,tempYpos)) {
-				//this.killWorm();
+				world.deleteProjectile(this);
+				this.setActive(false);
 				break;
 				
 				
 			}
 			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
 					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
-				//this.setXpos(tempXpos);
-				//this.setYpos(tempYpos);	
+				this.setXpos(tempXpos);
+				this.setYpos(tempYpos);	
 				break;
 			}
 			
@@ -220,6 +228,7 @@ public void jump2(Double timeStep) {
 	private double ypos;
 	private double direction;
 	private int mass;
+	private boolean active;
 	private double force;
 	private static final double G = 9.80665;
 

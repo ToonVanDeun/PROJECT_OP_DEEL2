@@ -354,8 +354,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean isActive(Projectile projectile) {
-		// TODO Auto-generated method stub
-		return false;
+		return projectile.getActive();
 	}
 	/**
 	 * Returns a given position with a given radius is adjacent for a given world.

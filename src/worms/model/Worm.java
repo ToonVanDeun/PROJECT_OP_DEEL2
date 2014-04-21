@@ -1078,6 +1078,18 @@ public class Worm extends Object {
 	public void selectNextWeapon(){
 		weapon.changeWeapon();
 	}
+	public boolean canShoot(){
+		if (this.getSelectedWeapon()=="Rifle"){
+			this.cost = 10;
+		}
+		else {
+			this.cost = 50;
+		}
+		if (this.getActionPoints()- this.cost >=0)
+			return true;
+		else 
+			return false;
+	}
 
 
 	
@@ -1100,6 +1112,7 @@ public class Worm extends Object {
 	private int  health = 10;
 	private boolean alive;
 	private int propulsion;
+	private int cost;
 	//constants
 	private static final int DENSITY = 1062;
 	private static final double G = 9.80665;
