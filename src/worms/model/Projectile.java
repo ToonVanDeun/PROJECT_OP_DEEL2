@@ -11,19 +11,21 @@ import be.kuleuven.cs.som.annotate.Basic;
  */
 public class Projectile extends Object{
 
-	public Projectile(World world, double xpos, double ypos) {
+	public Projectile(World world, double xpos, double ypos, Worm worm) {
 		super(world);
 		this.position = new Position(xpos,ypos);
-		this.setDirection();
-		this.setMass();
+		this.setDirection(worm);
+		this.setMass(worm);
 		this.setActive(true);
+		this.setForce(worm);
 	}
-	public Projectile(World world){
+	public Projectile(World world, Worm worm){
 		super(world);
 		this.position = new Position(world, this);
-		this.setDirection();
-		this.setMass();
+		this.setDirection(worm);
+		this.setMass(worm);
 		this.setActive(true);
+		this.setForce(worm);
 	}
 	public void deleteProjectile(World world){
 		world.deleteProjectile(this);
@@ -33,6 +35,12 @@ public class Projectile extends Object{
 	}
 	public boolean getActive(){
 		return this.active;
+	}
+	public void setRadiusWorm(Worm worm){
+		this.wormRadius =  worm.getRadius();
+	}
+	public double getRadiusWorm(){
+		return this.wormRadius;
 	}
 	/**
 	 * Sets the x-position of the projectile.
@@ -45,7 +53,7 @@ public class Projectile extends Object{
 	 * 			| ! position.isValidPos(xpos)
 	 */
 	public void setXpos(double xpos){
-		this.xpos = xpos+(worm.getRadius()*Math.cos(this.direction));
+		this.xpos = xpos+(this.getRadiusWorm()*Math.cos(this.direction));
 		position.setXpos(this.xpos);
 	}
 	/**
@@ -65,7 +73,7 @@ public class Projectile extends Object{
 	 * 			| ! isValidPos(ypos)
 	 */
 	public void setYpos(double ypos){
-		this.ypos = ypos+(worm.getRadius()*Math.sin(this.direction));
+		this.ypos = ypos+(this.getRadiusWorm()*Math.sin(this.direction));
 		position.setYpos(this.ypos);
 	}
 	/**
@@ -74,13 +82,15 @@ public class Projectile extends Object{
 	public double getYpos(){
 		return position.getYpos();
 	}
-	public void setDirection(){
+	public void setDirection(Worm worm){
+		System.out.println(this.direction);
 		this.direction = worm.getDirection();
+		System.out.println(this.direction);
 	}
 	public double getDirection(){
 		return this.direction;
 	}
-	public void setMass(){
+	public void setMass(Worm worm){
 		if (worm.getSelectedWeapon()=="Rifle"){
 			this.mass = 10;
 		}
@@ -97,7 +107,7 @@ public class Projectile extends Object{
 	public double getRadius() {
 		return this.radius;
 	}
-	public void setForce(){
+	public void setForce(Worm worm){
 		if (worm.getSelectedWeapon()=="Rifle"){
 			this.force = 1.5;
 		}
@@ -118,8 +128,8 @@ public class Projectile extends Object{
 	 */
 	@Basic 
 	private double jumpVelocity() {
+		System.out.println("force " +this.force);
 		double velocity = ((this.force/this.getMass())*0.5);
-		System.out.println("naam "+ worm.getSelectedWeapon() +" force " +this.force);
 		return velocity;
 	}
 	/**
@@ -197,7 +207,7 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
 		World world = this.getWorld();
-		new Projectile(world);
+		//new Projectile(world, worm);
 		System.out.println("getWorld ");
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
@@ -231,7 +241,7 @@ public void jump2(Double timeStep) {
 }
 
 
-	
+	private double wormRadius;
 	private double density = 7800;
 	private double radius;
 	private Worm worm;
