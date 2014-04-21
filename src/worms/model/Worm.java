@@ -89,7 +89,7 @@ public class Worm extends Object {
 		Random perimeter = world.getPerimeter();
 		this.setRadius(radiusLowerBound);
 		this.position = new Position(world, this);
-		this.setDirection(perimeter.nextDouble()*2*Math.PI);
+		this.setDirection(perimeter.nextDouble()*(2*Math.PI));
 		this.setName("Worm");
 		this.setActionPoints(this.getMaxActionPoints());
 		this.setHitPoints(this.getMaxHitPoints());
@@ -1093,7 +1093,7 @@ public class Worm extends Object {
 		else {
 			this.cost = 50;
 		}
-		if (this.getActionPoints()- this.cost >=0)
+		if ((this.getActionPoints()- this.cost) >=0)
 			return true;
 		else 
 			return false;
