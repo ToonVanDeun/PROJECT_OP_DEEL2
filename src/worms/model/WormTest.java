@@ -2,6 +2,10 @@ package worms.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Random;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,6 +21,15 @@ public class WormTest {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
+	private Random random;
+	private static World world;
+	private static World worldWithObjects;
+	public static boolean[][] passableMap;
+	public static boolean[][] passableMap1;
+	private Collection<Worm> worms = new ArrayList<Worm>();
+	private Collection<Food> food = new ArrayList<Food>();
+	
+	private static Worm worm_team;
 	private static Worm worm_position;
 	private static Worm worm_direction;
 	private static Worm worm_radius;
@@ -25,23 +38,66 @@ public class WormTest {
 	private static Worm worm_turn;
 	private static Worm worm_jump;
 	
+	private static Team team1;
+	
 	
 	@Before
 	public void setUp() throws Exception {
-		World world = new World(0, 0, null, null);
-		worm_position = new Worm(world, 0, 0, 0, 5, "Position");
-		worm_direction = new Worm(world,0, 0, 0, 5, "Direction");
-		worm_radius = new Worm(world, 0, 0, 0, 5, "Radius");
-		worm_name = new Worm(world, 0, 0, 0, 1, "Name");
-		worm_move = new Worm(world, 0, 0, (Math.PI)/4, 1, "Move");
-		worm_turn = new Worm(world, 0, 0, 0, 1, "Turn");
-		worm_jump = new Worm(world, 0, 0, 3 * Math.PI / 2, 1, "Jump");
+		//initialization
+			//passable map
+			boolean[][] passableMap = new boolean[50][50];
+			boolean[][] passableMap1 = new boolean[50][50];
+			
+			for (int i=0;i<50;i++){
+				for (int j=0;j<50;j++){
+					passableMap[i][j] = true;
+				}
+			}
+			passableMap1=passableMap;
+			for (int i=0;i<25;i++){
+				for (int j=0;j<50;j++){
+					passableMap1[i][j] = false;
+				}
+			}
+			//world
+			world = new World(100, 100, passableMap1, random  );
+			worldWithObjects = new World(100, 100, passableMap1, random  );
+			//worms
+			Worm worm1 = new Worm(worldWithObjects, 2, 2, 1, 1, "Timon");
+			Worm worm2 = new Worm(worldWithObjects, 3, 3, 1, 1, "Poemba");
+			worm_team = new Worm(world, 0, 0, 0, 5, "Team");
+			worm_position = new Worm(world, 0, 0, 0, 5, "Position");
+			worm_direction = new Worm(world,0, 0, 0, 5, "Direction");
+			worm_radius = new Worm(world, 0, 0, 0, 5, "Radius");
+			worm_name = new Worm(world, 0, 0, 0, 1, "Name");
+			worm_move = new Worm(world, 0, 0, (Math.PI)/4, 1, "Move");
+			worm_turn = new Worm(world, 0, 0, 0, 1, "Turn");
+			worm_jump = new Worm(world, 0, 0, 3 * Math.PI / 2, 1, "Jump");
+			
+			Food food1 = new Food(worldWithObjects,5,5);
+			Food food2 = new Food(worldWithObjects,6,6);
+			worms.add(worm1);
+			worms.add(worm2);
+			food.add(food1);
+			food.add(food2);
+			
+			team1 = new Team(world, "TeamTof");
+			worm_team.setTeamTo(team1);
+		
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}	
-	
+	//Team
+	@Test
+	public void test_getTeam_valid1() {
+		assertEquals( worm_team.getTeam(),team1);
+	}
+	@Test
+	public void test_getTeamName_valid1() {
+		assertEquals( worm_team.getTeamName(),(String) "TeamTof");
+	}
 	//position
 	@Test
 	public void test_isValidPos_valid1() {

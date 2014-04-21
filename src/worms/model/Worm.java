@@ -106,7 +106,7 @@ public class Worm extends Object {
 	// team
 	
 	public String getTeamName(){
-		return this.teamName;
+		return this.getTeam().getName();
 	}
 	public void setTeamName(Team team){
 		teamName = team.getName();
