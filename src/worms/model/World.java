@@ -176,12 +176,12 @@ public class World {
 	 * 			False if the object is placed in impassable terrain
 	 * 			| !this.isImpassable(x,y,radius)
 	 */
-	public boolean isPassable2(double x, double y, double radius) {
+	public boolean isPassable(double x, double y, double radius) {
 		return !isImpassable(x,y,radius);
 	}
 	
 	
-	public boolean isPassable(double x, double y, double radius) {
+	public boolean isPassable2(double x, double y, double radius) {
 		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
 		int mapHeight = this.getPassableMap().length; //eigenlijk width
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
@@ -207,7 +207,7 @@ public class World {
 	 * @return True if the object is placed on adjacent terrain
 	 * 			False if the object isn't placed on adjacent terrain
 	 */
-	public boolean isAdjacent2(double x, double y, double radius) {
+	public boolean isAdjacent(double x, double y, double radius) {
 		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
 		int mapHeight = this.getPassableMap().length; //eigenlijk width
 		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
@@ -228,7 +228,7 @@ public class World {
 						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] )));
 	}
 	
-	public boolean isAdjacent(double x, double y ,double radius){
+	public boolean isAdjacent2(double x, double y ,double radius){
 		if (this.isPassable(x, y, radius)){
 			
 			double maxDistance = radius*1.1;
@@ -367,7 +367,7 @@ public class World {
 	 *       |     ( (I == index) || (getObjectAt(I) != object) )
 	 */
 	@Raw
-	public boolean canHaveAsObjectAt(Object object, int index) {
+	private boolean canHaveAsObjectAt(Object object, int index) {
 		if ((index < 1) || (index > getNbObjects() + 1))
 			return false;
 		if (!canHaveAsObject(object))
@@ -405,7 +405,7 @@ public class World {
 	 *       |    else result == -1
 	 */
 	@Raw
-	public int getIndexOfObject(Object object) {
+	private int getIndexOfObject(Object object) {
 		return objects.indexOf(object);
 	}
 	/**

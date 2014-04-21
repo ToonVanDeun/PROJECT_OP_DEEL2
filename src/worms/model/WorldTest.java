@@ -147,8 +147,22 @@ public class WorldTest {
 	@Test
 	public void test_canHaveAsObject_valid1() {
 		Food food3 = new Food(worldWithObjects,7,7);
-		System.out.println(worldWithObjects.canHaveAsObject(food3));
+		assertEquals(worldWithObjects.canHaveAsObject(food3),false);
+	}
+	@Test
+	public void test_canHaveAsObject_valid2() {
+		Food food3 = new Food(world,7,7);
 		assertEquals(worldWithObjects.canHaveAsObject(food3),true);
+	}
+	@Test
+	public void test_hasAsObject_valid1() {
+		Food food3 = new Food(worldWithObjects,7,7);
+		assertEquals(worldWithObjects.hasAsObject(food3),true);
+	}
+	@Test
+	public void test_hasAsObject_fails() {
+		Food food3 = new Food(world,7,7);
+		assertEquals(worldWithObjects.hasAsObject(food3),false);
 	}
 	//Lists of objects
 	
