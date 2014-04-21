@@ -2,6 +2,8 @@ package worms.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.After;
@@ -165,6 +167,17 @@ public class WorldTest {
 		assertEquals(worldWithObjects.hasAsObject(food3),false);
 	}
 	//Lists of objects
+	@Test
+	public void test_getAllObjects_valid() {
+		ArrayList<Object> lijst = new ArrayList<Object>();
+		Food food1 = new Food(world,7,7);
+		Food food2 = new Food(world,8,8);
+		Food food3 = new Food(world,9,9);
+		lijst.add(food1);
+		lijst.add(food2);
+		lijst.add(food3);
+		assertEquals(world.getAllObjects(),lijst);
+	}
 	
 
 }
