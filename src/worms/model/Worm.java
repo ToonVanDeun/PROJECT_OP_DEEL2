@@ -31,8 +31,6 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public class Worm extends Object {
 	
-	
-	
 	/**
 	 * Initialize a worm with a x-and -position (meters), direction (radians), radius (meters) and a name.
 	 * @param xpos
@@ -1069,6 +1067,16 @@ public class Worm extends Object {
 	public int getPropulsionYield(){
 		return this.propulsion;
 	}
+	public void setMass(){
+		if (this.getSelectedWeapon() == "Rifle"){
+			this.mass = 10;
+		} else {
+			this.mass = 300;
+		}
+	}
+	public int getMassProjectile(){
+		return this.massProjectile;
+	}
 	
 	
 	Weapon weapon = new Weapon();
@@ -1089,6 +1097,15 @@ public class Worm extends Object {
 			return true;
 		else 
 			return false;
+	}
+	public void shoot(int yield) throws IllegalArgumentException{
+		if( !canShoot()){
+			throw new IllegalArgumentException();
+		} else {
+			this.setPropulsionYield(yield);
+			this.setActionPoints(this.getActionPoints()-this.cost);
+			
+		}
 	}
 
 
@@ -1112,6 +1129,7 @@ public class Worm extends Object {
 	private int  health = 10;
 	private boolean alive;
 	private int propulsion;
+	private int massProjectile;
 	private int cost;
 	//constants
 	private static final int DENSITY = 1062;

@@ -57,20 +57,13 @@ public class Weapon {
 		return this.damage;
 	}
 	public void changeWeapon(){
-		System.out.println("naam "+this.name);
 		if (this.name == "Rifle"){
-			System.out.println("if_naam1 "+this.name);
 			this.setName("Bazooka");
-			System.out.println("if_naam2 "+this.name);
 			this.getName();
-			System.out.println("if_naam3 "+this.name);
 		}  else {
-			System.out.println("else_naam1 "+this.name);
 			this.setName("Rifle");
 			this.getName();
-			System.out.println("else_naam2 "+this.name);
 		}
-		System.out.println("naam1 "+this.name);
 	}
 	
 	private Worm worm;

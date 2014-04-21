@@ -214,8 +214,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public Projectile getActiveProjectile(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Projectile) world.getProjectile();
 	}
 	/**
 	 * Returns which worm is active in the world.
@@ -429,7 +428,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void shoot(Worm worm, int yield) {
-		// TODO Auto-generated method stub
+		worm.shoot(yield);
 		
 	}
 	/**
