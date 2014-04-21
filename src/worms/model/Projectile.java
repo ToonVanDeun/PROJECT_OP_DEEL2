@@ -147,11 +147,11 @@ public class Projectile extends Object{
 		return xDistance;
 		
 	}
-//	private double jumpYDistance(double timeStep) {
-//		double yDistance = this.jumpStep(timeStep)[1];
-//		System.out.println("yDistance " +yDistance);
-//		return yDistance;
-//	}
+	private double jumpYDistance(double timeStep) {
+		double yDistance = this.jumpStep(timeStep)[1];
+		System.out.println("yDistance " +yDistance);
+		return yDistance;
+	}
 	/**
 	 * Returns the worms position during a jump on a given time (after the jump started).
 	 * @param timeAfterLaunch
@@ -243,7 +243,6 @@ public void jump2(Double timeStep) {
 	private double wormRadius;
 	private double density = 7800;
 	private double radius;
-	private Worm worm;
 	private Position position;
 	private double xpos;
 	private double ypos;
