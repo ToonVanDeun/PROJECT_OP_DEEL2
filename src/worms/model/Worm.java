@@ -1102,8 +1102,11 @@ public class Worm extends Object {
 		if( !canShoot()){
 			throw new IllegalArgumentException();
 		} else {
-			new Projectile(getWorld());
+			World world = this.getWorld();
+			new Projectile(world);
+			System.out.println("else ");
 			this.setPropulsionYield(yield);
+			System.out.println("yield " +this.getPropulsionYield());
 			this.setActionPoints(this.getActionPoints()-this.cost);
 			
 		}

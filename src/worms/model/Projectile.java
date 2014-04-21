@@ -196,7 +196,9 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 }
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
-		World world = this.getWorld();	
+		World world = this.getWorld();
+		new Projectile(world);
+		System.out.println("getWorld ");
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
 		double tempXpos = this.getXpos();
