@@ -531,6 +531,19 @@ public class World {
 		}
 		return teams;
 	}
+	public Collection<Projectile> getProjectile() {
+		ArrayList<Object> lijst = (ArrayList<Object>) objects;
+		Collection<Projectile> projectile = new ArrayList<Projectile>();
+		
+		for (int i = 0; i < lijst.size(); i++) {
+			if (lijst.get(i) instanceof Projectile)
+				projectile.add((Projectile) lijst.get(i));
+		}
+		return projectile;
+	}
+	public void deleteProjectile(Projectile projectile){
+		((List<Object>) objects).remove(projectile);
+	}
 	
 
 
