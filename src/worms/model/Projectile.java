@@ -3,6 +3,8 @@
  */
 package worms.model;
 
+import java.util.Collection;
+
 import be.kuleuven.cs.som.annotate.Basic;
 
 /**
@@ -11,6 +13,7 @@ import be.kuleuven.cs.som.annotate.Basic;
  */
 public class Projectile extends Object{
 
+	
 	public Projectile(World world, double xpos, double ypos, Worm worm) {
 		super(world);
 		this.position = new Position(xpos,ypos);
@@ -101,6 +104,16 @@ public class Projectile extends Object{
 	public double getMass(){
 		return this.mass;
 	}
+	public void setDamage(Worm worm){
+		if (worm.getSelectedWeapon() == "Rifle"){
+			this.damage = 20;
+		} else {
+			this.damage = 80;
+		}
+	}
+	public int getDamage(){
+		return this.damage;
+	}
 	public void setRadius() {
 		this.radius = Math.pow((3.0/4.0)*(this.getMass()/(density*Math.PI)) ,1.0/3.0);
 	}
@@ -185,6 +198,7 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
 		World world = this.getWorld();
+		Worm worm = this.overlappingWorm();
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
 		double tempXpos = this.getXpos();
@@ -213,6 +227,10 @@ public void jump2(Double timeStep) {
 				this.setActive(false);
 				break;
 			}
+			if (!(worm==null)) {
+				System.out.println("if3 worm geraakt");
+				worm.setHitPoints(worm.getHitPoints()-this.getDamage());
+			}
 			System.out.println("geen if");
 			this.deleteProjectile(world);
 			this.setActive(false);
@@ -221,11 +239,40 @@ public void jump2(Double timeStep) {
 		
 	}	
 }
+public Worm overlappingWorm() {
+	World world = this.getWorld();
+	double maxDistance = this.getRadius() + this.getRadiusWorm();
+	Worm overlappingWorm = null;
+//	System.out.println("maxDisctance" + maxDistance);
+//	System.out.println("Wx " + this.getXpos());
+//	System.out.println("Wy " + this.getYpos());
+	
+	Collection<Worm> collection = (world.getWorms());
+
+    for (Worm w : collection) {
+//    	System.out.println(f.getXpos());
+//    	System.out.println(f.getYpos());
+    	if (Math.sqrt(Math.pow(w.getXpos()-this.getXpos(), 2)+
+    			Math.pow(w.getYpos()-this.getYpos(), 2))< maxDistance) {
+    		//System.out.println("ze overlappen");
+    		
+    		//als ze overlappen
+    		
+    		overlappingWorm = w;
+    		break;
+    	} else {
+    		//System.out.println("nope");
+    		overlappingWorm = null;
+    	}
+    }
+    return overlappingWorm;
+}
 
 
 	private double wormRadius;
 	private double density = 7800;
 	private double radius;
+	private int damage;
 	private Position position;
 	private double xpos;
 	private double ypos;

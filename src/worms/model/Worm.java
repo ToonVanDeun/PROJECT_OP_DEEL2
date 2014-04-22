@@ -78,7 +78,7 @@ public class Worm extends Object {
 		this.setRadius(radius);
 		this.setName(name);
 		this.setActionPoints(maxActionPoints);
-		this.setHitPoints(5);
+		this.setHitPoints(maxHitPoints);
 		//this.setIsAlive();
 	}
 
@@ -92,7 +92,7 @@ public class Worm extends Object {
 		this.setDirection(perimeter.nextDouble()*(2*Math.PI));
 		this.setName("Worm");
 		this.setActionPoints(this.getMaxActionPoints());
-		this.setHitPoints(5);
+		this.setHitPoints(this.getMaxHitPoints());
 		this.setTeamRandom();
 		//this.setIsAlive();
 		
@@ -611,7 +611,7 @@ public class Worm extends Object {
 	 * @post	The value of a worm's hit points must never be less then zero.
 	 * 			|new.getHitPoint() >= 0
 	 */
-	private void setHitPoints(int hitPoints){
+	public void setHitPoints(int hitPoints){
 		if (hitPoints >= (this.getMaxHitPoints())) {
 			this.hitPoints = this.getMaxHitPoints();
 		} else if (hitPoints <0) {
