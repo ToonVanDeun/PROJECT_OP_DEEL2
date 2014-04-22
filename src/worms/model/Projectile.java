@@ -88,9 +88,7 @@ public class Projectile extends Object{
 		return position.getYpos();
 	}
 	public void setDirection(Worm worm){
-		System.out.println(this.direction);
 		this.direction = worm.getDirection();
-		System.out.println(this.direction);
 	}
 	public double getDirection(){
 		return this.direction;
@@ -200,37 +198,28 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
 		World world = this.getWorld();
-		Worm overlappingWorm = null;
-		
-		
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
 		double tempXpos = this.getXpos();
 		double tempYpos = this.getYpos();
 		double t=0;
-		while ((world.isPassable(tempXpos, tempYpos, this.getRadius()))&& (this.getActive()==true)){
-			t += timeStep;
+		while ((world.isPassable(tempXpos, tempYpos, this.getRadius()))){// && (this.getActive()==true)){
+			
 			tempXpos = this.jumpStep(t)[0];
 			tempYpos = this.jumpStep(t)[1];
-//			System.out.println("tempx " +tempXpos);
-//			System.out.println("tempy " +tempYpos);
-			
-			
-			
-			
+			 t += timeStep;
+
 			
 			Collection<Worm> collection = (world.getWorms());
 
 		    for (Worm w : collection) {
+		    	Worm overlappingWorm = null;
 		    	double maxDistance = this.getRadius() + w.getRadius();
 		    	
 		    	if (!(w==world.getCurrentWorm()) && (Math.sqrt(Math.pow(w.getXpos()-tempXpos, 2)+
 		    			Math.pow(w.getYpos()-tempYpos, 2))< maxDistance)) {
 		    		System.out.println("ze overlappen");
-//		    		System.out.println("worm x " +w.getXpos());
-//		    		System.out.println("worm tempx " +tempXpos);
-//		    		System.out.println("worm y " +w.getYpos());
-//		    		System.out.println("worm tempy " +tempYpos);
+
 		    		
 		    		//als ze overlappen
 		    		
@@ -242,36 +231,37 @@ public void jump2(Double timeStep) {
 	    			System.out.println("ze overlappen");
 					this.deleteProjectile(world);
 					this.setActive(false);
-					System.out.println("false?");
+					System.out.println("false?" +this.getActive());
+					
 					break;
 		    	} else {
 		    		System.out.println("nope");
 		    		overlappingWorm = null;
+		    		if ((isOutOfTheMap(tempXpos,tempYpos))&& (this.getActive()==true)) {
+						System.out.println("if1");
+						this.deleteProjectile(world);
+						this.setActive(false);
+						break;
+						
+						
+					}
+				
+					if (((world.isImpassable(tempXpos, tempYpos, this.getRadius()))) && (this.getActive()==true)){
+						System.out.println("if2");
+						//this.setXpos(tempXpos);
+						//this.setYpos(tempYpos);	
+						this.deleteProjectile(world);
+						this.setActive(false);
+						break;
+					}
 		    	}
 		    	
 		    	
 		    }
 		    
 
-//			if ((isOutOfTheMap(tempXpos,tempYpos))&& (this.getActive()==true)) {
-//				System.out.println("if1");
-//				this.deleteProjectile(world);
-//				this.setActive(false);
-//				break;
-//				
-//				
-//			}
-//		
-//			if (((world.isImpassable(tempXpos, tempYpos, this.getRadius()))  ||  
-//					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() ))&& (this.getActive()==true)){
-//				System.out.println("if2");
-//				//this.setXpos(tempXpos);
-//				//this.setYpos(tempYpos);	
-//				this.deleteProjectile(world);
-//				this.setActive(false);
-//				break;
-//			}
-//			
+			
+		   
 //			System.out.println("geen if");
 //			this.deleteProjectile(world);
 //			this.setActive(false);
