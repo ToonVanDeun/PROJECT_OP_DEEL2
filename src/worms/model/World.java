@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
+import be.kuleuven.cs.som.annotate.Value;
 
 /**
  * A class of World involving width, height, passableMap, and lists of objects.
@@ -52,8 +53,8 @@ public class World {
 	 * 			|new.getPerimeter == random
 	 */
 	public World(double width, double height, boolean[][] passableMap, Random random) {
-		this.setUpperboundHeight(height);
-		this.setUpperboundWidth(width);
+		World.setUpperboundHeight(height);
+		World.setUpperboundWidth(width);
 		this.setHeight(height);
 		this.setWidth(width);
 		this.passableMap = passableMap;
@@ -64,6 +65,7 @@ public class World {
 	/**
 	 * Returns the perimeter, a random object to determine several random aspects of the world.
 	 */
+	@Basic
 	public Random getPerimeter() {
 		return this.perimeter;		
 	}
@@ -72,6 +74,7 @@ public class World {
 	/**
 	 * Returns the width of the world.
 	 */
+	@Basic
 	public double getWidth() {
 		return this.width;
 	}
@@ -106,26 +109,30 @@ public class World {
 	/**
 	 * Returns the upper bound width of the world.
 	 */
+	@Basic
 	public double getUpperboundWidth() {
-		return this.upperboundWidth;
+		return World.upperboundWidth;
 	}
 	/**
 	 * Sets the upper bound for the width of the world. 
 	 * @param 	The new upperboundWidth for the world.
+	 * @pre		The new upperboundWidth can't be smaller than the current width of the world
+	 * 			| upperboundWidth>this.getWidth()
 	 * @post 	The upperboundWidth of the world is set to the given upperboundWidth.
 	 * 			|new.getUpperboundWidth() ==uperboundWidth
 	 * @throws 	IllegalArgumentException
 	 * 			If the upperboundWidth is not a valid upperboundWidth.
-	 * 			| upperboundWidth<this.getWidth()
+	 * 			| upperboundWidth<0
 	 */
-	public void setUpperboundWidth(double upperboundWidth) throws IllegalArgumentException {
-		if ( upperboundWidth<this.getWidth())
+	public static void setUpperboundWidth(double upperboundWidth) throws IllegalArgumentException {
+		if ( upperboundWidth<0)
 			throw new IllegalArgumentException();
-		this.upperboundWidth = upperboundWidth;
+		World.upperboundWidth = upperboundWidth;
 	}
 	/**
 	 * Returns the height of the world.
 	 */
+	@Basic
 	public double getHeight() {
 		return this.height;
 	}
@@ -160,67 +167,49 @@ public class World {
 	/**
 	 * Returns the upper bound height of the world.
 	 */
+	@Basic
 	public double getUpperboundHeight() {
-		return this.upperboundHeight;
+		return World.upperboundHeight;
 	}
 	/**
 	 * Sets the upper bound for the height of the world.
 	 * @param 	The new upperboundHeight for the world.
+	 * @pre		The new upperboundHeight can't be smaller than the current height of the world
+	 * 			| upperboundHeight>this.getheight()
 	 * @post 	The upperboundHeight of the world is set to the given upperboundHeight.
 	 * 			|new.getUpperboundHeight() ==uperboundHeight
 	 * @throws IllegalArgumentException
 	 * 			if the upperboundHeight is not a valid upperboundHeight.
-	 * 			|upperboundHeight<this.getHeight()
 	 */
-	public void setUpperboundHeight(double upperboundHeight) throws IllegalArgumentException {
-		if (upperboundHeight<this.getHeight())
+	public static void setUpperboundHeight(double upperboundHeight) throws IllegalArgumentException {
+		if (upperboundHeight<0)
 			throw new IllegalArgumentException();
-		this.upperboundHeight = upperboundHeight;
+		World.upperboundHeight = upperboundHeight;
 	}
 	
 	//Passable map
 	/**
 	 * Returns the passable map of the world.
 	 */
+	@Basic
 	public boolean[][] getPassableMap() {
 		return this.passableMap;
 	}
 	/**
 	 * Determines whether an object with given x position, given y position and given radius, 
-	 * is placed in or overlaps with impassable terrain.
-	 * @param x	The given x position
-	 * @param y	The given y position
-	 * @param radius	The given radius
-	 * @return True if the object is positioned in a impassable location
-	 * 			False if the object isn't positioned in impassable terrain.
+	 * is placed in passable terrain and doesn't overlap with impassable Terrain.
+	 * @param 	x	
+	 * 			The given x position
+	 * @param 	y	
+	 * 			The given y position
+	 * @param 	radius	
+	 * 			The given radius
+	 * @return 	True if the object is positioned in a passable location and 
+	 * 			doesn't overlap with impassable terrain.
+	 * 			False if the object isn't positioned in impassable terrain or 
+	 * 			overlaps with impassable terrain.
+	 * 			| (isLocatedOnPassableLocation(position) && doesNotOverlapWithImpassableTerrain(position,radius)
 	 */
-	public boolean isImpassable2(double x, double y, double radius) {
-		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
-		int mapHeight = this.getPassableMap().length; //eigenlijk width
-		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
-		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
-		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
-		
-		return ((! this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ));
-	}
-	public boolean isImpassable(double x, double y, double radius) {		
-		return !this.isPassable(x, y, radius);
-	}
-	/**
-	 * Checks whether an objects with given x position, given y position and given radius, 
-	 * is placed in passable terrain and doesn't overlap with impassable terrain.
-	 * @param x	The given x position
-	 * @param y	The given y position
-	 * @param radius	The given radius
-	 * @return	True if the object isn't placed in impassable terrain.
-	 * 			False if the object is placed in impassable terrain
-	 * 			| !this.isImpassable(x,y,radius)
-	 */
-	public boolean isPassable2(double x, double y, double radius) {
-		return !isImpassable(x,y,radius);
-	}
-	
-	
 	public boolean isPassable(double x, double y, double radius) {
 		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
 		int mapHeight = this.getPassableMap().length; //eigenlijk width
@@ -239,59 +228,34 @@ public class World {
 		return true;
 	}
 	/**
+	 * Determines whether an object with given x position, given y position and given radius, 
+	 * is placed in impassable terrain or overlaps with impassable Terrain.
+	 * @param 	x	
+	 * 			The given x position
+	 * @param 	y	
+	 * 			The given y position
+	 * @param 	radius	
+	 * 			The given radius
+	 * @return	True is the given position overlaps with, or is positioned in impassable terrain.
+	 * 			!this.isPassable(x, y, radius);
+	 */
+	public boolean isImpassable(double x, double y, double radius) {		
+		return !this.isPassable(x, y, radius);
+	}
+	/**
 	 * Checks whether an objects with given x position, given y position and given radius, 
 	 * is placed in adjacent terrain.
-	 * Adjacent means: Passable and in an x or y direction there is impassable terrain 
-	 * less than 0.1*radius from the objects' radius.
-	 * @param x	The given x position
-	 * @param y	The given y position
-	 * @param radius	The given radius
+	 * Adjacent means: Passable for radius and impassable for radius*1.1.
+	 * @param 	x	
+	 * 			The given x position
+	 * @param 	y	
+	 * 			The given y position
+	 * @param 	radius	
+	 * 			The given radius
 	 * @return True if the object is placed on adjacent terrain
 	 * 			False if the object isn't placed on adjacent terrain
+	 * 			|(this.isPassable(x, y, radius)) && (this.isImpassable(x, y, radius*1.1))
 	 */
-	public boolean isAdjacent2(double x, double y, double radius) {
-		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
-		int mapHeight = this.getPassableMap().length; //eigenlijk width
-		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
-		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
-		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
-		
-		if (((x-1.1*radius)<0) || ((x+1.1*radius)>this.getWidth()) || ((y-1.1*radius)<0) || ((y+1.1*radius)>this.getHeight())) {
-			return false;
-		}
-		return ((this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ) &&
-					((!this.getPassableMap() [(int) Math.floor((this.getHeight()-y+(1.1*radius))*yScale)][(int) Math.round(x*xScale)] ) &&
-						(this.getPassableMap() [(int) Math.floor((this.getHeight()-y+radius)*yScale)][(int) Math.round(x*xScale)] )) ||
-					((!this.getPassableMap() [(int) Math.round((this.getHeight()-y-(1.1*radius))*yScale)][(int) Math.round(x*xScale)] ) &&
-						(this.getPassableMap() [(int) Math.floor((this.getHeight()-y-radius)*yScale)][(int) Math.round(x*xScale)] )) ||
-					((!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.floor((x+(1.1*radius))*xScale)] ) &&
-						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.floor((x+radius)*xScale)] ))||
-					((!this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-(1.1*radius))*xScale)] ) &&
-						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] )));
-	}
-	
-	public boolean isAdjacent3(double x, double y ,double radius){
-		if (this.isPassable(x, y, radius)){
-			
-			double maxDistance = radius*1.1;
-			int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
-			int mapHeight = this.getPassableMap().length; //eigenlijk width
-			double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
-			double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
-			if (((x-maxDistance)<0) 	|| (((x+maxDistance)>this.getWidth()) || ((y-maxDistance)<0) || ((y+maxDistance)>this.getHeight()))) {
-				return false;
-			}
-			for (double dir=0;dir<2*Math.PI;dir+=0.3) {
-				if (this.getPassableMap()[(int) Math.floor((this.getHeight()-(y+radius*Math.sin(dir)))*yScale)][(int) Math.floor((x+radius*Math.cos(dir))*xScale)] &&
-						!this.getPassableMap()[(int) Math.floor((this.getHeight()-(y+maxDistance*Math.sin(dir)))*yScale)][(int) Math.floor((x+maxDistance*Math.cos(dir))*xScale)]) {
-					return true;
-				}
-			}
-				
-
-		}
-		return false;
-	}
 	public boolean isAdjacent(double x, double y ,double radius){
 		if ((this.isPassable(x, y, radius)) && (this.isImpassable(x, y, radius*1.1))){
 			return true;
@@ -301,35 +265,36 @@ public class World {
 	
 	//Worm Index and Current Worm
 	/**
-	 * 
-	 * @return
+	 * The index of the worm that is currently being controlled.
 	 */
+	@Basic
 	public int getCurrentWormIndex() {
 		return currentWormIndex;
 	}
 	/**
-	 * Set the currentWormIndex to currentWormIndex.
-	 * @param currentWormIndex	The new currentWormIndex.
-	 * @pre	The current worm index must be a valid index
-	 * 		| currentWormIndex>=0
-	 * @post The currentWormIndext is set to the given currentWormIndex
-	 * 		|new.getCurrentWormIndex() == currentWormIndex
+	 * Sets the currentWormIndex to the given currentWormIndex.
+	 * @param 	currentWormIndex	
+	 * 			The new currentWormIndex.
+	 * @post	The current worm index must be a valid index
+	 * 			| currentWormIndex>=0
+	 * @post 	The currentWormIndext is set to the given currentWormIndex
+	 * 			|new.getCurrentWormIndex() == currentWormIndex
 	 */
 	public void setCurrentWormIndex(int currentWormIndex) {
 		if (currentWormIndex<0){
 			currentWormIndex = 0;
 		}
-		assert currentWormIndex >=0;
 		this.currentWormIndex = currentWormIndex;
 	}
 	/**
-	 * Returns the the worm on position "getCurrentWormIndex" in the list of worms.
+	 * Returns the the worm that is currently being controlled.
+	 * (The worm on position "getCurrentWormIndex" in the list of worms.)
 	 */
 	public Worm getCurrentWorm(){
 		return ((ArrayList<Worm>) getWorms()).get(this.getCurrentWormIndex());
 	}
 
-	//Start and turns
+	//Start, turns, Finished, Winners
 	/**
 	 * Starts the game.
 	 * (By setting the currentWormINdext to zero.)
@@ -356,24 +321,47 @@ public class World {
 		}
 		setCurrentWormIndex(0);
 	}
+	/**
+	 * Returns the winner, if the game is finished.
+	 * If there are no teams the last worm the is alive will be the winner.
+	 * If only one team remains the winner is the remaining team.
+	 * If from the only remaining team only one worm remains, that worm will be the winner.
+	 */
+	public String getWinner(){
+		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
+		if (team ==null) {
+			return ((Worm) this.getWorms().toArray()[0]).getName();
+		} else{
+			if (team.getAllAliveWorms().size()==1) {
+				return ((Worm) this.getWorms().toArray()[0]).getName();
+			}else {
+				return ((Worm) this.getWorms().toArray()[0]).getTeamName();
+			}
+		}
+			
+	}
+	/**
+	 * Checks whether the game is finished or not.
+	 */
+	public boolean isGameFinished(){
+		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
+		for (Worm worm : this.getWorms()){
+			if (!(worm.getTeam()==team)){
+				return false;
+			}
+		}if (team==null)
+			if (this.getWorms().size()==1) {
+				return true;
+			} else {
+				return false;
+			}
+		return true;
+	}
+
 	
 	//All objects
 	/**
-	 * Return the object of this world at the given index.
-	 * @param  index
-	 *         The index of the owning to return.
-	 * @throws IndexOutOfBoundsException
-	 *         The given index is not positive or it exceeds the
-	 *         number of objects of this person.
-	 *       | (index < 1) || (index > getNbObjects())
-	 */
-	@Basic
-	@Raw
-	private Object getObjectAt(int index) throws IndexOutOfBoundsException {
-		return objects.get(index - 1);
-	}
-	/**
-	 * Return the number of objects in this world.
+	 * Returns the number of objects in this world.
 	 */
 	@Basic
 	@Raw
@@ -384,120 +372,42 @@ public class World {
 	 * Check whether this world can have the given object
 	 * as one of its objects.
 	 * 
-	 * @param  object
-	 *         The object to check.
-	 * @return True if and only if the given object is effective, and
-	 *         if that object can have this world as its world.
-	 *       | result ==
-	 *       |   (object != null) &&
-	 *       |   object.canHaveAsWorld(this)
+	 * @param  	object
+	 *         	The object to check.
+	 * @return 	True if and only if the given object is effective, and
+	 *         	if that object can have this world as its world.
+	 *     		| result ==
+	 *       	|   (object != null) &&
+	 *       	|   object.canHaveAsWorld(this)
 	 */
 	@Raw
 	public boolean canHaveAsObject(Object object) {
 		return (object != null) && object.canHaveAsWorld(this);
 	}
 	/**
-	 * Check whether this world can have the given object
-	 * as one of its objects at the given index.
-	 * @param  object
-	 *         The object to check.
-	 * @param  index
-	 *         The index to check.
-	 * @return False if the given index is not positive or exceeds
-	 *         the number of objects of this world + 1.
-	 *       | if ( (index < 1) || (index > getNbObjects()+1) )
-	 *       |   then result == false
-	 *         Otherwise, false if this world cannot have the
-	 *         given object as one of its objects.
-	 *       | else if (! canHaveAsObject(object))
-	 *       |   then result == false
-	 *         Otherwise, true if and only if the given object is
-	 *         not already registered at another index.
-	 *       | else result ==
-	 *       |   for each I in 1..getNbObjects():
-	 *       |     ( (I == index) || (getObjectAt(I) != object) )
-	 */
-	@Raw
-	private boolean canHaveAsObjectAt(Object object, int index) {
-		if ((index < 1) || (index > getNbObjects() + 1))
-			return false;
-		if (!canHaveAsObject(object))
-			return false;
-		for (int pos = 1; pos <= getNbObjects(); pos++)
-			if ((pos != index) && (getObjectAt(pos) == object))
-				return false;
-		return true;
-	}
-	
-	
-	
-	/**
-	 * Checks whether a given name is a valid name.
-	 * @param name
-	 * @post	Returns true if the given name is a valid name
-	 * 			(if it starts with a capital and exists only of and at least 2 letters .)
-	 * 			If the give name is not a valid name the method returns false.
-	 * 			| result == match "[A-Z]{1}[a-zA-Z " ']{1,}"
-	 */
-	@Raw
-	public boolean isValidTeamName(String name){
-	    String regex = "^[A-Z]{1}[a-zA-Z]{1,}$";
-	    Pattern pattern = Pattern.compile(regex);
-	    Matcher matcher = pattern.matcher(name);
-	    return matcher.find();
-	}
-	
-	public boolean canAddAsTeam(String teamName) throws IllegalArgumentException, IllegalStateException {
-		if (! isValidTeamName(teamName))
-			throw new IllegalArgumentException();
-		if (! (this.getTeams().size()<10))
-			throw new IllegalStateException();
-		if ((this.getTeams().size()<10) && this.isValidTeamName(teamName)){
-			return true;
-		} else {
-			return false;
-		}
-	}
-	/**
 	 * Check whether this world has the given object as one of
 	 * its objects.
-	 * @param  object
-	 *         The object to check.
-	 * @return True if and only if this world has the given object
-	 *         as one of its objects at some index.
-	 *       | result ==
-	 *       |   for some index in 1..getNbObjects():
-	 *       |     getObjectAt(index).equals(object)
+	 * @param  	object
+	 *         	The object to check.
+	 * @return 	True if and only if this world has the given object
+	 *         	as one of its objects at some index.
+	 *       	| result ==
+	 *       	|   for some index in 1..getNbObjects():
+	 *       	|     getObjectAt(index).equals(object)
 	 */
 	@Raw
 	public boolean hasAsObject(Object object) {
 		return objects.contains(object);
 	}
 	/**
-	 * Return the index at which the given object is registered
-	 * in the list of objects for this world.
-	 * @param  object
-	 *         The object to search for.
-	 * @return If this world has the given object as one of its
-	 *         objects, that object is registered at the resulting
-	 *         index. Otherwise, the resulting value is -1.
-	 *       | if (hasAsObject(object))
-	 *       |    then getObjectAt(result) == object
-	 *       |    else result == -1
-	 */
-	@Raw
-	private int getIndexOfObject(Object object) {
-		return objects.indexOf(object);
-	}
-	/**
 	 * Return a list of all the objects of this world.
-	 * @return The size of the resulting list is equal to the number of
-	 *         objects in this world.
-	 *       | result.size() == getNbObjects()
-	 * @return Each element in the resulting list is the same as the
-	 *         objects of this world at the corresponding index.
-	 *       | for each index in 0..result-size()-1 :
-	 *       |   result.get(index) == getObjectAt(index+1)
+	 * @return 	The size of the resulting list is equal to the number of
+	 *         	objects in this world.
+	 *       	| result.size() == getNbObjects()
+	 * @return 	Each element in the resulting list is the same as the
+	 *         	objects of this world at the corresponding index.
+	 *       	| for each index in 0..result-size()-1 :
+	 *       	|   result.get(index) == getObjectAt(index+1)
 	 */
 	public List<Object> getAllObjects() {
 		return new ArrayList<Object>(objects);
@@ -509,16 +419,16 @@ public class World {
 	 *         The object to be added.
 	 * @pre    The given object is effective and already references
 	 *         this world as its world.
-	 *       | (world != null) && (object.getWorld() == this)
+	 *         | (world != null) && (object.getWorld() == this)
 	 * @pre    This world does not yet have the given object
 	 *         as one of its objects.
-	 *       | ! hasAsObject(object)
+	 *         | ! hasAsObject(object)
 	 * @post   The number of objects of this world is incremented
 	 *         by 1.
-	 *       | new.getNbObjects() == getNbObjects() + 1
+	 *         | new.getNbObjects() == getNbObjects() + 1
 	 * @post   This world has the given object as its new last
 	 *         object.
-	 *       | new.getObjectAt(getNbObjects()+1) == object
+	 *         | new.getObjectAt(getNbObjects()+1) == object
 	 */
 	public void addAsObject(@Raw Object object) {
 		assert (object != null) && (object.getWorld() == this);
@@ -527,25 +437,24 @@ public class World {
 	}
 	/**
 	 * Remove the given object from the objects of this world.
-	 * 
-	 * @param  object
-	 *         The object to be removed.
-	 * @pre    The given object is effective and does not have any
-	 *         world.
-	 *       | (object != null) && (object.getWorld() == null)
-	 * @pre    This world has the given object as one of
-	 *         its objects.
-	 *       | hasAsObject(object)
-	 * @post   The number of objects of this world is decremented
-	 *         by 1.
-	 *       | new.getNbObjects() == getNbObjects() - 1
-	 * @post   This world no longer has the given object as
-	 *         one of its objects.
-	 *       | (! new.hasAsObject(object))
-	 * @post   All objects registered beyond the removed object
-	 *         shift one position to the left.
-	 *       | for each index in getIndexOfObject(object)+1..getNbObjects():
-	 *       |   new.getObjectAt(index-1) == getObjectAt(index) 
+	 * @param 	object
+	 *       	The object to be removed.
+	 * @pre  	The given object is effective and does not have any
+	 *        	world.
+	 *       	| (object != null) && (object.getWorld() == null)
+	 * @pre  	This world has the given object as one of
+	 *       	its objects.
+	 *     		| hasAsObject(object)
+	 * @post  	The number of objects of this world is decremented
+	 *        	by 1.
+	 *       	| new.getNbObjects() == getNbObjects() - 1
+	 * @post  	This world no longer has the given object as
+	 *       	one of its objects.
+	 *     		| (! new.hasAsObject(object))
+	 * @post  	All objects registered beyond the removed object
+	 *         	shift one position to the left.
+	 *     		| for each index in getIndexOfObject(object)+1..getNbObjects():
+	 *      	|   new.getObjectAt(index-1) == getObjectAt(index) 
 	 */
 	@Raw
 	public void removeAsObject(Object object) {
@@ -558,9 +467,9 @@ public class World {
 	//List of Worms
 	/**
 	 * Returns a collection of all the worms in the world.
-	 * @post the size of the collection must be equal to or less than het size of all the objects in the world.
+	 * @post 	the size of the collection must be equal to or less than het size of all the objects in the world.
 	 * 			| result.size()<=this.objects.size()
-	 * @post the collection only contains objects of the class Worm
+	 * @post 	the collection only contains objects of the class Worm
 	 * 			| for each index in 0..result.size()-1:
 	 *      	|   (result.get(i) instanceof Worm) == true
 	 */
@@ -576,6 +485,8 @@ public class World {
 	}
 	/**
 	 * Deletes a worm from the list of all objects in this world.
+	 * @post 	objects no longer contains worm
+	 * 			| new.objects.contains(worm) == false;
 	 */
 	public void deleteWorm(Worm worm){
 		((List<Object>) objects).remove(worm);
@@ -583,13 +494,13 @@ public class World {
 	
 	//List of Food
 	/**
-	 * Return a list of all the objects that is food of this world.
-	 * @post The size of the resulting list is smaller than or equal to the number of
-	 *         objects in this world.
-	 *       | result.size() <= getNbObjects()
-	 * @return Each object in the resulting list is food.
-	 *       | for each index in 0..result.size()-1 :
-	 *       |   result.get(index) instanceof Food = true
+	 * Return a list of all the objects that are food of this world.
+	 * @post 	The size of the resulting list is smaller than or equal to the number of
+	 *         	objects in this world.
+	 *       	| result.size() <= getNbObjects()
+	 * @return 	Each object in the resulting list is food.
+	 *       	| for each index in 0..result.size()-1 :
+	 *       	|   result.get(index) instanceof Food = true
 	 *       
 	 */
 	public Collection<Food> getFood() {
@@ -604,6 +515,8 @@ public class World {
 	}
 	/**
 	 * Removes the given food.
+	 * @post 	objects no longer contains the food
+	 * 			| new.objects.contains(food) == false;
 	 */
 	public void deleteFood(Food food){
 		((List<Object>) objects).remove(food);
@@ -611,7 +524,7 @@ public class World {
 	
 	//List of Teams
 	/**
-	 * Return a list of all the objects that is a team in this world.
+	 * Return a list of all the objects that are teams in this world.
 	 * @post The size of the resulting list is smaller than or equal to the number of
 	 *         objects in this world.
 	 *       | result.size() <= getNbObjects()
@@ -629,10 +542,55 @@ public class World {
 		}
 		return teams;
 	}
+	/**
+	 * Checks whether a new team can be added.
+	 * @param 	teamName
+	 * 			The name of the team that is being checked.
+	 * @throws 	IllegalArgumentException
+	 * 			If the name isn't a valid name
+	 * 			|!isValidTeamname(teamName)
+	 * @throws 	IllegalStateException
+	 * 			If The world already contains 10 teams 
+	 * 			which is the maximum allowed number of teams per world.
+	 * 			|!(this.getTeams().size()<10)
+	 */
+	public boolean canAddAsTeam(String teamName) throws IllegalArgumentException, IllegalStateException {
+		if (! isValidTeamName(teamName))
+			throw new IllegalArgumentException();
+		if (! (this.getTeams().size()<10))
+			throw new IllegalStateException();
+		if ((this.getTeams().size()<10) && this.isValidTeamName(teamName)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * Checks whether a given name is a valid name for a team.
+	 * @param 	name
+	 * @post	Returns true if the given name is a valid name for a team
+	 * 			(if it starts with a capital and exists only of and at least 2 letters .)
+	 * 			If the give name is not a valid name the method returns false.
+	 * 			| result == match "[A-Z]{1}[a-zA-Z " ']{1,}"
+	 */
+	@Raw
+	public boolean isValidTeamName(String name){
+	    String regex = "^[A-Z]{1}[a-zA-Z]{1,}$";
+	    Pattern pattern = Pattern.compile(regex);
+	    Matcher matcher = pattern.matcher(name);
+	    return matcher.find();
+	}
 	
 	// List of Projectiles
-	
-	
+	/**
+	 * Return a list of all the objects that are projectiles in this world.
+	 * @post The size of the resulting list is smaller than or equal to the number of
+	 *         objects in this world.
+	 *       | result.size() <= getNbObjects()
+	 * @return Each object in the resulting list is a projectile.
+	 *       | for each index in 0..result.size()-1 :
+	 *       |   result.get(index) instanceof Projectile == true      
+	 */	
 	public Collection<Projectile> getProjectile() {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Projectile> projectile = new ArrayList<Projectile>();
@@ -643,59 +601,30 @@ public class World {
 		}
 		return projectile;
 	}
+	/**
+	 * Removes the given projectile.
+	 * @param 	projectile
+	 * 			The projectile that is to be removed.
+	 * @post 	objects no longer contains the projectile
+	 * 			| new.objects.contains(projectile) == false;
+	 */
 	public void deleteProjectile(Projectile projectile){
 		((List<Object>) objects).remove(projectile);
 	}
+	/**
+	 * The index of the projectile that is currently being fired.
+	 */
 	private int getCurrentProjectileIndex() {
 		return currentProjectileIndex;
 	}
+	/**
+	 * Returns the the projectile that is currently being fired.
+	 * (The projectile on position "getCurrentProjectileIndex" in the list of projectiles.)
+	 */
 	public Projectile getCurrentProjectile(){
 		return ((ArrayList<Projectile>) getProjectile()).get(this.getCurrentProjectileIndex());
 	}
 	
-	//winning
-//	public String getWinner(){
-//		for (Team team : this.getTeams()){
-//			if (!(team.getAllAliveWorms().size()==0)){
-//				if (team.getAllAliveWorms().size()==1) {
-//					return ((Worm) team.getAllWorms().toArray()[0]).getName();
-//				} else {
-//				return team.getName();
-//				}
-//			}
-//		}
-//		return null;
-//	}
-	public String getWinner(){
-		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
-		if (team ==null) {
-			return ((Worm) this.getWorms().toArray()[0]).getName();
-		} else{
-			if (team.getAllAliveWorms().size()==1) {
-				return ((Worm) this.getWorms().toArray()[0]).getName();
-			}else {
-				return ((Worm) this.getWorms().toArray()[0]).getTeamName();
-			}
-		}
-			
-	}
-		
-	public boolean isGameFinished(){
-		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
-		for (Worm worm : this.getWorms()){
-			if (!(worm.getTeam()==team)){
-				return false;
-			}
-		}if (team==null)
-			if (this.getWorms().size()==1) {
-				return true;
-			} else {
-				return false;
-			}
-		return true;
-	}
-
-
 	//Variables
 	/**
 	 * Variable referencing a list collecting all the objects of
@@ -706,13 +635,12 @@ public class World {
 	 *       |   ( (object != null) && (!object.isTerminated()) )
 	 */
 	private  List<Object> objects = new ArrayList<Object>();
-	
 	public final Random perimeter;
 	private boolean[][] passableMap;
 	private double width;
 	private double height;
-	private double upperboundWidth;
-	private double upperboundHeight;
+	private static double upperboundWidth;
+	private static double upperboundHeight;
 	private int currentWormIndex;
 	private int currentProjectileIndex;
 	
