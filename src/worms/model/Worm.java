@@ -706,9 +706,13 @@ public class Worm extends Object {
 				}
 				direction = direction +0.0175;
 			}
+			if (this.isOutOfTheMap(x2Max, y2Max)){
+				this.killWorm();
+			} else {
 			this.setXpos(x2Max);
 			this.setYpos(y2Max);
 			this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
+			}
 			
 			// geval2: Er werd in direction+-45° geen geschikte plaats gevonden
 			//			nagaan of er in direction naar een passable locatie kan verplaatst worden,
@@ -720,10 +724,14 @@ public class Worm extends Object {
 				pasXpos = (x + (Math.cos(this.getDirection())*this.getRadius()));
 				pasYpos = (y + (Math.sin(this.getDirection())*this.getRadius()));
 				if (!world.isAdjacent(pasXpos, pasYpos, this.getRadius()) && world.isPassable(pasXpos, pasYpos, this.getRadius())) {
+					if (this.isOutOfTheMap(pasXpos, pasYpos)){
+						this.killWorm();
+					} else {
 					this.setXpos(pasXpos);
 					this.setYpos(pasYpos);
 					this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
 					//this.fall();
+					}
 				}
 				
 			} 
