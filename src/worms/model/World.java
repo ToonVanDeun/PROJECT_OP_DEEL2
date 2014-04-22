@@ -411,6 +411,18 @@ public class World {
 	    Matcher matcher = pattern.matcher(name);
 	    return matcher.find();
 	}
+	
+	public boolean canAddAsTeam(String teamName) throws IllegalArgumentException, IllegalStateException {
+		if (! isValidTeamName(teamName))
+			throw new IllegalArgumentException();
+		if (! (this.getTeams().size()<10))
+			throw new IllegalStateException();
+		if ((this.getTeams().size()<10) && this.isValidTeamName(teamName)){
+			return true;
+		} else {
+			return false;
+		}
+	}
 	/**
 	 * Check whether this world has the given object as one of
 	 * its objects.

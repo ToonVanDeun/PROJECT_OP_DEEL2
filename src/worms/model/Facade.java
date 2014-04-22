@@ -141,12 +141,18 @@ public  class Facade implements IFacade {
 	 * Adds a new empty team wroms van join.
 	 */
 	@Override
-	public void addEmptyTeam(World world, String newName) {
+	public void addEmptyTeam(World world, String newName) {	
 		try {
+			if (world.canAddAsTeam(newName)) {
 				new Team(world, newName);
+			}
 		} catch (IllegalArgumentException exc) {
 			throw new ModelException("that name is not valid");
 		}
+		catch (IllegalStateException exc) {
+			throw new ModelException("You've reached the maximum number of teams");
+		}
+		
 	}
 	/**
 	 * Adds a food object to the world.
