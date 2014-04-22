@@ -315,8 +315,6 @@ public class Worm extends Object {
 				if (this.getYpos()<0) {
 					this.setYpos(0+this.getRadius()*1.1);
 					trigger = true;
-					//this.alive = false;
-					//this.deleteWorm(world);
 					break;
 				}
 			}
@@ -329,8 +327,7 @@ public class Worm extends Object {
 				
 			}
 			this.setHitPoints(this.getHitPoints()-(3*(int) Math.floor(distance)));
-//			this.setIsAlive();
-//			this.deleteWorm(world);
+			this.consumeFood();
 		}	
 	}
 	
