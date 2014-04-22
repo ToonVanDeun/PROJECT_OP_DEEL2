@@ -14,6 +14,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 public class Projectile extends Object{
 
 	
+	
 	public Projectile(World world, double xpos, double ypos, Worm worm) {
 		super(world);
 		this.position = new Position(xpos,ypos);
@@ -22,6 +23,7 @@ public class Projectile extends Object{
 		this.setActive(true);
 		this.setForce(worm);
 		this.setDamage(worm);
+		//this.setYield(worm);
 	}
 	public Projectile(World world, Worm worm){
 		super(world);
@@ -31,6 +33,7 @@ public class Projectile extends Object{
 		this.setActive(true);
 		this.setForce(worm);
 		this.setDamage(worm);
+		//this.setYield(worm);
 	}
 	public void deleteProjectile(World world){
 		world.deleteProjectile(this);
@@ -120,12 +123,21 @@ public class Projectile extends Object{
 	public double getRadius() {
 		return this.radius;
 	}
+	public void setYield(Worm worm){
+		this.yield = worm.getPropulsionYield();
+	}
+	public double getYield(){
+		return this.yield;
+	}
 	public void setForce(Worm worm){
+		this.setYield(worm);
 		if (worm.getSelectedWeapon()=="Rifle"){
 			this.force = 1.5;
 		}
 		else {
-			this.force =  2.5+(worm.getPropulsionYield()*0.07);
+			System.out.println("yield " +this.getYield());
+			this.force =  2.5+(this.getYield()*0.07);
+			System.out.println("dede " +this.force);
 		}
 	}
 	public double getForce(){
@@ -264,6 +276,7 @@ public void jump2(Double timeStep) {
 	private double wormRadius;
 	private double density = 7800;
 	private double radius;
+	private int yield;
 	private int damage;
 	private Position position;
 	private double xpos;

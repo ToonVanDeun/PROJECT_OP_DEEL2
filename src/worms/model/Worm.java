@@ -1072,6 +1072,7 @@ public class Worm extends Object {
 			throw new IllegalArgumentException();
 	}
 	public int getPropulsionYield(){
+		System.out.println("tere " +this.propulsion);
 		return this.propulsion;
 	}
 	public void setMass(){
@@ -1110,9 +1111,10 @@ public class Worm extends Object {
 			throw new IllegalArgumentException();
 		} else {
 			World world = this.getWorld();
+			this.setPropulsionYield(yield);
 			new Projectile(world,this.getXpos(),this.getYpos(),this);
 			System.out.println("else ");
-			this.setPropulsionYield(yield);
+			
 			System.out.println("yield " +this.getPropulsionYield());
 			this.setActionPoints(this.getActionPoints()-this.cost);
 			
