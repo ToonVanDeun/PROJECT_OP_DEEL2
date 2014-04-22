@@ -319,7 +319,7 @@ public class Worm extends Object {
 				}
 			}
 			
-			if ((this.getYpos()>=0) && !trigger){
+			if ((this.getYpos()>=0) && !trigger){	
 				while (!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
 					this.setYpos(this.getYpos()+0.1*this.getRadius());
 					distance -= 0.1*this.getRadius();
@@ -639,7 +639,7 @@ public class Worm extends Object {
 	}
 	public void deleteWorm(World world){
 		if (this.getIsAlive() == false)
-			world.deleteWorm();
+			world.deleteWorm(this);
 	}
 	
 	public void heal(int amount){

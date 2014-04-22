@@ -527,8 +527,8 @@ public class World {
 	/**
 	 * Deletes a worm from the list of all objects in this world.
 	 */
-	public void deleteWorm(){
-		((List<Object>) objects).remove(this.getCurrentWorm());
+	public void deleteWorm(Worm worm){
+		((List<Object>) objects).remove(worm);
 	}
 	
 	//List of Food

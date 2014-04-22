@@ -207,7 +207,7 @@ public void jump2(Double timeStep) {
 			
 			tempXpos = this.jumpStep(t)[0];
 			tempYpos = this.jumpStep(t)[1];
-			 t += timeStep;
+			
 
 			
 			Collection<Worm> collection = (world.getWorms());
@@ -228,6 +228,7 @@ public void jump2(Double timeStep) {
 		    		
 		    		
 	    			overlappingWorm.setHitPoints(overlappingWorm.getHitPoints()-this.getDamage());
+	    			System.out.println("dammage");
 	    			System.out.println("ze overlappen");
 					this.deleteProjectile(world);
 					this.setActive(false);
@@ -235,7 +236,6 @@ public void jump2(Double timeStep) {
 					
 					break;
 		    	} else {
-		    		System.out.println("nope");
 		    		overlappingWorm = null;
 		    		if ((isOutOfTheMap(tempXpos,tempYpos))&& (this.getActive()==true)) {
 						System.out.println("if1");
@@ -257,7 +257,9 @@ public void jump2(Double timeStep) {
 		    	}
 		    	
 		    	
+		    	
 		    }
+		    t += timeStep;
 		    
 
 			
