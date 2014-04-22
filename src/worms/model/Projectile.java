@@ -198,7 +198,10 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
 		World world = this.getWorld();
-		Worm worm = this.overlappingWorm();
+		double maxDistance = this.getRadius() + this.getRadiusWorm();
+		Worm overlappingWorm = null;
+		
+		
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
 		double tempXpos = this.getXpos();
@@ -207,9 +210,38 @@ public void jump2(Double timeStep) {
 		while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
 			tempXpos = this.jumpStep(t)[0];
 			tempYpos = this.jumpStep(t)[1];
+			System.out.println("tempx " +tempXpos);
+			System.out.println("tempy " +tempYpos);
+			Worm worm = overlappingWorm;
+			
+			
 			t += timeStep;
 			
-			
+			Collection<Worm> collection = (world.getWorms());
+
+		    for (Worm w : collection) {
+		    	
+		    	if (Math.sqrt(Math.pow(w.getXpos()-tempXpos, 2)+
+		    			Math.pow(w.getYpos()-tempYpos, 2))< maxDistance) {
+		    		System.out.println("ze overlappen");
+		    		System.out.println("worm x " +w.getXpos());
+		    		System.out.println("worm tempx " +tempXpos);
+		    		System.out.println("worm y " +w.getYpos());
+		    		System.out.println("worm tempy " +tempYpos);
+		    		
+		    		//als ze overlappen
+		    		
+		    		overlappingWorm = w;
+		    		System.out.println(w);
+		    		break;
+		    	} else {
+		    		System.out.println("nope");
+		    		overlappingWorm = null;
+		    	}
+		    	
+		    }
+		    
+
 			if (isOutOfTheMap(tempXpos,tempYpos)) {
 				System.out.println("if1");
 				this.deleteProjectile(world);
@@ -218,19 +250,24 @@ public void jump2(Double timeStep) {
 				
 				
 			}
-			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
-					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
-				System.out.println("if2");
-				this.setXpos(tempXpos);
-				this.setYpos(tempYpos);	
+			if (!(worm==null)) {
+				System.out.println("if3 worm geraakt");
+				worm.setHitPoints(worm.getHitPoints()-this.getDamage());
+				System.out.println("HP1 "+worm.getHitPoints());
 				this.deleteProjectile(world);
 				this.setActive(false);
 				break;
 			}
-			if (!(worm==null)) {
-				System.out.println("if3 worm geraakt");
-				worm.setHitPoints(worm.getHitPoints()-this.getDamage());
+			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius()))  ||  
+					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
+				System.out.println("if2");
+				//this.setXpos(tempXpos);
+				//this.setYpos(tempYpos);	
+				this.deleteProjectile(world);
+				this.setActive(false);
+				break;
 			}
+			
 			System.out.println("geen if");
 			this.deleteProjectile(world);
 			this.setActive(false);
@@ -238,34 +275,6 @@ public void jump2(Double timeStep) {
 		
 		
 	}	
-}
-public Worm overlappingWorm() {
-	World world = this.getWorld();
-	double maxDistance = this.getRadius() + this.getRadiusWorm();
-	Worm overlappingWorm = null;
-//	System.out.println("maxDisctance" + maxDistance);
-//	System.out.println("Wx " + this.getXpos());
-//	System.out.println("Wy " + this.getYpos());
-	
-	Collection<Worm> collection = (world.getWorms());
-
-    for (Worm w : collection) {
-//    	System.out.println(f.getXpos());
-//    	System.out.println(f.getYpos());
-    	if (Math.sqrt(Math.pow(w.getXpos()-this.getXpos(), 2)+
-    			Math.pow(w.getYpos()-this.getYpos(), 2))< maxDistance) {
-    		//System.out.println("ze overlappen");
-    		
-    		//als ze overlappen
-    		
-    		overlappingWorm = w;
-    		break;
-    	} else {
-    		//System.out.println("nope");
-    		overlappingWorm = null;
-    	}
-    }
-    return overlappingWorm;
 }
 
 
