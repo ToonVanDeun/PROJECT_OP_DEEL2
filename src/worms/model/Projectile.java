@@ -198,12 +198,10 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
 		World world = this.getWorld();
-		double origXpos = this.getXpos();
-		double origYpos = this.getYpos();
 		double tempXpos = this.getXpos();
 		double tempYpos = this.getYpos();
 		double t=0;
-		while ((world.isPassable(tempXpos, tempYpos, this.getRadius()))){// && (this.getActive()==true)){
+		while ((world.isPassable(tempXpos, tempYpos, this.getRadius()))){
 			
 			tempXpos = this.jumpStep(t)[0];
 			tempYpos = this.jumpStep(t)[1];
@@ -226,33 +224,31 @@ public void jump2(Double timeStep) {
 		    		overlappingWorm = w;
 		    		System.out.println(w.getName());
 		    		
-		    		
-	    			overlappingWorm.setHitPoints(overlappingWorm.getHitPoints()-this.getDamage());
-	    			System.out.println("dammage");
-	    			System.out.println("ze overlappen");
-					this.deleteProjectile(world);
-					this.setActive(false);
-					System.out.println("false?" +this.getActive());
+		    		while ((this.getActive()==true)){
+		    			overlappingWorm.setHitPoints(overlappingWorm.getHitPoints()-this.getDamage());
+		    			System.out.println("dammage");
+		    			System.out.println("ze overlappen");
+						this.deleteProjectile(world);
+						this.setActive(false);
+						System.out.println("false?" +this.getActive());
+		    		}
 					
-					break;
 		    	} else {
 		    		overlappingWorm = null;
 		    		if ((isOutOfTheMap(tempXpos,tempYpos))&& (this.getActive()==true)) {
 						System.out.println("if1");
 						this.deleteProjectile(world);
 						this.setActive(false);
-						break;
+						
 						
 						
 					}
 				
 					if (((world.isImpassable(tempXpos, tempYpos, this.getRadius()))) && (this.getActive()==true)){
 						System.out.println("if2");
-						//this.setXpos(tempXpos);
-						//this.setYpos(tempYpos);	
 						this.deleteProjectile(world);
 						this.setActive(false);
-						break;
+						
 					}
 		    	}
 		    	
@@ -260,16 +256,7 @@ public void jump2(Double timeStep) {
 		    	
 		    }
 		    t += timeStep;
-		    
-
-			
-		   
-//			System.out.println("geen if");
-//			this.deleteProjectile(world);
-//			this.setActive(false);
 		}
-		
-		
 	}	
 }
 
