@@ -327,7 +327,7 @@ public class Worm extends Object {
 				
 			}
 			this.setHitPoints(this.getHitPoints()-(3*(int) Math.floor(distance)));
-			this.consumeFood();
+			//this.consumeFood();
 		}	
 	}
 	

@@ -21,6 +21,7 @@ public class Projectile extends Object{
 		this.setMass(worm);
 		this.setActive(true);
 		this.setForce(worm);
+		this.setDamage(worm);
 	}
 	public Projectile(World world, Worm worm){
 		super(world);
@@ -29,6 +30,7 @@ public class Projectile extends Object{
 		this.setMass(worm);
 		this.setActive(true);
 		this.setForce(worm);
+		this.setDamage(worm);
 	}
 	public void deleteProjectile(World world){
 		world.deleteProjectile(this);
@@ -56,7 +58,7 @@ public class Projectile extends Object{
 	 * 			| ! position.isValidPos(xpos)
 	 */
 	public void setXpos(double xpos){
-		this.xpos = xpos+(this.getRadiusWorm()*Math.cos(this.direction));
+		this.xpos = xpos+((this.getRadiusWorm()+this.getRadius())*1.1*Math.cos(this.getDirection()));
 		position.setXpos(this.xpos);
 	}
 	/**
@@ -76,7 +78,7 @@ public class Projectile extends Object{
 	 * 			| ! isValidPos(ypos)
 	 */
 	public void setYpos(double ypos){
-		this.ypos = ypos+(this.getRadiusWorm()*Math.sin(this.direction));
+		this.ypos = ypos+((this.getRadiusWorm()+this.getRadius())*1.1*Math.sin(this.getDirection()));
 		position.setYpos(this.ypos);
 	}
 	/**
@@ -198,7 +200,6 @@ public boolean isOutOfTheMap(double xpos, double ypos) {
 public void jump2(Double timeStep) {
 	if (this.canJump()) {
 		World world = this.getWorld();
-		double maxDistance = this.getRadius() + this.getRadiusWorm();
 		Worm overlappingWorm = null;
 		
 		
@@ -207,70 +208,73 @@ public void jump2(Double timeStep) {
 		double tempXpos = this.getXpos();
 		double tempYpos = this.getYpos();
 		double t=0;
-		while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
+		while ((world.isPassable(tempXpos, tempYpos, this.getRadius()))&& (this.getActive()==true)){
+			t += timeStep;
 			tempXpos = this.jumpStep(t)[0];
 			tempYpos = this.jumpStep(t)[1];
-			System.out.println("tempx " +tempXpos);
-			System.out.println("tempy " +tempYpos);
-			Worm worm = overlappingWorm;
+//			System.out.println("tempx " +tempXpos);
+//			System.out.println("tempy " +tempYpos);
 			
 			
-			t += timeStep;
+			
+			
 			
 			Collection<Worm> collection = (world.getWorms());
 
 		    for (Worm w : collection) {
+		    	double maxDistance = this.getRadius() + w.getRadius();
 		    	
-		    	if (Math.sqrt(Math.pow(w.getXpos()-tempXpos, 2)+
-		    			Math.pow(w.getYpos()-tempYpos, 2))< maxDistance) {
+		    	if (!(w==world.getCurrentWorm()) && (Math.sqrt(Math.pow(w.getXpos()-tempXpos, 2)+
+		    			Math.pow(w.getYpos()-tempYpos, 2))< maxDistance)) {
 		    		System.out.println("ze overlappen");
-		    		System.out.println("worm x " +w.getXpos());
-		    		System.out.println("worm tempx " +tempXpos);
-		    		System.out.println("worm y " +w.getYpos());
-		    		System.out.println("worm tempy " +tempYpos);
+//		    		System.out.println("worm x " +w.getXpos());
+//		    		System.out.println("worm tempx " +tempXpos);
+//		    		System.out.println("worm y " +w.getYpos());
+//		    		System.out.println("worm tempy " +tempYpos);
 		    		
 		    		//als ze overlappen
 		    		
 		    		overlappingWorm = w;
-		    		System.out.println(w);
-		    		break;
+		    		System.out.println(w.getName());
+		    		
+		    		
+	    			overlappingWorm.setHitPoints(overlappingWorm.getHitPoints()-this.getDamage());
+	    			System.out.println("ze overlappen");
+					this.deleteProjectile(world);
+					this.setActive(false);
+					System.out.println("false?");
+					break;
 		    	} else {
 		    		System.out.println("nope");
 		    		overlappingWorm = null;
 		    	}
 		    	
+		    	
 		    }
 		    
 
-			if (isOutOfTheMap(tempXpos,tempYpos)) {
-				System.out.println("if1");
-				this.deleteProjectile(world);
-				this.setActive(false);
-				break;
-				
-				
-			}
-			if (!(worm==null)) {
-				System.out.println("if3 worm geraakt");
-				worm.setHitPoints(worm.getHitPoints()-this.getDamage());
-				System.out.println("HP1 "+worm.getHitPoints());
-				this.deleteProjectile(world);
-				this.setActive(false);
-				break;
-			}
-			if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius()))  ||  
-					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() )){
-				System.out.println("if2");
-				//this.setXpos(tempXpos);
-				//this.setYpos(tempYpos);	
-				this.deleteProjectile(world);
-				this.setActive(false);
-				break;
-			}
-			
-			System.out.println("geen if");
-			this.deleteProjectile(world);
-			this.setActive(false);
+//			if ((isOutOfTheMap(tempXpos,tempYpos))&& (this.getActive()==true)) {
+//				System.out.println("if1");
+//				this.deleteProjectile(world);
+//				this.setActive(false);
+//				break;
+//				
+//				
+//			}
+//		
+//			if (((world.isImpassable(tempXpos, tempYpos, this.getRadius()))  ||  
+//					(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() ))&& (this.getActive()==true)){
+//				System.out.println("if2");
+//				//this.setXpos(tempXpos);
+//				//this.setYpos(tempYpos);	
+//				this.deleteProjectile(world);
+//				this.setActive(false);
+//				break;
+//			}
+//			
+//			System.out.println("geen if");
+//			this.deleteProjectile(world);
+//			this.setActive(false);
 		}
 		
 		
