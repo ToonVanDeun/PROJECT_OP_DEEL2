@@ -3,6 +3,7 @@
  */
 package worms.model;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
 
@@ -59,6 +60,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 		/**
 		 * Returns the radius of the food.
 		 */
+		@Basic
 		public double getRadius() {
 			return this.radius;
 		}
@@ -67,12 +69,14 @@ import be.kuleuven.cs.som.annotate.Raw;
 		/**
 		 * Returns the x-position of the food.
 		 */
+		@Basic
 		public double getXpos() {
 			return position.getXpos();
 		}
 		/**
 		 * Returns the y-position of the food.
 		 */
+		@Basic
 		public double getYpos() {
 			return position.getYpos();
 		}
