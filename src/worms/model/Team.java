@@ -17,10 +17,8 @@ import be.kuleuven.cs.som.annotate.Raw;
  */
 public class Team extends Object {
 	
-	public Team(World world, String name) throws IllegalStateException {
+	public Team(World world, String name) {
 		super(world);
-		if (!(world.getTeams().size()<11))
-			throw new IllegalStateException("World already contains the maximum of 10 teams.");
 		this.setName(name);		
 	}
 	

@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
@@ -376,6 +378,29 @@ public class World {
 			if ((pos != index) && (getObjectAt(pos) == object))
 				return false;
 		return true;
+	}
+	
+	public boolean canAddTeam(String name) {
+		if ((this.getTeams().size()<11) && this.isValidTeamName(name)) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether a given name is a valid name.
+	 * @param name
+	 * @post	Returns true if the given name is a valid name
+	 * 			(if it starts with a capital and exists only of and at least 2 letters .)
+	 * 			If the give name is not a valid name the method returns false.
+	 * 			| result == match "[A-Z]{1}[a-zA-Z " ']{1,}"
+	 */
+	@Raw
+	public boolean isValidTeamName(String name){
+	    String regex = "^[A-Z]{1}[a-zA-Z]{1,}$";
+	    Pattern pattern = Pattern.compile(regex);
+	    Matcher matcher = pattern.matcher(name);
+	    return matcher.find();
 	}
 	/**
 	 * Check whether this world has the given object as one of
