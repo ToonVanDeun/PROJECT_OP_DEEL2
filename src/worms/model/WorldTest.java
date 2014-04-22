@@ -112,10 +112,10 @@ public class WorldTest {
 		assertEquals(world.isPassable(10, 70, 2),true);
 	}
 	//WERKT NOG NIET
-//	@Test
-//	public void test_isAdjacent_valid1() {
-//		assertEquals(world.isAdjacent(10, 48, 2),true);
-//	}
+	@Test
+	public void test_isAdjacent_valid1() {
+		assertEquals(world.isAdjacent(10, 48, 2),true);
+	}
 	@Test
 	public void test_isAdjacent_valid2() {
 		assertEquals(world.isAdjacent(10, 50, 2),false);

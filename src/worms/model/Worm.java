@@ -78,7 +78,7 @@ public class Worm extends Object {
 		this.setRadius(radius);
 		this.setName(name);
 		this.setActionPoints(maxActionPoints);
-		this.setHitPoints(maxHitPoints);
+		this.setHitPoints(5);
 		//this.setIsAlive();
 	}
 
@@ -92,7 +92,7 @@ public class Worm extends Object {
 		this.setDirection(perimeter.nextDouble()*(2*Math.PI));
 		this.setName("Worm");
 		this.setActionPoints(this.getMaxActionPoints());
-		this.setHitPoints(this.getMaxHitPoints());
+		this.setHitPoints(5);
 		this.setTeamRandom();
 		//this.setIsAlive();
 		
@@ -329,8 +329,8 @@ public class Worm extends Object {
 				
 			}
 			this.setHitPoints(this.getHitPoints()-(3*(int) Math.floor(distance)));
-			this.setIsAlive();
-			this.deleteWorm(world);
+//			this.setIsAlive();
+//			this.deleteWorm(world);
 		}	
 	}
 	
@@ -616,6 +616,8 @@ public class Worm extends Object {
 			this.hitPoints = this.getMaxHitPoints();
 		} else if (hitPoints <0) {
 				this.hitPoints = 0;
+				this.setIsAlive();
+				this.deleteWorm(this.getWorld());
 		} else if (hitPoints < this.getMaxHitPoints()) {
 				this.hitPoints = hitPoints;
 		} 
@@ -724,7 +726,7 @@ public class Worm extends Object {
 					this.setXpos(pasXpos);
 					this.setYpos(pasYpos);
 					this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
-					this.fall();
+					//this.fall();
 				}
 				
 			} 
