@@ -303,8 +303,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public String getWinner(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getWinner();
 	}
 	/**
 	 * Returns the list of all worm objects in the world.

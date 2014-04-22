@@ -603,7 +603,15 @@ public class World {
 		return ((ArrayList<Projectile>) getProjectile()).get(this.getCurrentProjectileIndex());
 	}
 	
-
+	//winning
+	public String getWinner(){
+		for (Team team : this.getTeams()){
+			if (!(team.getAllAliveWorms().size()==0)){
+				return team.getName();
+			}
+		}
+		return null;
+	}
 
 
 	//Variables
