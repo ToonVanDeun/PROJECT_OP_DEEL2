@@ -380,12 +380,7 @@ public class World {
 		return true;
 	}
 	
-	public boolean canAddTeam(String name) {
-		if ((this.getTeams().size()<11) && this.isValidTeamName(name)) {
-			return true;
-		}
-		return false;
-	}
+	
 	
 	/**
 	 * Checks whether a given name is a valid name.

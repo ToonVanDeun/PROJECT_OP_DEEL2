@@ -142,11 +142,8 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void addEmptyTeam(World world, String newName) {
-		
 		try {
-			if (world.canAddTeam(newName)) {
 				new Team(world, newName);
-			}
 		} catch (IllegalArgumentException exc) {
 			throw new ModelException("that name is not valid");
 		}
