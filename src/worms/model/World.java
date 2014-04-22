@@ -14,12 +14,43 @@ import java.util.regex.Pattern;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
-
+/**
+ * A class of World involving width, height, passableMap, and lists of objects.
+ * Complemented with methods to interact with the world and change curtain values.
+ * 
+ * @invar	
+ * 	
+ * @author 	Toon Stuyck
+ * 			Toon Van Deun
+ * 			Burgerlijk Ingenieur
+ * 			https://github.com/ToonVanDeun/PROJECT_OP_DEEL2
+ * @version 1.0
+ */
 /**
  * @author Toon
  *
  */
 public class World {
+	/**
+	 * Initialize a world with a width, height, passableMap and random object.
+	 * @param width		The width of the new world.
+	 * @param height	The height of the new world.
+	 * @param passableMap	The passableMap for the new world.
+	 * @param random	The random object for the world (perimeter).
+	 * 
+	 * @post	The UpperboundHeight is initialized to the given height.
+	 * 			| new.getUpperboundHeight() == height
+	 * @post	The upperboundWidth is initialized to the given height.
+	 * 			| new.getUpperboundWidth() == width
+	 * @post	The height is set to the given height.
+	 * 			| new.getHeight() == height
+	 * @post	The width is set to the given width.
+	 * 			| new.getWidth() == width
+	 * @post	The passableMap is set to the given passableMap.
+	 * 			|new.getPassableMap() == passableMap
+	 * @post	The perimeter is set to the given random object.
+	 * 			|new.getPerimeter == random
+	 */
 	public World(double width, double height, boolean[][] passableMap, Random random) {
 		this.setUpperboundHeight(height);
 		this.setUpperboundWidth(width);
@@ -37,7 +68,7 @@ public class World {
 		return this.perimeter;		
 	}
 	
-	//Width and Hight
+	//Width and Height
 	/**
 	 * Returns the width of the world.
 	 */
@@ -67,6 +98,7 @@ public class World {
 	 * 			If the given width isn't a valid width 
 	 * 			(smaller then 0 or bigger then Double.MAX_VALUE or bigger than upperBoundWidth),
 	 * 			the method returns false.
+	 * 			| ((0<= width) && (width<=Double.MAX_VALUE) && (width<=this.getUpperboundWidth()))
 	 */
 	private boolean isValidWidth(double width){
 		return ((0<= width) && (width<=Double.MAX_VALUE) && (width<=this.getUpperboundWidth()));
@@ -82,8 +114,9 @@ public class World {
 	 * @param 	The new upperboundWidth for the world.
 	 * @post 	The upperboundWidth of the world is set to the given upperboundWidth.
 	 * 			|new.getUpperboundWidth() ==uperboundWidth
-	 * @throws IllegalArgumentException
-	 * 			if the upperboundWidth is not a valid width.
+	 * @throws 	IllegalArgumentException
+	 * 			If the upperboundWidth is not a valid upperboundWidth.
+	 * 			| upperboundWidth<this.getWidth()
 	 */
 	public void setUpperboundWidth(double upperboundWidth) throws IllegalArgumentException {
 		if ( upperboundWidth<this.getWidth())
@@ -119,6 +152,7 @@ public class World {
 	 * 			If the given height isn't a valid height 
 	 * 			(smaller then 0 or bigger then Double.MAX_VALUE or bigger that upperboundHeight),
 	 * 			the method returns false.
+	 * 			|(0<= height) && (height<=Double.MAX_VALUE) && (height<=this.getUpperboundHeight())
 	 */
 	private boolean isValidHeight(double height){
 		return ((0<= height) && (height<=Double.MAX_VALUE) && (height<=this.getUpperboundHeight()));
@@ -135,7 +169,8 @@ public class World {
 	 * @post 	The upperboundHeight of the world is set to the given upperboundHeight.
 	 * 			|new.getUpperboundHeight() ==uperboundHeight
 	 * @throws IllegalArgumentException
-	 * 			if the upperboundHeight is not a valid height.
+	 * 			if the upperboundHeight is not a valid upperboundHeight.
+	 * 			|upperboundHeight<this.getHeight()
 	 */
 	public void setUpperboundHeight(double upperboundHeight) throws IllegalArgumentException {
 		if (upperboundHeight<this.getHeight())
