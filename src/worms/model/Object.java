@@ -5,9 +5,7 @@ import be.kuleuven.cs.som.annotate.Model;
 import be.kuleuven.cs.som.annotate.Raw;
 import be.kuleuven.cs.som.annotate.Value;
 
-
 /**
- * 
  * A class of objects that can be in a world of class World. 
  * Classes Worm, Food, Team and Projectile all inherit from Object.
  * 
@@ -16,7 +14,11 @@ import be.kuleuven.cs.som.annotate.Value;
  * @invar  No world contains the same object twice.
  *       | 
  *       
- * @author Toon
+ * @author 	Toon Stuyck
+ * 			Toon Van Deun
+ * 			Burgerlijk Ingenieur
+ * 			https://github.com/ToonVanDeun/PROJECT_OP_DEEL2
+ * @version 2.0
  */
 @Value
 public abstract class Object {

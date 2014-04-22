@@ -4,7 +4,6 @@
 package worms.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -13,7 +12,6 @@ import java.util.regex.Pattern;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
-import be.kuleuven.cs.som.annotate.Value;
 
 /**
  * A class of World involving width, height, passableMap, and lists of objects.
@@ -25,11 +23,7 @@ import be.kuleuven.cs.som.annotate.Value;
  * 			Toon Van Deun
  * 			Burgerlijk Ingenieur
  * 			https://github.com/ToonVanDeun/PROJECT_OP_DEEL2
- * @version 1.0
- */
-/**
- * @author Toon
- *
+ * @version 2.0
  */
 public class World {
 	/**
