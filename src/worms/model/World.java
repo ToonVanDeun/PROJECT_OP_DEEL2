@@ -159,7 +159,7 @@ public class World {
 	 * @return True if the object is positioned in a impassable location
 	 * 			False if the object isn't positioned in impassable terrain.
 	 */
-	public boolean isImpassable(double x, double y, double radius) {
+	public boolean isImpassable2(double x, double y, double radius) {
 		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
 		int mapHeight = this.getPassableMap().length; //eigenlijk width
 		//schaalfactoren waarmee coordinaten uit world vermenigvuldigd zullen worden om ze in passableMap te hebben.
@@ -167,6 +167,9 @@ public class World {
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
 		
 		return ((! this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round(x*xScale)] ));
+	}
+	public boolean isImpassable(double x, double y, double radius) {		
+		return !this.isPassable(x, y, radius);
 	}
 	/**
 	 * Checks whether an objects with given x position, given y position and given radius, 
@@ -188,15 +191,17 @@ public class World {
 		int mapHeight = this.getPassableMap().length; //eigenlijk width
 		double xScale = (mapWidth/this.getWidth()); //schaalfactor voor een x coordinaat van world
 		double yScale = (mapHeight/this.getHeight());//schaalfactor voor een y coordinaat van world
-		if (((x-radius)<0) 	|| (((x+radius)>this.getWidth()) || ((y-radius)<0) || ((y+radius)>this.getHeight()))) {
-			return false;
+		if (((x>=0)&&(x<=this.getWidth())&&(y>=0)&&y<=this.getHeight()) && 
+				(((x-radius)<0) 	|| (((x+radius)>this.getWidth()) || ((y-radius)<0) || ((y+radius)>this.getHeight())))) {
+			return (this.getPassableMap()[(int) Math.floor((this.getHeight()-(y))*yScale)][(int) Math.floor((x)*xScale)]);
 		}
 		for (double dir=0;dir<2*Math.PI;dir+=0.3) {
-			if (this.getPassableMap()[(int) Math.floor((this.getHeight()-(y+radius*Math.sin(dir)))*yScale)][(int) Math.floor((x+radius*Math.cos(dir))*xScale)])  {
-				return true;
+			if (!(this.getPassableMap()[(int) Math.floor((this.getHeight()-(y))*yScale)][(int) Math.floor((x)*xScale)]) ||
+				!(this.getPassableMap()[(int) Math.floor((this.getHeight()-(y+radius*Math.sin(dir)))*yScale)][(int) Math.floor((x+radius*Math.cos(dir))*xScale)]))  {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	/**
 	 * Checks whether an objects with given x position, given y position and given radius, 
@@ -230,7 +235,7 @@ public class World {
 						(this.getPassableMap() [(int) Math.round((this.getHeight()-y)*yScale)][(int) Math.round((x-radius)*xScale)] )));
 	}
 	
-	public boolean isAdjacent(double x, double y ,double radius){
+	public boolean isAdjacent3(double x, double y ,double radius){
 		if (this.isPassable(x, y, radius)){
 			
 			double maxDistance = radius*1.1;
@@ -249,6 +254,12 @@ public class World {
 			}
 				
 
+		}
+		return false;
+	}
+	public boolean isAdjacent(double x, double y ,double radius){
+		if ((this.isPassable(x, y, radius)) && (this.isImpassable(x, y, radius*1.1))){
+			return true;
 		}
 		return false;
 	}
