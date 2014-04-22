@@ -256,7 +256,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public double getJumpTime(Projectile projectile, double timeStep) {
-		return projectile.jumpTime2(timeStep);
+		return projectile.jumpTime(timeStep);
 	}
 	/**
 	 * Get the time it takes the given worm to jump.
@@ -393,7 +393,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void jump(Projectile projectile, double timeStep) {
-		projectile.jump2(timeStep);
+		projectile.jump(timeStep);
 		
 	}
 	/**

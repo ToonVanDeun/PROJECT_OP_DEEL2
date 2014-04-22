@@ -1,5 +1,8 @@
 package worms.model;
 
+import be.kuleuven.cs.som.annotate.Value;
+
+@Value
 public class Weapon {
 	
 	
