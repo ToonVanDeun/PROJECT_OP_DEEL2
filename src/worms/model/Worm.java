@@ -615,6 +615,7 @@ public class Worm extends Object {
 				this.hitPoints = 0;
 				this.setIsAlive();
 				this.deleteWorm(this.getWorld());
+				this.getWorld().setCurrentWormIndex(this.getWorld().getCurrentWormIndex()-1);
 		} else if (hitPoints < this.getMaxHitPoints()) {
 				this.hitPoints = hitPoints;
 		} 

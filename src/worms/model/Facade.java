@@ -373,8 +373,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public boolean isGameFinished(World world) {
-		// TODO Auto-generated method stub
-		return false;
+		return world.isGameFinished();
 	}
 	/**
 	 * Returns a given position with a given radius is impassable for a given world.

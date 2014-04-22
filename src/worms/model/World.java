@@ -269,7 +269,7 @@ public class World {
 	 * 
 	 * @return
 	 */
-	private int getCurrentWormIndex() {
+	public int getCurrentWormIndex() {
 		return currentWormIndex;
 	}
 	/**
@@ -280,7 +280,10 @@ public class World {
 	 * @post The currentWormIndext is set to the given currentWormIndex
 	 * 		|new.getCurrentWormIndex() == currentWormIndex
 	 */
-	private void setCurrentWormIndex(int currentWormIndex) {
+	public void setCurrentWormIndex(int currentWormIndex) {
+		if (currentWormIndex<0){
+			currentWormIndex = 0;
+		}
 		assert currentWormIndex >=0;
 		this.currentWormIndex = currentWormIndex;
 	}
@@ -604,13 +607,45 @@ public class World {
 	}
 	
 	//winning
+//	public String getWinner(){
+//		for (Team team : this.getTeams()){
+//			if (!(team.getAllAliveWorms().size()==0)){
+//				if (team.getAllAliveWorms().size()==1) {
+//					return ((Worm) team.getAllWorms().toArray()[0]).getName();
+//				} else {
+//				return team.getName();
+//				}
+//			}
+//		}
+//		return null;
+//	}
 	public String getWinner(){
-		for (Team team : this.getTeams()){
-			if (!(team.getAllAliveWorms().size()==0)){
-				return team.getName();
+		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
+		if (team ==null) {
+			return ((Worm) this.getWorms().toArray()[0]).getName();
+		} else{
+			if (team.getAllAliveWorms().size()==1) {
+				return ((Worm) this.getWorms().toArray()[0]).getName();
+			}else {
+				return ((Worm) this.getWorms().toArray()[0]).getTeamName();
 			}
 		}
-		return null;
+			
+	}
+		
+	public boolean isGameFinished(){
+		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
+		for (Worm worm : this.getWorms()){
+			if (!(worm.getTeam()==team)){
+				return false;
+			}
+		}if (team==null)
+			if (this.getWorms().size()==1) {
+				return true;
+			} else {
+				return false;
+			}
+		return true;
 	}
 
 
