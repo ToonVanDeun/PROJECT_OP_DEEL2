@@ -10,8 +10,33 @@ import be.kuleuven.cs.som.annotate.Raw;
  * Complemented with methodes that interact with the projectile and changes certain values.
  * 
  * 
- * @invar	
- * 	
+ * @invar	The mass of the Rifle must be 10g.
+ * 		  	| if worm.getSelectedWeapon() =="Rifle"
+ * 			|	then this.getMass() == 0.01
+ * @invar	The mass of the Bazooka must be 300g.
+ * 			| if worm.getSelectedWeapon() =="Bazooka"
+ * 			|	then this.getMass() == 0.3
+ * @invar	The direction of the projectile must be the same as the direction of the worm.
+ * 			| this.getDirection().equals(worm.getDirection())
+ * @invar	The force that is exerted by the Rifle is 1.5
+ * 			| if worm.getSelectedWeapon() =="Rifle"
+ * 			|	then this.getForce() == 1.5
+ * @invar	The force that is exerted by the Bazooka is in range of 2.5 and 9.5
+ * 			| if worm.getSelectedWeapon() =="Bazooka"
+ * 			|	then this.getForce() == 2.5+(this.getYield()*0.07)
+ * @invar	The damage done by the Rifle is 20.
+ * 			| if worm.getSelectedWeapon() =="Rifle"
+ * 			|	then this.getDamage() == 20
+ * @invar	The damage done by the Bazooka is 80.
+ * 			| if worm.getSelectedWeapon() =="Bazooka"
+ * 			|	then this.getDamage() == 80
+ * @invar	The cost to shoot with the Rifle is 10 actionpoints.
+ * 			| if worm.getSelectedWeapon() =="Rifle"
+ * 			|	then this.getCost() == 10
+ * @invar	The cost to shoot with the Bazooka is 50 actionpoints.
+ * 			| if worm.getSelectedWeapon() =="Bazooka"
+ * 			|	then this.getCost() == 50
+ * 
  * @author 	Toon Stuyck
  * 			Toon Van Deun
  * 			Burgerlijk Ingenieur
