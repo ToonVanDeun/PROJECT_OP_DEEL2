@@ -373,8 +373,8 @@ public class Projectile extends Object{
 	 */
 	public boolean isOutOfTheMap(double xpos, double ypos) {
 		World world= this.getWorld();
-		return !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
-				((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius()))) ;
+		return !((xpos<(world.getWidth()-this.getRadius()))&&((xpos>this.getRadius()))&&
+				((ypos < world.getHeight()-this.getRadius())) && ((ypos>this.getRadius()))) ;
 	}
 	/**
 	 * Changes the positions of the projectile as a result of a jump from the current position.
@@ -427,7 +427,7 @@ public class Projectile extends Object{
 						
 			    	} else {
 			    		overlappingWorm = null;
-			    		if ((isOutOfTheMap(tempXpos,tempYpos))&& (this.getActive()==true)) {
+			    		if ((isOutOfTheMap(tempXpos,tempYpos))) {
 							this.deleteProjectile(world);
 							this.setActive(false);	
 						}
