@@ -205,7 +205,11 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void fall(Worm worm) {
-		worm.fall();
+		try{
+			worm.fall();
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException("not allowed to fall");
+		}
 	}
 	/**
 	 * Returns the projectile that is active in the world.
@@ -265,7 +269,7 @@ public  class Facade implements IFacade {
 	@Override
 	public double getJumpTime(Worm worm, double timeStep) {
 		try {
-			return worm.jumpTime2(timeStep);
+			return worm.jumpTime(timeStep);
 		} catch (IllegalStateException exc) {
 			throw new ModelException("can't jump");
 		}
@@ -406,8 +410,7 @@ public  class Facade implements IFacade {
 	@Override
 	public void jump(Worm worm, double timeStep) {
 		try {
-			//worm.jump(timeStep);	
-			worm.jump2(timeStep);
+			worm.jump(timeStep);	
 		} catch (IllegalStateException exc) {
 			throw new ModelException("can't jump");
 		}
@@ -418,9 +421,11 @@ public  class Facade implements IFacade {
 	@Override
 	public void move(Worm worm) {
 		try{
-			worm.move2();
+			worm.move();
 		} catch (IllegalArgumentException exc) {
-			throw new ModelException("not allowed to move");
+			throw new ModelException("not enough actionpoints to move");
+		} catch (IllegalStateException exc) {
+			throw new ModelException("the worm cannot move");
 		}
 	}
 	/**

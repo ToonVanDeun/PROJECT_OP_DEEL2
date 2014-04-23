@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -148,6 +149,7 @@ public class Worm extends Object {
 	 * 			| if(this.alive == true)
 	 * 			|	then new.getHitPoints() == old.getHitpoints() + health
 	 */
+	@Raw
 	public void newRound(){
 		if (this.alive == true)
 			this.renewActionPoints();
@@ -158,6 +160,7 @@ public class Worm extends Object {
 	/**
 	 * Returns the name of the team if the worm has a team.
 	 */
+	@Basic
 	public String getTeamName(){
 		if (this.hasTeam())
 			return this.getTeam().getName();
@@ -338,7 +341,7 @@ public class Worm extends Object {
 	 * @return	True if the given position isn't in the boundaries of the map.
 	 * 			False if e given position is in the boundaries of the map.
 	 * 			| !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
-				|	((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius())))
+	 *			|	((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius())))
 	 */
 	private boolean isOutOfTheMap(double xpos, double ypos) {
 		World world= this.getWorld();
@@ -359,9 +362,20 @@ public class Worm extends Object {
 				!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
 	/**
-	 * Makes the worm fall, if it can fall, until the worm falls on an obstacle or falls out of the map.			
+	 * Makes the worm fall, if it can fall, until the worm falls on an obstacle or falls out of the map.
+	 *
+	 * @post	The worm has fallen to a new position that is adjacent the x-position stays the same but 
+	 * 			the y-position changes.
+	 * 			|new.getYpos() == 
+	 * @post	The worms hitpoints are correctly reduced.
+	 * 			|new.getHitPoints() == old.getHitPoints() - 3*distance
+	 * @post	After the fall the worm could be on food this gets checked.
+	 * 			| this.consumeFood()
+	 * @throws	IllegalStateException
+	 * 			If the worm can't fall because he is on adjacent terrain the exception is thrown.
+	 * 			| ! canFall()		
 	 */
-	public void fall() {
+	public void fall() throws IllegalStateException{
 		World world = this.getWorld();
 		double distance = 0;
 		boolean trigger = false;
@@ -385,7 +399,10 @@ public class Worm extends Object {
 			}
 			this.setHitPoints(this.getHitPoints()-(3*(int) Math.floor(distance)));
 			this.consumeFood();
-		}	
+		}
+		else {
+			throw new IllegalStateException();
+		}
 	}
 	
 	//direction (nominal)
@@ -615,6 +632,13 @@ public class Worm extends Object {
 		else 
 			this.actionPoints = actionPoints;
 	}
+	/**
+	 * This methods refills the actionpoints to its maximum.
+	 * 
+	 * @post	The actionspoints are refilled to its maximum
+	 * 			| new.getActionPoints() == this.getMaxActionPoints()
+	 */
+	@Raw
 	public void renewActionPoints(){
 		this.setActionPoints(this.getMaxActionPoints());
 	}
@@ -677,6 +701,14 @@ public class Worm extends Object {
 		} 
 		this.setIsAlive();
 	}
+	/**
+	 * This method checks whether the worm still has hitpoints over else it is set as a dead worm.
+	 * 
+	 * @post	If the hitpoints of the worm >0 then it is alive but if the hitpoints ==0 then the worm is set dead.
+	 * 			| if (this.getHitpoints() == 0)
+	 * 			|	then new.getAlive() == false
+	 * 			| else then new.getAlive() == true
+	 */
 	public void setIsAlive(){
 		if(this.getHitPoints()==0) {
 			this.alive = false;
@@ -685,51 +717,76 @@ public class Worm extends Object {
 			this.alive = true;
 		}
 	}
-
+	/**
+	 * This method return whether or not the worm is still alive.
+	 */
 	public boolean getIsAlive(){
 		return this.alive;
 	}
+	/**
+	 * This method kills a worm.
+	 * 
+	 * @post	The hitpoints of a worm are set to 0.
+	 * 			| new.getHitPoints() == 0
+	 * @post	The state of the worm will be set to dead because he has no hitpoints left.
+	 * 			| new.getIsAlive() == false
+	 * @post	The worm will be deleted from the current world.
+	 * 			| new.objects.contains(this) == false;
+	 */
 	public void killWorm() {
 		this.setHitPoints(0);
 		this.setIsAlive();
 		this.deleteWorm(this.getWorld());
 	}
+	/**
+	 * This method deletes a worm from the list of objects.
+	 * @param world
+	 * 			The world from where the worm needs to be deleted.
+	 * 
+	 * @post	The worm will be deleted from the current world.
+	 * 			| new.objects.contains(this) == false;
+	 */
 	public void deleteWorm(World world){
 		if (this.getIsAlive() == false)
 			world.deleteWorm(this);
 	}
-	
+	/**
+	 * This method heals the worm with an amount of health.
+	 * @param amount
+	 * 			The amount of health which the worm will get.
+	 * 
+	 * @post	If the worm is still alive it will get an amount of new hitpoints else it will be deleted.
+	 * 			| if (this.getAlive() == true)
+	 * 			| 	then new.getHitPoints() == old.getHitPoints() + amount
+	 * 			| else then new.objects.contains(this) == false;
+	 */
 	public void heal(int amount){
 		if (this.alive)
 			this.setHitPoints(this.getHitPoints()+amount);
+		else 
+			this.deleteWorm(getWorld());
 	}
 	//move (defensive)
 	/**
 	 * The method makes the worm move a given number of steps in the direction the worm is currently facing.
-	 * @param steps
-	 * 			The number of steps the worm is moving
-	 * @post	The worm has moved the according number of steps in the current direction.
+	 * @post	The worm has moved in the current direction.
 	 * 			|new.getXpos() == old.getXpos() + steps*cos(direction)*radius
 	 * 			|new.getYpos() == old.getYpos() + steps*sin(direction)*radius
 	 * @post	The worms actionpoints are correctly reduced.
 	 * 			|new.getActionPoints == old.getActionPoints() - old.computeCostStep(steps)
 	 * @throws	IllegalArgumentException
-	 * 			If the worm can't move the amount of steps because he has insufficient actionpoints
+	 * 			If the worm can't move because he has insufficient actionpoints
 	 * 			the exception is thrown.
-	 * 			| ! isValidStep(steps)
+	 * 			| ! isValidStep()
+	 * @throws	IllegalStateException
+	 * 			If the worm can't move because the worm isn't positioned in passable terrain 
+	 * 			and adjacent to impassable terrain the exception is thrown.
+	 * 			| ! canMove()
 	 */
-	public void move() throws IllegalArgumentException {
+	public void move() throws IllegalArgumentException,IllegalStateException {
 		if ( ! isValidStep())
 			throw new IllegalArgumentException();
-		this.setXpos(this.getXpos() + (Math.cos(this.getDirection())*this.getRadius()));
-		this.setYpos(this.getYpos() + (Math.sin(this.getDirection())*this.getRadius()));
-		this.setActionPoints(this.getActionPoints()-this.computeCostStep(1));
-	}
-	
-	public void move2() throws IllegalArgumentException {
-		if ( ! isValidStep())
-			throw new IllegalArgumentException();
-		if (canMove2()) { 
+		if (canMove()) { 
 			World world = this.getWorld(); //wereld waarin de worm zich bevind.
 			double x = this.getXpos();
 			double y = this.getYpos();
@@ -796,14 +853,14 @@ public class Worm extends Object {
 			
 			
 		}
+		else throw new IllegalStateException();
 	}
 	
 	/**
-	 * 
-	 * @return Returns true if the worm is positioned in passable terrain 
-	 * 			and adjacent to impassable terrain.
+	 * Returns true if the worm is positioned in passable terrain 
+	 * 	and adjacent to impassable terrain.
 	 */
-	public boolean canMove2() {
+	public boolean canMove() {
 		World world = this.getWorld();
 		return world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius());
 	}
@@ -822,7 +879,13 @@ public class Worm extends Object {
 		return Math.abs((int) Math.round((steps)*(Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4.0*Math.sin(this.getDirection()))))));
 	}
-	
+	/**
+	 * Returns the cost in actionpoints to move in the current direction.
+	 * @param prevXpos
+	 * 			The x-position of the worm before he moved.
+	 * @param prevYpos
+	 * 			The y-position of the worm before he moved.
+	 */
 	private int computeCost2(double prevXpos, double prevYpos){
 		return (int) (Math.round(Math.abs(this.getXpos()-prevXpos))
 				+Math.round(4*Math.abs(this.getYpos()-prevYpos)));
@@ -883,9 +946,9 @@ public class Worm extends Object {
 	//jump (defensive)
 	/**
 	 * Changes the positions of the worm as a result of a jump from the current position.
-	 * @post 	The worms jumped to the correct position when the direction is in the range (0 - PI)
+	 * @post 	The worm jumped to the correct position when the direction is in the range (0 - PI)
 	 * 			| new.getXpos() == old.getXpos() + this.jumpDistance()
-	 * @post 	The worms hasn't jumped when the direction is in the range (PI- 2*PI)
+	 * @post 	The worm hasn't jumped when the direction is in the range (PI- 2*PI)
 	 * 			| new.getXpos() == old.getXpos()
 	 * @post	The worm's actionpoints are reduced to zero.
 	 * 			|new.getActionPoints() == 0;
@@ -893,34 +956,8 @@ public class Worm extends Object {
 	 * 			When the worm has no action point left to jump the exception is thrown.
 	 * 			|! canJump()
 	 */
-	public void jump(double timeStep) throws IllegalStateException {
-		World world = this.getWorld();
-		System.out.println("jump xpos voor " +this.getXpos());
-		System.out.println("jump ypos voor " +this.getYpos());
-		if (! canJump()) {
-			throw new IllegalStateException();
-		}
-		else {
-			System.out.println("jump if");
-			while(world.isPassable(this.jumpStep(timeStep)[0], this.jumpStep(timeStep)[1], this.getRadius())) {
-				//System.out.println("jump if2");
-				this.setXpos(this.jumpStep(timeStep)[0]);
-				this.setYpos(this.jumpStep(timeStep)[1]);
-				this.setActionPoints(0);
-				//System.out.println("jump xpos na " +this.getXpos());
-				//System.out.println("jump ypos na " +this.getYpos());
-			}
-		}
-		System.out.println("jump xpos2 " +this.getXpos());
-		System.out.println("jump ypos2 " +this.getYpos());
-		//this.setXpos(this.jumpStep(this.jumpTime())[0]);
-		//this.setYpos(this.jumpStep(this.jumpTime())[1]);
-		//this.setActionPoints(0);
-		//this.fall();
-	}
-	
-	public void jump2(Double timeStep) {
-		if (this.canJump2()) {
+	public void jump(Double timeStep) throws IllegalStateException{
+		if (this.canJump()) {
 			World world = this.getWorld();	
 			double origXpos = this.getXpos();
 			double origYpos = this.getYpos();
@@ -951,22 +988,14 @@ public class Worm extends Object {
 			}
 			
 			
-		}	
+		} else throw new IllegalStateException();
 	}
 	
 	//~jump ~actionpoints (total)
 	/**
-	 * Checks whether the worms still has actionpoints and is facing the right direction so he can jump.
-	 */
-	public boolean canJump() {
-		World world = this.getWorld();
-		return ((this.getActionPoints() > 0) && ((this.getDirection()<=Math.PI)) &&
-				world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
-	}
-	/**
 	 * Checks whether the worms still has actionpoints is placed in passable terrain.
 	 */
-	public boolean canJump2() {
+	public boolean canJump() {
 		World world = this.getWorld();
 		return ((this.getActionPoints() > 0) && world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
@@ -982,54 +1011,19 @@ public class Worm extends Object {
 		return velocity;
 	}
 	/**
-	 * Returns the jump distance of a worm.
-	 */
-	@Basic
-	private double jumpXDistance(double timeStep) {
-		World world = this.getWorld();
-		double xDistance;
-		if (world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) {
-			 xDistance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
-		}
-//		double distance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
-//		return distance;
-		xDistance = this.jumpStep(timeStep)[0];
-		System.out.println("xdistance " +xDistance);
-		return xDistance;
-		
-	}
-	private double jumpYDistance(double timeStep) {
-		double yDistance = this.jumpStep(timeStep)[1];
-		System.out.println("yDistance " +yDistance);
-		return yDistance;
-	}
-	/**
 	 * Returns the time it takes to worm to jump (to his new position).
 	 * @throws	IllegalStateException
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
-	@Basic
 	public double jumpTime(double timeStep) throws IllegalStateException{
-		double time = 0;
-		if (!this.canJump2())
-			throw new IllegalStateException();
-		if (this.getDirection() == (Math.PI/2))
-			time = 0;
-		else
-			time = Math.sqrt(Math.pow(this.jumpXDistance(timeStep),2)+Math.pow(this.jumpYDistance(timeStep),2))
-			/(this.jumpVelocity()*Math.abs(Math.cos(this.getDirection())));
-		return time;
-	}
-	
-	public double jumpTime2(double timeStep) {
-		
 		World world = this.getWorld();	
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
 		double tempXpos = this.getXpos();
 		double tempYpos = this.getYpos();
 		double t=0;
+		if (this.canJump()){
 		while (world.isPassable(tempXpos, tempYpos, this.getRadius())){
 			tempXpos = this.jumpStep(t)[0];
 			tempYpos = this.jumpStep(t)[1];
@@ -1043,9 +1037,10 @@ public class Worm extends Object {
 				return t;
 			}
 		}
-		return t;	
+		return t;
+		}
+		else throw new IllegalStateException();
 	}
-	
 	
 	/**
 	 * Returns the worms position during a jump on a given time (after the jump started).
@@ -1059,58 +1054,49 @@ public class Worm extends Object {
 	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
 		double[] step;
         step = new double[2];
-        if (! this.canJump2())
+        if (! this.canJump())
         	throw new IllegalStateException();
         
         	step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
         	step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
         			0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
-        
-
 		return step;
 	}
 	
 	//Eating food
-	
+	/**
+	 * This method makes the worm eat food.
+	 * @post	When the food gets eaten the radius of the worm will increas with 10%.
+	 * 			| new.getRadius() == old.getRadius() * 1.1
+	 * @post	When the food gets eaten the worm will be placed to the nearest adjecent location.
+	 * 			| world.isAdjacent(xpos, ypos , radius) == true
+	 * @post	When the food gets eaten this food object will de removed from the world.
+	 * 			| (! (this.getWorld()).hasAsObject(food))
+	 */
 	public void consumeFood() {
-		double xpos = this.getXpos(); // om de een of andere vreemde reden, fallt de worm als je zijn radius aanpast...
+		double xpos = this.getXpos();
 		double ypos = this.getYpos();
-		World world = this.getWorld();
 		Food food = this.overlappingFood();
 		if (!(food==null)) {
-			
 			this.radius = this.getRadius()*1.1;
-			
 			this.setNearestAdjacent(xpos, ypos);
-			
 			food.unsetWorld();	
-			
 		}
 	}
-	
+	/**
+	 * This method return the food objects that overlap with the worms position.
+	 */
 	public Food overlappingFood() {
 		World world = this.getWorld();
 		double maxDistance = this.getRadius() + 0.2;
 		Food overlappingFood = null;
-//		System.out.println("maxDisctance" + maxDistance);
-//		System.out.println("Wx " + this.getXpos());
-//		System.out.println("Wy " + this.getYpos());
-		
 		Collection<Food> collection = (world.getFood());
-
 	    for (Food f : collection) {
-//	    	System.out.println(f.getXpos());
-//	    	System.out.println(f.getYpos());
 	    	if (Math.sqrt(Math.pow(f.getXpos()-this.getXpos(), 2)+
 	    			Math.pow(f.getYpos()-this.getYpos(), 2))< maxDistance) {
-	    		//System.out.println("ze overlappen");
-	    		
-	    		//als ze overlappen
-	    		
 	    		overlappingFood = f;
 	    		break;
 	    	} else {
-	    		//System.out.println("nope");
 	    		overlappingFood = null;
 	    	}
 	    }
@@ -1118,7 +1104,7 @@ public class Worm extends Object {
 	}
 	
 	// shoot
-	
+	Weapon weapon = new Weapon();
 	public boolean isValidPropulsion(int propulsion) {
 		return (propulsion >= 0 && propulsion <= 100);
 	}
@@ -1144,8 +1130,6 @@ public class Worm extends Object {
 		return this.massProjectile;
 	}
 	
-	
-	Weapon weapon = new Weapon();
 	public String getSelectedWeapon(){
 		return weapon.getName();
 	}
@@ -1178,15 +1162,10 @@ public class Worm extends Object {
 			
 		}
 	}
-
-
-	
 	// variables
 	
 	private Team team;
 	private Position position;
-//	private double xpos;
-//	private double ypos;
 	private double direction;
 	private double radius;
 	private static double radiusLowerBound = 0.25;

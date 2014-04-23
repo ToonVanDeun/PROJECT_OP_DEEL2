@@ -416,6 +416,10 @@ public class Projectile extends Object{
 	 * 			the given x-position that needs to be checked.
 	 * @param ypos
 	 * 			the given y-position that needs to be checked.
+	 * @return	True if the given position isn't in the boundaries of the map.
+	 * 			False if e given position is in the boundaries of the map.
+	 * 			| !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
+	 *			|	((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius())))
 	 */
 	@Raw
 	public boolean isOutOfTheMap(double xpos, double ypos) {
