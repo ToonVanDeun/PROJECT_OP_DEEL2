@@ -329,7 +329,7 @@ public class World {
 			if (team.getAllAliveWorms().size()==1) {
 				return ((Worm) this.getWorms().toArray()[0]).getName();
 			}else {
-				return ((Worm) this.getWorms().toArray()[0]).getTeamName();
+				return "TEAM " + ((Worm) this.getWorms().toArray()[0]).getTeamName();
 			}
 		}
 			
