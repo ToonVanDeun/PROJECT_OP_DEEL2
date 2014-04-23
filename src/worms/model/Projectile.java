@@ -7,7 +7,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 
 /**
  * A class of projectiles involving x-position, y-position, a radius, a orientation, a mass, a propulsion yield and a force.
- * Complemented with methodes that interact with the projectile and change certain values.
+ * Complemented with methodes that interact with the projectile and changes certain values.
  * 
  * 
  * @invar	
