@@ -24,13 +24,17 @@ public class Weapon {
 	 */
 	public Weapon(){
 		this.setName("Rifle");
+		this.setMass();
+		this.setForce();
+		this.setCost();
+		this.setDamage();
 	}
 	/**
 	 * Sets the name of the weapon.
 	 * @param name
 	 * 			The name of the weapon
 	 */
-	public void setName(String name){
+	private void setName(String name){
 		this.name = name;
 	}
 	/**
@@ -42,7 +46,7 @@ public class Weapon {
 	/**
 	 * The method sets the mass of the weapon.
 	 */
-	public void setMass(){
+	private void setMass(){
 		if (this.name == "Rifle"){
 			this.mass = 10;
 		} else {
@@ -58,7 +62,7 @@ public class Weapon {
 	/**
 	 * The method sets the force that is exerted by the weapon.
 	 */
-	public void setForce(){
+	private void setForce(){
 		if (this.name == "Rifle"){
 			this.force = 1.5;
 		} else {
@@ -74,7 +78,7 @@ public class Weapon {
 	/**
 	 * The method sets the cost of action points to use the weapon.
 	 */
-	public void setCost(){
+	private void setCost(){
 		if (this.name == "Rifle"){
 			this.cost = 10;
 		} else {
@@ -90,7 +94,7 @@ public class Weapon {
 	/**
 	 * The method sets the damage the weapon will inflict.
 	 */
-	public void setDamage(){
+	private void setDamage(){
 		if (this.name == "Rifle"){
 			this.damage = 20;
 		} else {
