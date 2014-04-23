@@ -443,7 +443,9 @@ public  class Facade implements IFacade {
 		try{
 			worm.shoot(yield);
 		} catch (IllegalArgumentException exc) {
-			throw new ModelException("not enough action points");
+			throw new ModelException("This yield is not a valid yield");
+		} catch (IllegalStateException exc) {
+			throw new ModelException("the worm cannot shoot");
 		}
 	}
 	/**

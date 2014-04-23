@@ -1108,61 +1108,98 @@ public class Worm extends Object {
 	
 	// shoot
 	Weapon weapon = new Weapon();
+	/**
+	 * This method checks whether the propulsion is between 0 and 100.
+	 * @param propulsion
+	 * 			The propulsion that needs to be checked.
+	 * @return	True if the propulsion is between 0 and 100.
+	 */
 	public boolean isValidPropulsion(int propulsion) {
 		return (propulsion >= 0 && propulsion <= 100);
 	}
-	
+	/**
+	 * This method sets the given propulsion.
+	 * @param propulsion
+	 * 			The propulsion that needs to be set.
+	 * @throws IllegalArgumentException
+	 * 			If the propulsion isn't a valid propulsion the error is thrown.
+	 * 			| if !(isValidPropulsion(propulsion))
+	 */
 	public void setPropulsionYield(int propulsion) throws IllegalArgumentException {
 		if (isValidPropulsion(propulsion)) {
 			this.propulsion = propulsion;
 		} else 
 			throw new IllegalArgumentException();
 	}
+	/**
+	 * This method returns the propulsion yield.
+	 */
 	public int getPropulsionYield(){
-		System.out.println("tere " +this.propulsion);
 		return this.propulsion;
 	}
-	public void setMass(){
-		if (this.getSelectedWeapon() == "Rifle"){
-			this.mass = 10;
-		} else {
-			this.mass = 300;
-		}
-	}
+	/**
+	 * This method returns the mass of the projectile of the selected weapon.
+	 */
 	public int getMassProjectile(){
-		return this.massProjectile;
+		return weapon.getMass();
 	}
-	
+	/**
+	 * This method returns the name of the selected weapon.
+	 */
 	public String getSelectedWeapon(){
 		return weapon.getName();
 	}
+	/**
+	 * This method makes the worm select the next weapon.
+	 */
 	public void selectNextWeapon(){
 		weapon.changeWeapon();
 	}
+	/**
+	 * This method checks whether a worm can shoot.
+	 * @return	True if the cost to use the weapon is smaller then 
+	 * 			the remaining action points of the worm and if the worm is positioned on passable
+	 * 			terrain and false if the cost to use the weapon is bigger then the 
+	 * 			remaining action points and if the worm is not placed on passable terrain.
+	 * 			| this.getActionPoints() >= weapon.getCost()
+	 * 			| !this.getWorld().isImpassable(this.getXpos(),this.getYpos(),this.getRadius()) 
+	 */
 	public boolean canShoot(){
-		if (this.getSelectedWeapon()=="Rifle"){
-			this.cost = 10;
-		}
-		else {
-			this.cost = 50;
-		}
-		if ((this.getActionPoints()- this.cost) >=0)
+		this.cost = weapon.getCost();
+		if (((this.getActionPoints()- this.cost) >=0) && (!this.getWorld().isImpassable(this.getXpos(), this.getYpos(), this.getRadius())))
 			return true;
 		else 
 			return false;
 	}
-	public void shoot(int yield) throws IllegalArgumentException{
-		if( !canShoot()){
+	/**
+	 * This method makes the worm shoot a projectile.
+	 * @param yield
+	 * 			The yield that is used to shoot the projectile.
+	 * @post	If the worm can shoot, a new projectile is made in the current world
+	 * 			with a x-position and y-position outside the worm who is shooting.
+	 * 			| new Projectile(world, this.getXpos(), this.getYpos(), this)
+	 * @post	If the worm can shoot its actionpoints will also be changed.
+	 * 			| new.getActionPoints() == old.getActionPoints() - weapon.getCost()
+	 * @throws IllegalArgumentException
+	 * 			If the given yield is not a valid yield the exepction is thrown.
+	 * 			| !isValidPropulsion(yield)
+	 * @throws IllegalStateException
+	 * 			If the worm cannot shoot because it has not enough action points or it is located
+	 * 			on impassable terrain the exception will be thrown.
+	 * 			| !canShoot()
+	 */
+	public void shoot(int yield) throws IllegalArgumentException, IllegalStateException{
+		if( !isValidPropulsion(yield)){
 			throw new IllegalArgumentException();
 		} else {
-			World world = this.getWorld();
-			this.setPropulsionYield(yield);
-			new Projectile(world,this.getXpos(),this.getYpos(),this);
-			System.out.println("else ");
-			
-			System.out.println("yield " +this.getPropulsionYield());
-			this.setActionPoints(this.getActionPoints()-this.cost);
-			
+			if( !canShoot()){
+				throw new IllegalStateException();
+			} else {
+				World world = this.getWorld();
+				this.setPropulsionYield(yield);
+				new Projectile(world,this.getXpos(),this.getYpos(),this);
+				this.setActionPoints(this.getActionPoints()-weapon.getCost());
+			}
 		}
 	}
 	// variables
@@ -1181,7 +1218,6 @@ public class Worm extends Object {
 	private int  health = 10;
 	private boolean alive;
 	private int propulsion;
-	private int massProjectile;
 	private int cost;
 	//constants
 	private static final int DENSITY = 1062;
