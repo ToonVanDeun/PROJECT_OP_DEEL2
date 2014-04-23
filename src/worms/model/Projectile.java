@@ -378,12 +378,20 @@ public class Projectile extends Object{
 	}
 	/**
 	 * Changes the positions of the projectile as a result of a jump from the current position.
-	 * @post 	The worms jumped to the correct position when the direction is in the range (0 - PI)
-	 * 			| new.getXpos() == old.getXpos() + this.jumpDistance()
-	 * @post 	The worms hasn't jumped when the direction is in the range (PI- 2*PI)
-	 * 			| new.getXpos() == old.getXpos()
-	 * @post	The worm's actionpoints are reduced to zero.
-	 * 			|new.getActionPoints() == 0;
+	 * @post 	If the projectile hits a worm this worm loses some hit points and the projectile is removed from the world and set non active. 
+	 * 			| if ((Math.sqrt(Math.pow(w.getXpos()-tempXpos, 2)+Math.pow(w.getYpos()-tempYpos, 2))< maxDistance))
+	 * 			|	while (this.getActive == true)
+	 * 			|		then (new.setHitPoints(worm.getHitPoints-this.getDamage())
+	 * 			|		then (world.getProjectile() == null)
+	 * 			|		then (new.getActive == false))
+	 * @post 	If the projectile doesn't hit a worm, the projectile will be deleted when it leaves the map or when it hits impassable terrain.
+	 * 			| if !((Math.sqrt(Math.pow(w.getXpos()-tempXpos, 2)+Math.pow(w.getYpos()-tempYpos, 2))< maxDistance))
+	 * 			|	then ( if ((isOutOfTheMap(tempXpos,tempYpos)))
+	 * 			|				then ((world.getProjectile() == null)
+	 * 			|				then (new.getActive == false))
+	 * 			|		 (else if (world.isImpassable(tempXpos, tempYpos, this.getRadius())))
+	 * 			|				then ((world.getProjectile() == null)
+	 * 			|				then (new.getActive == false)))
 	 * @throws 	IllegalStateException
 	 * 			If the projectile can't jump the exception is thrown.
 	 * 			|! canJump()
@@ -409,44 +417,26 @@ public class Projectile extends Object{
 			    	
 			    	if (!(w==world.getCurrentWorm()) && (Math.sqrt(Math.pow(w.getXpos()-tempXpos, 2)+
 			    			Math.pow(w.getYpos()-tempYpos, 2))< maxDistance)) {
-			    		System.out.println("ze overlappen");
-	
-			    		
-			    		//als ze overlappen
 			    		
 			    		overlappingWorm = w;
-			    		System.out.println(w.getName());
-			    		
 			    		while ((this.getActive()==true)){
 			    			overlappingWorm.setHitPoints(overlappingWorm.getHitPoints()-this.getDamage());
-			    			System.out.println("dammage");
-			    			System.out.println("ze overlappen");
 							this.deleteProjectile(world);
 							this.setActive(false);
-							System.out.println("false?" +this.getActive());
 			    		}
 						
 			    	} else {
 			    		overlappingWorm = null;
 			    		if ((isOutOfTheMap(tempXpos,tempYpos))&& (this.getActive()==true)) {
-							System.out.println("if1");
 							this.deleteProjectile(world);
-							this.setActive(false);
-							
-							
-							
+							this.setActive(false);	
 						}
 					
-						if (((world.isImpassable(tempXpos, tempYpos, this.getRadius()))) && (this.getActive()==true)){
-							System.out.println("if2");
+			    		else if (((world.isImpassable(tempXpos, tempYpos, this.getRadius()))) && (this.getActive()==true)){
 							this.deleteProjectile(world);
-							this.setActive(false);
-							
+							this.setActive(false);	
 						}
 			    	}
-			    	
-			    	
-			    	
 			    }
 			    t += timeStep;
 			}
@@ -456,7 +446,7 @@ public class Projectile extends Object{
 		}
 	}
 
-
+	// Variables
 	private double wormRadius;
 	private double radius;
 	private int yield;
@@ -469,7 +459,7 @@ public class Projectile extends Object{
 	private boolean active;
 	private double force;
 	
-	
+	// Constants
 	private static final double G = 9.80665;
 	private static final double density = 7800;
 

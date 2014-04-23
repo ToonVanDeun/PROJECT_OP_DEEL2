@@ -394,8 +394,11 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void jump(Projectile projectile, double timeStep) {
-		projectile.jump(timeStep);
-		
+		try {
+			projectile.jump(timeStep);
+		} catch (IllegalStateException exc) {
+			throw new ModelException("can't jump");
+		}
 	}
 	/**
 	 * Makes a given worm jump.
