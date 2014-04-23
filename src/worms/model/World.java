@@ -15,7 +15,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 
 /**
  * A class of World involving width, height, passableMap, and lists of objects.
- * Complemented with methods to interact with the world and change curtain values.
+ * Complemented with methods to interact with the world and change certain values.
  * 
  * @invar	
  * 	
