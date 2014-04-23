@@ -338,18 +338,22 @@ public class World {
 	 * Checks whether the game is finished or not.
 	 */
 	public boolean isGameFinished(){
-		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
-		for (Worm worm : this.getWorms()){
-			if (!(worm.getTeam()==team)){
-				return false;
-			}
-		}if (team==null)
-			if (this.getWorms().size()==1) {
-				return true;
-			} else {
-				return false;
-			}
-		return true;
+		if (this.getWorms().size()>0){
+			Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
+			for (Worm worm : this.getWorms()){
+				if (!(worm.getTeam()==team)){
+					return false;
+				}
+			}if (team==null)
+				if (this.getWorms().size()==1) {
+					return true;
+				} else {
+					return false;
+				}
+			return true;
+		}
+		return false;
+		
 	}
 
 	

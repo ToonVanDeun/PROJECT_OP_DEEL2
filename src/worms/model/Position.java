@@ -1,14 +1,31 @@
 package worms.model;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
-
+/**
+ * A class to handle all objects' positions in a World.
+ * Complemented with methods to set random positions, 
+ * set random Adjacent positions and set the the nearest adjacent position to a given position
+ * 
+ * @invar	The position is always a valid position.
+ * 			| this.isValidXpos(this.getX(), world)==true
+ * 			| this.isValidYpos(this.getY(), world)==true
+ *
+ * @author 	Toon Stuyck
+ * 			Toon Van Deun
+ * 			Burgerlijk Ingenieur
+ * 			https://github.com/ToonVanDeun/PROJECT_OP_DEEL2
+ * @version 2.0
+ */
 public class Position {
 	//Initialization
 	/**
 	 * Initializes a position for a given object with given x- and y-positions.
-	 * @param xpos	The given x position.
-	 * @param ypos	The given y position.
-	 * @post The newly initialized position is set the the given position.
+	 * @param 	xpos	
+	 * 			The given x position.
+	 * @param 	ypos	
+	 * 			The given y position.
+	 * @post 	The newly initialized position is set the the given position.
 	 * 			|new.getXpos() == xpos
 	 * 			|new.getYpos() == ypos
 	 */
@@ -18,10 +35,12 @@ public class Position {
 	}
 	/**
 	 * Initializes a random adjacent position for a given object.
-	 * @param world		The world in which the position is being determined.
-	 * @param object	The object the position in being determined for.
-	 * @post 			The new position is an adjacent position.
-	 * 					|world.isAdjacent(new.getXpos(), new.getYpos, object.getRadius)
+	 * @param 	world		
+	 * 			The world in which the position is being determined.
+	 * @param 	object	
+	 * 			The object the position in being determined for.
+	 * @post 	The new position is an adjacent position.
+	 * 			|world.isAdjacent(new.getXpos(), new.getYpos, object.getRadius)
 	 */
 	public Position(World world, Object object) {
 		this.setAdjacantPosition(world, object);
@@ -31,6 +50,7 @@ public class Position {
 	/**
 	 * Returns the x-position of the object.
 	 */
+	@Basic
 	public double getXpos() {
 		return this.xpos;
 	}
@@ -52,6 +72,7 @@ public class Position {
 	/**
 	 * Returns the y-position of the object.
 	 */
+	@Basic
 	public double getYpos() {
 		return this.ypos;
 	}
@@ -76,9 +97,11 @@ public class Position {
 	 * Checking if that the position is passable. If not, a new random location is chosen.
 	 * Thereafter new positions get determined stepwise by moving in a random direction,
 	 * until the position is and adjacent position.
-	 * @param world	The world in which the position is being determined.
-	 * @param object	The object the position in being determined for.
-	 * @post The new position is an adjacent position.
+	 * @param 	world	
+	 * 			The world in which the position is being determined.
+	 * @param 	object	
+	 * 			The object the position in being determined for.
+	 * @post 	The new position is an adjacent position.
 	 * 			|world.isAdjacent(new.getXpos(), new.getYpos, object.getRadius)
 	 */
 	public void setAdjacantPosition(World world, Object object) {
@@ -107,33 +130,47 @@ public class Position {
 			this.setYpos(randYpos);
 		}
 	}
+	/**
+	 * Sets the position to the nearest adjacent position of the given position.
+	 * @param 	world
+	 * 			The world in which we are determining the new position.
+	 * @param 	xpos
+	 * 			The given x position to which we try to find the nearest adjacent position.
+	 * @param 	ypos
+	 * 			The given x position to which we try to find the nearest adjacent position.
+	 * @param 	radius
+	 * 			The radius of the object.
+	 * @post	If there is a adjacent position closer than world.getWidth()/10 to the given position
+	 * 			Then the new position will be the nearest adjacent position.
+	 * 			| If (world.isAdjacent((new) position)) For a<world.getWidth()/10
+	 * 			| 	Then new.World.isAdjacent(position);
+	 */
 	public void setNearestAdjacent(World world, double xpos, double ypos, double radius){
 		double tempx =xpos;
 		double tempy =ypos;
-		//if (world.isPassable(xpos, ypos, radius)) {
-			for (double a=0;a<(world.getWidth()/10); a=a+0.01) {
-				if (world.isAdjacent(tempx+a, tempy, radius)){
-					this.setXpos(tempx+a);
-					this.setYpos(tempy);
-					break;
-				}
-				if (world.isAdjacent(tempx-a, tempy, radius)){
-					this.setXpos(tempx-a);
-					this.setYpos(tempy);
-					break;
-				}
-				if (world.isAdjacent(tempx, tempy+a, radius)){
-					this.setXpos(tempx);
-					this.setYpos(tempy+a);
-					break;
-				}
-				if (world.isAdjacent(tempx, tempy-a, radius)){
-					this.setXpos(tempx);
-					this.setYpos(tempy-a);
-					break;
-				}
+		
+		for (double a=0;a<(world.getWidth()/10); a=a+0.01) {
+			if (world.isAdjacent(tempx+a, tempy, radius)){
+				this.setXpos(tempx+a);
+				this.setYpos(tempy);
+				break;
 			}
-		//}
+			if (world.isAdjacent(tempx-a, tempy, radius)){
+				this.setXpos(tempx-a);
+				this.setYpos(tempy);
+				break;
+			}
+			if (world.isAdjacent(tempx, tempy+a, radius)){
+				this.setXpos(tempx);
+				this.setYpos(tempy+a);
+				break;
+			}
+			if (world.isAdjacent(tempx, tempy-a, radius)){
+				this.setXpos(tempx);
+				this.setYpos(tempy-a);
+				break;
+			}
+		}
 	}
 	
 	//Checkers
@@ -184,13 +221,13 @@ public class Position {
 	 * 			The x-position that needs to be checked.
 	 * @return 	True if the given x-position (pos) is a valid y-position.
 	 * 			If the given position isn't a valid position (not a number (NaN), 
-	 * 			or the x position lies not in the range from the map (0..width) the range taken into account,
+	 * 			or the x position lies not in the range from the map (0..width) the radius taken into account,
 	 * 			the method returns false.
-	 * 			| !(Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getWidth()-2*radius)
+	 * 			| !(Double.isNaN(pos)) && (pos)>=(0+radius) && pos<=(world.getWidth()-radius)
 	 */
 	@Raw
 	public boolean isValidXPos(double pos, World world, double radius) {
-		return !(Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getWidth()-2*radius);
+		return !(Double.isNaN(pos)) && (pos)>=(0+radius) && pos<=(world.getWidth()-radius);
 	}
 	/**
 	 * Checks whether the given y-position is a valid y-position.
@@ -198,13 +235,13 @@ public class Position {
 	 * 			The y-position that needs to be checked.
 	 * @return 	True if the given y-position (pos) is a valid y-position.
 	 * 			If the given position isn't a valid position (not a number (NaN), 
-	 * 			or the y position lies not in the range from the map (0..height) the range taken into account,
+	 * 			or the y position lies not in the range from the map (0..height) the radius taken into account,
 	 * 			the method returns false.
-	 * 			| !(Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getHeight()-2*radius)
+	 * 			| !(Double.isNaN(pos)) && (pos)>=(0+radius) && pos<=(world.getHeight()-radius)
 	 */
 	@Raw
 	public boolean isValidYPos(double pos, World world, double radius) {
-		return ! (Double.isNaN(pos)) && (pos)>(0+2*radius) && pos<(world.getHeight()-2*radius);
+		return !(Double.isNaN(pos)) && (pos)>=(0+radius) && pos<=(world.getHeight()-radius);
 	}
 	
 	//Variables
