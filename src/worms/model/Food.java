@@ -3,8 +3,8 @@
  */
 package worms.model;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Raw;
+import be.kuleuven.cs.som.annotate.*;
+
 
 
 /**
@@ -54,13 +54,14 @@ import be.kuleuven.cs.som.annotate.Raw;
 		/**
 		 * The radius of the food is set to 0.20.
 		 */
+		@Raw @Immutable
 		public final void setRadius() {
 			this.radius = 0.20;
 		}
 		/**
 		 * Returns the radius of the food.
 		 */
-		@Basic
+		@Basic @Raw @Immutable
 		public double getRadius() {
 			return this.radius;
 		}
@@ -69,14 +70,14 @@ import be.kuleuven.cs.som.annotate.Raw;
 		/**
 		 * Returns the x-position of the food.
 		 */
-		@Basic
+		@Basic @Raw
 		public double getXpos() {
 			return position.getXpos();
 		}
 		/**
 		 * Returns the y-position of the food.
 		 */
-		@Basic
+		@Basic @Raw
 		public double getYpos() {
 			return position.getYpos();
 		}
@@ -87,6 +88,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 		 * @post	the given x-position is the new x-position of the food.
 		 * 			| new.getXpos() == xpos
 		 */
+		@Raw
 		public void setXpos(double xpos) {
 			position.setXpos(xpos);
 		}
@@ -97,6 +99,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 		 * @post	the given y-position is the new y-position of the food.
 		 * 			| new.getYpos() == ypos
 		 */
+		@Raw
 		public void setYpos(double ypos) {
 			position.setYpos(ypos);
 		}
@@ -105,6 +108,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 		 * @return	True if food has a world different from null.
 		 * 			| !this.getWorld()==null
 		 */
+		@Raw
 		public boolean isActive(){
 			if (this.getWorld()==null){
 				return false;
@@ -118,6 +122,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 		 * @post	The food in no longer an object of the world it originally belonged to.
 		 * 			|(new) world.getAllObjects().contains(this) == false
 		 */
+		@Raw
 		public void deleteFood(World world){
 			world.deleteFood(this);
 		}

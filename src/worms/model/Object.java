@@ -136,21 +136,21 @@ public abstract class Object {
 	/**
 	 * Returns the radius of the object.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getRadius() {
 		return this.radius;
 	}
 	/**
 	 * Returns the X position of the object
 	 */
-	@Basic
+	@Basic @Raw
 	public double getXpos() {
 		return position.getXpos();
 	}
 	/**
 	 * Returns the Y position of the object
 	 */
-	@Basic
+	@Basic @Raw
 	public double getYpos(){
 		return position.getYpos();
 	}

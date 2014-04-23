@@ -97,6 +97,7 @@ public class World {
 	 * 			the method returns false.
 	 * 			| ((0<= width) && (width<=Double.MAX_VALUE) && (width<=this.getUpperboundWidth()))
 	 */
+	@Raw
 	private boolean isValidWidth(double width){
 		return ((0<= width) && (width<=Double.MAX_VALUE) && (width<=this.getUpperboundWidth()));
 	}
@@ -118,6 +119,7 @@ public class World {
 	 * 			If the upperboundWidth is not a valid upperboundWidth.
 	 * 			| upperboundWidth<0
 	 */
+	@Raw
 	public static void setUpperboundWidth(double upperboundWidth) throws IllegalArgumentException {
 		if ( upperboundWidth<0)
 			throw new IllegalArgumentException();
@@ -140,6 +142,7 @@ public class World {
 	 * 			If height isn't a valid height the exception is thrown.
 	 * 			| ! isValidHeight(height)
 	 */
+	@Raw
 	public final void setHeight(double height) throws IllegalArgumentException {
 		if (! isValidHeight(height))
 			throw new IllegalArgumentException();
@@ -155,6 +158,7 @@ public class World {
 	 * 			the method returns false.
 	 * 			|(0<= height) && (height<=Double.MAX_VALUE) && (height<=this.getUpperboundHeight())
 	 */
+	@Raw
 	private boolean isValidHeight(double height){
 		return ((0<= height) && (height<=Double.MAX_VALUE) && (height<=this.getUpperboundHeight()));
 	}
@@ -284,6 +288,7 @@ public class World {
 	 * Returns the the worm that is currently being controlled.
 	 * (The worm on position "getCurrentWormIndex" in the list of worms.)
 	 */
+	@Basic
 	public Worm getCurrentWorm(){
 		return ((ArrayList<Worm>) getWorms()).get(this.getCurrentWormIndex());
 	}
@@ -293,6 +298,7 @@ public class World {
 	 * Starts the game.
 	 * (By setting the currentWormINdext to zero.)
 	 */
+	@Raw
 	public void	startGame(){
 		setCurrentWormIndex(0);
 	}
@@ -300,6 +306,7 @@ public class World {
 	 * Cycles through all worms turn by turn.
 	 * When all worms have had a turn a new round is started.
 	 */
+	@Raw
 	public void startNextTurn(){
 		if (getCurrentWormIndex() >= (getWorms().size()-1))
 			startNextRound();
@@ -309,6 +316,7 @@ public class World {
 	/**
 	 * Starts a new round.
 	 */
+	@Raw
 	private void startNextRound(){
 		for (Worm worm: getWorms()){
 			worm.newRound();
@@ -407,6 +415,7 @@ public class World {
 	 *       	| for each index in 0..result-size()-1 :
 	 *       	|   result.get(index) == getObjectAt(index+1)
 	 */
+	@Basic
 	public List<Object> getAllObjects() {
 		return new ArrayList<Object>(objects);
 	}
@@ -428,6 +437,7 @@ public class World {
 	 *         object.
 	 *         | new.getObjectAt(getNbObjects()+1) == object
 	 */
+	@Raw
 	public void addAsObject(@Raw Object object) {
 		assert (object != null) && (object.getWorld() == this);
 		assert !hasAsObject(object);
@@ -471,6 +481,7 @@ public class World {
 	 * 			| for each index in 0..result.size()-1:
 	 *      	|   (result.get(i) instanceof Worm) == true
 	 */
+	@Basic
 	public Collection<Worm> getWorms() {
 		ArrayList<Object> lijst = new ArrayList<Object>(objects);
 		Collection<Worm> worms = new ArrayList<Worm>(); 
@@ -486,6 +497,7 @@ public class World {
 	 * @post 	objects no longer contains worm
 	 * 			| new.objects.contains(worm) == false;
 	 */
+	@Raw
 	public void deleteWorm(Worm worm){
 		((List<Object>) objects).remove(worm);
 	}
@@ -516,6 +528,7 @@ public class World {
 	 * @post 	objects no longer contains the food
 	 * 			| new.objects.contains(food) == false;
 	 */
+	@Raw
 	public void deleteFood(Food food){
 		((List<Object>) objects).remove(food);
 	}
@@ -606,12 +619,14 @@ public class World {
 	 * @post 	objects no longer contains the projectile
 	 * 			| new.objects.contains(projectile) == false;
 	 */
+	@Raw
 	public void deleteProjectile(Projectile projectile){
 		((List<Object>) objects).remove(projectile);
 	}
 	/**
 	 * The index of the projectile that is currently being fired.
 	 */
+	@Basic
 	private int getCurrentProjectileIndex() {
 		return currentProjectileIndex;
 	}
@@ -619,6 +634,7 @@ public class World {
 	 * Returns the the projectile that is currently being fired.
 	 * (The projectile on position "getCurrentProjectileIndex" in the list of projectiles.)
 	 */
+	@Basic
 	public Projectile getCurrentProjectile(){
 		return ((ArrayList<Projectile>) getProjectile()).get(this.getCurrentProjectileIndex());
 	}

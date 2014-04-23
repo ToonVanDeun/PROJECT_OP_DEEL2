@@ -36,7 +36,7 @@ public class Team extends Object {
 	/**
 	 * Returns the name of the team.
 	 */
-	@Basic
+	@Basic @Raw
 	public String getName() {
 		return this.name;
 	}
@@ -92,6 +92,7 @@ public class Team extends Object {
 	 *       	| for each index in 0..result-size()-1 :
 	 *       	|   result.get(index) == getWormAt(index+1)
 	 */
+	@Basic @Raw
 	public ArrayList<Worm> getAllWorms() {
 		return new ArrayList<Worm>(worms);
 	}
@@ -105,6 +106,7 @@ public class Team extends Object {
 	 *       |   result.get(index).getIsAlive() == true &&
 	 *       |	 result.get(index).getTeam()==this
 	 */
+	@Raw
 	public ArrayList<Worm> getAllAliveWorms() {		
 		ArrayList<Worm> lijst = getAllWorms();
 		ArrayList<Worm> aliveWorms = new ArrayList<Worm>(); 
