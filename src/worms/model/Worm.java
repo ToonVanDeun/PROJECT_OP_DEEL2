@@ -399,7 +399,6 @@ public class Worm extends Object {
 	public void setRadius(double radius) throws IllegalArgumentException{
 		if ( ! isValidRadius(radius))
 			throw new IllegalArgumentException();
-		
 		this.radius = radius;
 		this.setMass(radius);
 		
@@ -1023,10 +1022,12 @@ public class Worm extends Object {
 		Food food = this.overlappingFood();
 		if (!(food==null)) {
 			
-			this.setRadius(this.getRadius()*1.1);
+			this.radius = this.getRadius()*1.1;
 			
-			this.setNearestAdjacent(xpos, ypos);			
+			this.setNearestAdjacent(xpos, ypos);
+			
 			food.unsetWorld();	
+			
 		}
 	}
 	

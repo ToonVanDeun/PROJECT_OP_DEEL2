@@ -110,7 +110,7 @@ public class Position {
 	public void setNearestAdjacent(World world, double xpos, double ypos, double radius){
 		double tempx =xpos;
 		double tempy =ypos;
-		if (world.isPassable(xpos, ypos, radius)) {
+		//if (world.isPassable(xpos, ypos, radius)) {
 			for (double a=0;a<(world.getWidth()/10); a=a+0.01) {
 				if (world.isAdjacent(tempx+a, tempy, radius)){
 					this.setXpos(tempx+a);
@@ -133,7 +133,7 @@ public class Position {
 					break;
 				}
 			}
-		}
+		//}
 	}
 	
 	//Checkers
