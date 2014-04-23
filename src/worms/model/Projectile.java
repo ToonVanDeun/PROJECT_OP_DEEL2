@@ -73,6 +73,7 @@ public class Projectile extends Object{
 	 * @param 	world
 	 *			The world where the projectile gets removed from.		
 	 */
+	@Raw
 	public void deleteProjectile(World world){
 		world.deleteProjectile(this);
 	}
@@ -81,12 +82,14 @@ public class Projectile extends Object{
 	 * @param 	state
 	 * 			The state where the projectile gets set to (True or False).
 	 */
+	@Basic @Raw
 	private void setActive(boolean state){
 		this.active = state;
 	}
 	/**
 	 * Returns the state of the projectile.
 	 */
+	@Basic @Raw
 	public boolean getActive(){
 		return this.active;
 	}
@@ -95,12 +98,14 @@ public class Projectile extends Object{
 	 * @param 	worm
 	 * 			The worm that shot the projectile.
 	 */
+	@Raw
 	public void setRadiusWorm(Worm worm){
 		this.wormRadius =  worm.getRadius();
 	}
 	/**
 	 * Returns the radius of the worm that shot the projectile.
 	 */
+	@Basic @Raw
 	public double getRadiusWorm(){
 		return this.wormRadius;
 	}
@@ -111,6 +116,7 @@ public class Projectile extends Object{
 	 * @post	the given x-position is the new x-position of the projectile.
 	 * 			| new.getXpos() == xpos
 	 */
+	@Raw
 	public void setXpos(double xpos){
 		this.xpos = xpos+((this.getRadiusWorm()+this.getRadius())*1.1*Math.cos(this.getDirection()));
 		position.setXpos(this.xpos);
@@ -118,6 +124,7 @@ public class Projectile extends Object{
 	/**
 	 * Returns the x-position of the projectile.
 	 */
+	@Basic @Raw
 	public double getXpos(){
 		return position.getXpos();
 	}
@@ -128,6 +135,7 @@ public class Projectile extends Object{
 	 * @post	the given y-position is the new y-position of the projectile.
 	 * 			| new.getYpos() == ypos
 	 */
+	@Raw
 	public void setYpos(double ypos){
 		this.ypos = ypos+((this.getRadiusWorm()+this.getRadius())*1.1*Math.sin(this.getDirection()));
 		position.setYpos(this.ypos);
@@ -135,6 +143,7 @@ public class Projectile extends Object{
 	/**
 	 * Returns the y-position of the projectile.
 	 */
+	@Basic @Raw
 	public double getYpos(){
 		return position.getYpos();
 	}
@@ -147,6 +156,7 @@ public class Projectile extends Object{
 	 * @post	The new direction of the projectile is the same as the direction of the worm.
 	 * 			| new.getDirection() == worm.getDirection()
 	 */
+	@Raw
 	private void setDirection(Worm worm){
 		assert (isValidDirection(worm.getDirection()));
 		this.direction = worm.getDirection();
@@ -156,6 +166,7 @@ public class Projectile extends Object{
 	 * The direction of the projectile is an angle given in radians, 
 	 * which indicates where the projectile is facing at. (ex. facing up = PI/2, facing right = 0)
 	 */
+	@Basic @Raw
 	public double getDirection(){
 		return this.direction;
 	}
@@ -185,6 +196,7 @@ public class Projectile extends Object{
 	 * 			When the selected weapon is nor the Rifle nor the Bazooka the exception will be thrown.
 	 * 			| !((worm.getSelectedWeapon() == "Rifle") || (worm.getSelectedWeapon() == "Bazooka"))
 	 */
+	@Raw
 	private void setMass(Worm worm) throws IllegalStateException{
 		if (worm.getSelectedWeapon()=="Rifle"){
 			this.mass = 0.01;
@@ -198,6 +210,7 @@ public class Projectile extends Object{
 	/**
 	 * Returns the mass of the projectile.
 	 */
+	@Basic @Raw
 	public double getMass(){
 		return this.mass;
 	}
@@ -222,6 +235,7 @@ public class Projectile extends Object{
 	 * 			|	then (new.getDamage() == 20)
 	 * 			|	else (new.getDamage() == 80)
 	 */
+	@Raw
 	private void setDamage(Worm worm){
 		if (worm.getSelectedWeapon() == "Rifle"){
 			this.damage = 20;
@@ -232,6 +246,7 @@ public class Projectile extends Object{
 	/**
 	 * Returns the damage a projectile will inflict 
 	 */
+	@Basic @Raw
 	public int getDamage(){
 		return this.damage;
 	}
@@ -243,6 +258,7 @@ public class Projectile extends Object{
 	 * 			When the mass appropriate to the projectile is not a valid mass the exception will be thrown.
 	 * 			| ! isValidMass(this.getMass()))
 	 */
+	@Raw
 	public void setRadius() throws IllegalArgumentException{
 		if ( ! isValidMass(this.getMass()))
 			throw new IllegalArgumentException();
@@ -251,6 +267,7 @@ public class Projectile extends Object{
 	/**
 	 * Returns the radius of the projectile.
 	 */
+	@Basic @Raw
 	public double getRadius() {
 		return this.radius;
 	}
@@ -261,12 +278,14 @@ public class Projectile extends Object{
 	 * @post	The new yield of the projectile is set.
 	 * 			| new.getYield()==worm.getPropulsionYield()
 	 */
+	@Raw
 	public void setYield(Worm worm){
 		this.yield = worm.getPropulsionYield();
 	}
 	/**
 	 * Returns the propulsion yield of the projectile.
 	 */
+	@Basic @Raw
 	public double getYield(){
 		return this.yield;
 	}
@@ -280,6 +299,7 @@ public class Projectile extends Object{
 	 * 			|		then (new.getForce() == 1.5)
 	 * 			|		else (new.getForce() == 2.5+(this.getYield()*0.07))
 	 */
+	@Raw
 	private void setForce(Worm worm){
 		this.setYield(worm);
 		if (worm.getSelectedWeapon()=="Rifle"){
@@ -292,6 +312,7 @@ public class Projectile extends Object{
 	/**
 	 * Returns the force that is exerted on the projectile.
 	 */
+	@Basic @Raw
 	public double getForce(){
 		return this.force;
 	}
@@ -339,6 +360,7 @@ public class Projectile extends Object{
 	 * 			If the projectile can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
+	@Basic
 	public double jumpTime(double timeStep) throws IllegalStateException{
 		
 		World world = this.getWorld();	
@@ -371,6 +393,7 @@ public class Projectile extends Object{
 	 * @param ypos
 	 * 			the given y-position that needs to be checked.
 	 */
+	@Raw
 	public boolean isOutOfTheMap(double xpos, double ypos) {
 		World world= this.getWorld();
 		return !((xpos<(world.getWidth()-this.getRadius()))&&((xpos>this.getRadius()))&&
