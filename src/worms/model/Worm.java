@@ -695,7 +695,6 @@ public class Worm extends Object {
 				this.hitPoints = 0;
 				this.setIsAlive();
 				this.deleteWorm(this.getWorld());
-				this.getWorld().setCurrentWormIndex(this.getWorld().getCurrentWormIndex()-1);
 		} else if (hitPoints < this.getMaxHitPoints()) {
 				this.hitPoints = hitPoints;
 		} 
@@ -747,6 +746,10 @@ public class Worm extends Object {
 	 * 			| new.objects.contains(this) == false;
 	 */
 	public void deleteWorm(World world){
+		int index = world.getCurrentWormIndex()+1;
+		int size = world.getWorms().size();
+		if (index==size)
+			this.getWorld().setCurrentWormIndex(0);
 		if (this.getIsAlive() == false)
 			world.deleteWorm(this);
 	}
@@ -1078,7 +1081,7 @@ public class Worm extends Object {
 		double ypos = this.getYpos();
 		Food food = this.overlappingFood();
 		if (!(food==null)) {
-			this.radius = this.getRadius()*1.1;
+			this.setRadius(this.getRadius()*1.1);
 			this.setNearestAdjacent(xpos, ypos);
 			food.unsetWorld();	
 		}
