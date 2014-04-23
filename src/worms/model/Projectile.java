@@ -16,7 +16,7 @@ import be.kuleuven.cs.som.annotate.Raw;
  * 			Toon Van Deun
  * 			Burgerlijk Ingenieur
  * 			https://github.com/ToonVanDeun/PROJECT_OP_DEEL2
- * @version 1.0
+ * @version 2.0
  */
 public class Projectile extends Object{
 	/**
@@ -82,7 +82,7 @@ public class Projectile extends Object{
 	 * @param 	state
 	 * 			The state where the projectile gets set to (True or False).
 	 */
-	@Basic @Raw
+	@Raw
 	private void setActive(boolean state){
 		this.active = state;
 	}
@@ -327,7 +327,7 @@ public class Projectile extends Object{
 	 * Returns the jump velocity of a projectile.
 	 * 	this is needed to calculate the distance over which to projectile can jump.
 	 */
-	@Basic 
+	@Raw 
 	private double jumpVelocity() {
 		double velocity = ((this.force/this.getMass())*0.5);
 		return velocity;
@@ -340,7 +340,7 @@ public class Projectile extends Object{
 	 * 			If the projectile can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
-	@Basic
+	
 	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
 		double[] step;
         step = new double[2];
@@ -360,7 +360,6 @@ public class Projectile extends Object{
 	 * 			If the projectile can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
-	@Basic
 	public double jumpTime(double timeStep) throws IllegalStateException{
 		
 		World world = this.getWorld();	
