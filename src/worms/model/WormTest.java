@@ -264,7 +264,7 @@ public class WormTest {
 	}
 	
 	//ActionPoints
-	//werkt nog niet wegen probleem bij move, wegens probleem bij isAdjacent.
+	//werkt nog niet wegens probleem bij move.
 	
 	//move
 	@Test
@@ -321,7 +321,6 @@ public class WormTest {
 	}
 	
 	//jump
-	//GAAT NOG NIET WEGENS FOUT BIJ ISADJACENT
 //	@Test
 //	public void test_jumpStep_valid() {
 //		worm_jump.turn((3.0/4.0)*Math.PI);
@@ -330,33 +329,22 @@ public class WormTest {
 //		assert Math.abs((worm_jump.jumpStep(0.5)[1] - calculated_pos[1])) <0.3;
 //	}
 //	@Test
-//	public void test_canJump_valid1() {
-//		worm_jump.turn((-9.0/2.0)*Math.PI);
-//		assert worm_jump.canJump()==true;
-//	}
-//	@Test
-//	public void test_canJump_valid2() {
-//		worm_jump.turn((5.0/2.0)*Math.PI);
-//		assert worm_jump.canJump()==true;
-//	}
-//	@Test
-//	public void test_canJump_valid3() {
-//		worm_jump.turn((7.0/2.0)*Math.PI);
-//		assert worm_jump.canJump()==true;
-//	}
-//	@Test
-//	public void test_canJump_invalid1() {
-//		worm_jump.turn((4.0/2.0)*Math.PI);
-//		assert worm_jump.canJump()==false;
-//	}
-//	@Test
-//	public void test_canJump_fails() {
-//		assert worm_jump.canJump()==false;
-//	}
-//	@Test
-//	public void test_canJump_failsAP() {
-//		worm_jump.turn((3.0/4.0)*Math.PI);
-//		worm_jump.jump();
-//		assert worm_jump.canJump()==false;
-//	}
+	
+	//hitpoints
+	@Test
+	public void test_setHitPoints_valid1() {
+		worm_position2.setHitPoints(5);
+		assertEquals(worm_position2.getHitPoints(),5);
+	}
+	@Test
+	public void test_setHitPoints_valid2() {
+		worm_position2.setHitPoints(-500);
+		assertEquals(worm_position2.getHitPoints(),0);
+	}
+	@Test
+	public void test_setHitPoints_valid3() {
+		worm_position2.setHitPoints(-500);
+		assertEquals(worm_position2.getIsAlive(),false);
+	}
+	
 }

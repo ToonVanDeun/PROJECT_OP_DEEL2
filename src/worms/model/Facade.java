@@ -82,7 +82,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public double getMinimalRadius(Worm worm) {
-		return 0.25;
+		return worm.getRadiusLowerBound();
 	}
 	/**
 	 * Get the amount of actionpoints of a given worm.
@@ -133,10 +133,10 @@ public  class Facade implements IFacade {
 			if (world.canAddAsTeam(newName)) {
 				new Team(world, newName);
 			}
-		} catch (IllegalArgumentException exc) {
+		} catch (IllegalArgumentException exc1) {
 			throw new ModelException("that name is not valid");
 		}
-		catch (IllegalStateException exc) {
+		catch (IllegalStateException exc2) {
 			throw new ModelException("You've reached the maximum number of teams");
 		}
 	}
@@ -247,7 +247,7 @@ public  class Facade implements IFacade {
 	public double[] getJumpStep(Projectile projectile, double t) throws ModelException {
 		try {
 			return projectile.jumpStep(t);
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException exc) {
 			throw new ModelException("The Worm can't jump here.");
 		}
 	}
@@ -258,10 +258,9 @@ public  class Facade implements IFacade {
 	public double getJumpTime(Projectile projectile, double timeStep) throws ModelException{
 		try {
 			return projectile.jumpTime(timeStep);
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException exc) {
 			throw new ModelException("The Projectile can't be fired here.");
 		}
-		
 	}
 	/**
 	 * Get the time it takes the given worm to jump.

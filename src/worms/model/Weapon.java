@@ -7,7 +7,6 @@ import be.kuleuven.cs.som.annotate.*;
  * A class of weapons involving a name.
  * Complemented with methodes that interact with the weapon and changes certain values.
  * 
- * 
  * @invar	The mass of the Rifle must be 10g.
  * 		  	| if worm.getSelectedWeapon() =="Rifle"
  * 			|	then this.getMass() == 0.01
@@ -46,6 +45,7 @@ public class Weapon {
 	 *  @post	The weapon is given the name.
 	 * 			| 	new.getName() == Rifle
 	 */
+	@Raw
 	public Weapon(){
 		this.setName("Rifle");
 		this.setMass();

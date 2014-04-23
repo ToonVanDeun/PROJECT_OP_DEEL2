@@ -2,8 +2,7 @@ package worms.model;
 
 import java.util.Collection;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Raw;
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class of projectiles involving x-position, y-position, a radius, a orientation, a mass, a propulsion yield and a force.
@@ -75,18 +74,10 @@ public class Projectile extends Object{
 	 * 			|	then (new.getDamage() == 20)
 	 * 			|	else (new.getDamage() == 80)
 	 */
+	@Raw
 	public Projectile(World world, double xpos, double ypos, Worm worm) {
 		super(world);
 		this.position = new Position(xpos,ypos);
-		this.setDirection(worm);
-		this.setMass(worm);
-		this.setActive(true);
-		this.setForce(worm);
-		this.setDamage(worm);
-	}
-	public Projectile(World world, Worm worm){
-		super(world);
-		this.position = new Position(world, this);
 		this.setDirection(worm);
 		this.setMass(worm);
 		this.setActive(true);
@@ -124,7 +115,7 @@ public class Projectile extends Object{
 	 * 			The worm that shot the projectile.
 	 */
 	@Raw
-	public void setRadiusWorm(Worm worm){
+	private void setRadiusWorm(Worm worm){
 		this.wormRadius =  worm.getRadius();
 	}
 	/**
@@ -142,7 +133,7 @@ public class Projectile extends Object{
 	 * 			| new.getXpos() == xpos
 	 */
 	@Raw
-	public void setXpos(double xpos){
+	private void setXpos(double xpos){
 		this.xpos = xpos+((this.getRadiusWorm()+this.getRadius())*1.1*Math.cos(this.getDirection()));
 		position.setXpos(this.xpos);
 	}
@@ -161,7 +152,7 @@ public class Projectile extends Object{
 	 * 			| new.getYpos() == ypos
 	 */
 	@Raw
-	public void setYpos(double ypos){
+	private void setYpos(double ypos){
 		this.ypos = ypos+((this.getRadiusWorm()+this.getRadius())*1.1*Math.sin(this.getDirection()));
 		position.setYpos(this.ypos);
 	}
@@ -221,7 +212,7 @@ public class Projectile extends Object{
 	 * 			When the selected weapon is nor the Rifle nor the Bazooka the exception will be thrown.
 	 * 			| !((worm.getSelectedWeapon() == "Rifle") || (worm.getSelectedWeapon() == "Bazooka"))
 	 */
-	@Raw
+	@Raw 
 	private void setMass(Worm worm) throws IllegalStateException{
 		if (worm.getSelectedWeapon()=="Rifle"){
 			this.mass = 0.01;
@@ -284,7 +275,7 @@ public class Projectile extends Object{
 	 * 			| ! isValidMass(this.getMass()))
 	 */
 	@Raw
-	public void setRadius() throws IllegalArgumentException{
+	private void setRadius() throws IllegalArgumentException{
 		if ( ! isValidMass(this.getMass()))
 			throw new IllegalArgumentException();
 		this.radius = Math.pow((3.0/4.0)*(this.getMass()/(density*Math.PI)) ,1.0/3.0);
@@ -304,7 +295,7 @@ public class Projectile extends Object{
 	 * 			| new.getYield()==worm.getPropulsionYield()
 	 */
 	@Raw
-	public void setYield(Worm worm){
+	private void setYield(Worm worm){
 		this.yield = worm.getPropulsionYield();
 	}
 	/**
@@ -365,7 +356,7 @@ public class Projectile extends Object{
 	 * 			If the projectile can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
-	
+	@Raw
 	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
 		double[] step;
         step = new double[2];
@@ -385,8 +376,8 @@ public class Projectile extends Object{
 	 * 			If the projectile can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
+	@Raw
 	public double jumpTime(double timeStep) throws IllegalStateException{
-		
 		World world = this.getWorld();	
 		double origXpos = this.getXpos();
 		double origYpos = this.getYpos();
@@ -447,6 +438,7 @@ public class Projectile extends Object{
 	 * 			If the projectile can't jump the exception is thrown.
 	 * 			|! canJump()
 	 */
+	@Raw
 	public void jump(Double timeStep) throws IllegalStateException{
 		if (this.canJump()) {
 			World world = this.getWorld();
@@ -457,9 +449,7 @@ public class Projectile extends Object{
 				
 				tempXpos = this.jumpStep(t)[0];
 				tempYpos = this.jumpStep(t)[1];
-				
-	
-				
+			
 				Collection<Worm> collection = (world.getWorms());
 	
 			    for (Worm w : collection) {

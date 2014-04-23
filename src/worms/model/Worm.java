@@ -82,6 +82,7 @@ public class Worm extends Object {
 	 * 			Or when no lower bound is given it's set to 0.25 as it is in this case.
 	 * 			|new.getRadiusLowerBound() ==  0.25
 	 */
+	@Raw
 	public Worm(World world, double xpos, double ypos, double direction, double radius, String name){
 		super(world);
 		this.position = new Position(xpos, ypos);
@@ -127,6 +128,7 @@ public class Worm extends Object {
 	 * 			Or when no lower bound is given it's set to 0.25 as it is in this case.
 	 * 			|new.getRadiusLowerBound() ==  0.25
 	 */
+	@Raw
 	public Worm(World world){
 		super(world);
 		Random perimeter = world.getPerimeter();
@@ -160,7 +162,7 @@ public class Worm extends Object {
 	/**
 	 * Returns the name of the team if the worm has a team.
 	 */
-	@Basic
+	@Basic @Raw
 	public String getTeamName(){
 		if (this.hasTeam())
 			return this.getTeam().getName();
@@ -170,8 +172,7 @@ public class Worm extends Object {
 	 * Return the team of this worm.
 	 *   A null reference is returned if this object is not in a team.
 	 */
-	@Basic
-	@Raw
+	@Basic @Raw
 	public Team getTeam() {
 		return this.team;
 	}
@@ -214,6 +215,7 @@ public class Worm extends Object {
 	 *         	This worm already belongs to a team.
 	 *       	| hasTeam()
 	 */	
+	@Raw
 	public void setTeamTo(Team team)
 			throws IllegalArgumentException, IllegalStateException {
 		if ((team == null))
@@ -238,12 +240,13 @@ public class Worm extends Object {
 		this.team = team;
 	}
 	/**
-	 * Sets the team to a random team, is there are teams.
+	 * Sets the team to a random team, if there are teams.
 	 * @post	If there where teams the worm is added to a team.
 	 * 			If there where no teams the worm isn't added to a team.
 	 * 			| if ((this.getWorld().getTeams().size()!=0)) {
 	 * 			|	then this.hasTeam() == true;
 	 */
+	@Raw
 	public void setTeamRandom(){
 		World world = this.getWorld();
 		ArrayList<Team> teams = (ArrayList<Team>) world.getTeams();
@@ -262,6 +265,7 @@ public class Worm extends Object {
 	 *       	|    (getTeam() == null)
 	 *       	| || (! (new getTeam()).hasAsWorm(worm))
 	 */
+	@Raw
 	public void unsetTeam() {
 		if (hasTeam()) {
 			Team formerTeam = this.getTeam();
@@ -316,6 +320,7 @@ public class Worm extends Object {
 	 * @param 	ypos
 	 * 			The position to which we try to find and set a new x-position that is adjacent
 	 */
+	@Raw
 	private void setNearestAdjacent(double xpos, double ypos){
 		position.setNearestAdjacent(this.getWorld(), xpos, ypos, this.getRadius());
 	}
@@ -343,6 +348,7 @@ public class Worm extends Object {
 	 * 			| !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
 	 *			|	((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius())))
 	 */
+	@Raw
 	private boolean isOutOfTheMap(double xpos, double ypos) {
 		World world= this.getWorld();
 		return !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
@@ -356,6 +362,7 @@ public class Worm extends Object {
 	 * 			| world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
 				|!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 	 */
+	@Raw
 	public boolean canFall() {
 		World world = this.getWorld();
 		return( world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
@@ -364,9 +371,19 @@ public class Worm extends Object {
 	/**
 	 * Makes the worm fall, if it can fall, until the worm falls on an obstacle or falls out of the map.
 	 *
-	 * @post	The worm has fallen to a new position that is adjacent the x-position stays the same but 
+	 * @post	The worm has fallen to a new position that is adjacent. The x-position stays the same but 
 	 * 			the y-position changes.
-	 * 			|new.getYpos() == 
+	 * 			|this.getWorld().isAdjacent(new.getXpos(),new.getYpos(), new.getDirecetion) == true
+	 * 			|new.getXpos()==old.getXpos()
+	 * 			|while (world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()))
+	 * 			|	newYpos = this.getYpos()-this.getRadius()
+	 * 			|	if (this.getYpos()<0) 
+	 * 			|		then new.getYpos == (this.getRadius()*1.1)
+	 * 			|		break;
+	 * 			|	else if ((this.getYpos()>=0)){	
+	 * 			|		while (!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius())) 
+	 * 			|			newYpos = (this.getYpos()+0.1*this.getRadius())
+	 * 			|		new.getYpos() == newYpos
 	 * @post	The worms hitpoints are correctly reduced.
 	 * 			|new.getHitPoints() == old.getHitPoints() - 3*distance
 	 * @post	After the fall the worm could be on food this gets checked.
@@ -375,6 +392,7 @@ public class Worm extends Object {
 	 * 			If the worm can't fall because he is on adjacent terrain the exception is thrown.
 	 * 			| ! canFall()		
 	 */
+	@Raw
 	public void fall() throws IllegalStateException{
 		World world = this.getWorld();
 		double distance = 0;
@@ -454,7 +472,7 @@ public class Worm extends Object {
 	/**
 	 * Returns the current radius (meters) of the worm.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getRadius(){
 		return this.radius;
 	}	
@@ -470,6 +488,7 @@ public class Worm extends Object {
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius)) 
 	 */
+	@Raw
 	public void setRadius(double radius) throws IllegalArgumentException{
 		if ( ! isValidRadius(radius))
 			throw new IllegalArgumentException();
@@ -484,6 +503,7 @@ public class Worm extends Object {
 	 * @return	True if and only if the given radius is larger than or equal to the minimal allowed radius.
 	 * 			| result == (radius >= this.getRadiusLowerBound())
 	 */
+	@Raw
 	public boolean isValidRadius(double radius){
 		return radius >= this.getRadiusLowerBound();
 	}
@@ -491,7 +511,7 @@ public class Worm extends Object {
 	 * Returns the lower bound of the radius (meters)
 	 * 	the lower bound of the radius is the minimal allowed radius of the worm.
 	 */
-	@Basic 
+	@Basic @Raw
 	public double getRadiusLowerBound() {
 		return Worm.radiusLowerBound;
 	}
@@ -501,7 +521,8 @@ public class Worm extends Object {
 	 * 			The minimal allowed radius of the worm.
 	 * 			Originally initialized at 0.25m.
 	 */
-	public static void setRadiusLowerBound(double lowerbound) {
+	@Raw
+	private static void setRadiusLowerBound(double lowerbound) {
 		Worm.radiusLowerBound = lowerbound;
 	}
 	
@@ -528,6 +549,7 @@ public class Worm extends Object {
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
+	@Raw
 	private void setMass(double radius) throws IllegalArgumentException{
 		if (! isValidRadius(radius))
 			throw new IllegalArgumentException();
@@ -571,7 +593,7 @@ public class Worm extends Object {
 	 * 			| result == match "[A-Z]{1}[a-zA-Z0-9 " ']{1,}"
 	 */
 	@Raw
-	public static boolean isValidName(String name){
+	private static boolean isValidName(String name){
 	    String regex = "^[A-Z]{1}[a-zA-Z0-9 \"\']{1,}$";
 	    Pattern pattern = Pattern.compile(regex);
 	    Matcher matcher = pattern.matcher(name);
@@ -600,6 +622,7 @@ public class Worm extends Object {
 	 * 			| this.maxActionPoints == (int) Math.round(new.getMass()) == int Math.round(mass)
 	 * @effect	The maximal amount of action points has been set.
 	 */
+	@Raw
 	private void setMaxActionPoints(){
 		
 		if (this.getMass() < Integer.MAX_VALUE)
@@ -610,7 +633,7 @@ public class Worm extends Object {
 	/**
 	 * Return the current amount of action points for this worm.
 	 */
-	@Basic 
+	@Basic  @Raw
 	public int getActionPoints(){
 		return this.actionPoints;
 	}
@@ -624,6 +647,7 @@ public class Worm extends Object {
 	 * @post	The value of a worm's action points must never be less then zero.
 	 * 			|new.getActionPoint() >= 0
 	 */
+	@Raw
 	private void setActionPoints(int actionPoints){
 		if (actionPoints >= (this.getMaxActionPoints()))
 			this.actionPoints = this.getMaxActionPoints();
@@ -646,7 +670,7 @@ public class Worm extends Object {
 	/**
 	 * Return the maximal amount of hit points for this worm.
 	 */
-	@Basic
+	@Basic @Raw
 	public int getMaxHitPoints(){
 		return this.maxHitPoints;
 	}
@@ -664,6 +688,7 @@ public class Worm extends Object {
 	 * 			| this.maxHitPoints == (int) Math.round(new.getMass()) == int Math.round(mass)
 	 * @effect	The maximal amount of hit points has been set.
 	 */
+	@Raw
 	private void setMaxHitPoints(){
 		
 		if (this.getMass() < Integer.MAX_VALUE)
@@ -674,7 +699,7 @@ public class Worm extends Object {
 	/**
 	 * Return the current amount of hit points for this worm.
 	 */
-	@Basic 
+	@Basic @Raw
 	public int getHitPoints(){
 		return this.hitPoints;
 	}
@@ -688,6 +713,7 @@ public class Worm extends Object {
 	 * @post	The value of a worm's hit points must never be less then zero.
 	 * 			|new.getHitPoint() >= 0
 	 */
+	@Raw
 	public void setHitPoints(int hitPoints){
 		if (hitPoints >= (this.getMaxHitPoints())) {
 			this.hitPoints = this.getMaxHitPoints();
@@ -708,6 +734,7 @@ public class Worm extends Object {
 	 * 			|	then new.getAlive() == false
 	 * 			| else then new.getAlive() == true
 	 */
+	@Raw
 	public void setIsAlive(){
 		if(this.getHitPoints()==0) {
 			this.alive = false;
@@ -719,6 +746,7 @@ public class Worm extends Object {
 	/**
 	 * This method return whether or not the worm is still alive.
 	 */
+	@Raw
 	public boolean getIsAlive(){
 		return this.alive;
 	}
@@ -732,6 +760,7 @@ public class Worm extends Object {
 	 * @post	The worm will be deleted from the current world.
 	 * 			| new.objects.contains(this) == false;
 	 */
+	@Raw
 	public void killWorm() {
 		this.setHitPoints(0);
 		this.setIsAlive();
@@ -745,6 +774,7 @@ public class Worm extends Object {
 	 * @post	The worm will be deleted from the current world.
 	 * 			| new.objects.contains(this) == false;
 	 */
+	@Raw
 	public void deleteWorm(World world){
 		int index = world.getCurrentWormIndex()+1;
 		int size = world.getWorms().size();
@@ -755,7 +785,7 @@ public class Worm extends Object {
 	}
 	/**
 	 * This method heals the worm with an amount of health.
-	 * @param amount
+	 * @param 	amount
 	 * 			The amount of health which the worm will get.
 	 * 
 	 * @post	If the worm is still alive it will get an amount of new hitpoints else it will be deleted.
@@ -763,6 +793,7 @@ public class Worm extends Object {
 	 * 			| 	then new.getHitPoints() == old.getHitPoints() + amount
 	 * 			| else then new.objects.contains(this) == false;
 	 */
+	@Raw
 	public void heal(int amount){
 		if (this.alive)
 			this.setHitPoints(this.getHitPoints()+amount);
@@ -771,12 +802,37 @@ public class Worm extends Object {
 	}
 	//move (defensive)
 	/**
-	 * The method makes the worm move a given number of steps in the direction the worm is currently facing.
-	 * @post	The worm has moved in the current direction.
-	 * 			|new.getXpos() == old.getXpos() + steps*cos(direction)*radius
-	 * 			|new.getYpos() == old.getYpos() + steps*sin(direction)*radius
+	 * The method makes the worm move to a next position that is adjacent to impassable terrain following the slope
+	 * of that terrain in the direction. The worm shall aim to maximize the distance while minimizing the divergence.
+	 * If no such location exists because all locations in the direction +- 0,7875 are impassable the worm shall remain at its current position.
+	 * If locations in the direction are passable but not adjacent the worm shall move there and then drop passively.
+	 * @post	If the worm can maximize the distance while minimizing the divergence, 
+	 * 			the worm has moved to the optimal location.
+	 * 			|for (double a = 0.1;a<=this.getRadius();a=a+(0.01*a)) {
+	 *			|	x2 = x+Math.cos(direction)*a;
+	 *			|	y2 = y+Math.sin(direction)*a;
+	 *			|	if (world.isAdjacent(x2, y2, this.getRadius()) &&
+	 *			|			world.isPassable(x2, y2, this.getRadius())) {
+	 *			|		double d = Math.sqrt(Math.pow((x-x2),2)+Math.pow((y-y2),2));
+	 *			|		double s = Math.atan((x-x2)/(y-y2));
+	 *			|		if ((d>=maxD) && (s<minS)) {
+	 *			|			minS=s;
+	 *			|			maxD=d;
+	 *			|			x2Max = x2;
+	 *			|			y2Max= y2;
+	 *			|	direction = direction +0.0175;
+	 *			|new.getXpos()==x2Max
+	 *			|new.getYpos() == y2Max
+	 * @post	If the worm can't maximize the distance while minimizing the divergence and there is 
+	 * 			only impassable terrain in the checked directions, the worm will not have moved.
+	 * 			|new.getXpos() == old.getXpos()
+	 * 			|new.getYpos() == old.getYpos()
+	 * @post	If the worm can't maximize the distance while minimizing the divergence and there is 
+	 * 			only passable terrain in the checked directions that is not adjacent, the worm will move there.
+	 * 			|new.getXpos() == old.getXpos() + cos(direction)*radius
+	 * 			|new.getYpos() == old.getYpos() + sin(direction)*radius
 	 * @post	The worms actionpoints are correctly reduced.
-	 * 			|new.getActionPoints == old.getActionPoints() - old.computeCostStep(steps)
+	 * 			|new.getActionPoints == old.getActionPoints() - old.computeCost2(old.getXpos(),old.getYpos())
 	 * @throws	IllegalArgumentException
 	 * 			If the worm can't move because he has insufficient actionpoints
 	 * 			the exception is thrown.
@@ -786,11 +842,12 @@ public class Worm extends Object {
 	 * 			and adjacent to impassable terrain the exception is thrown.
 	 * 			| ! canMove()
 	 */
+	@Raw
 	public void move() throws IllegalArgumentException,IllegalStateException {
 		if ( ! isValidStep())
 			throw new IllegalArgumentException();
 		if (canMove()) { 
-			World world = this.getWorld(); //wereld waarin de worm zich bevind.
+			World world = this.getWorld();
 			double x = this.getXpos();
 			double y = this.getYpos();
 			double prevx = x;
@@ -847,14 +904,10 @@ public class Worm extends Object {
 					this.setXpos(pasXpos);
 					this.setYpos(pasYpos);
 					this.setActionPoints(this.getActionPoints()-this.computeCost2(prevx, prevy));
-					//this.fall();
 					}
 				}
-				
 			} 
 			this.consumeFood();
-			
-			
 		}
 		else throw new IllegalStateException();
 	}
@@ -863,7 +916,8 @@ public class Worm extends Object {
 	 * Returns true if the worm is positioned in passable terrain 
 	 * 	and adjacent to impassable terrain.
 	 */
-	public boolean canMove() {
+	@Raw
+	private boolean canMove() {
 		World world = this.getWorld();
 		return world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius());
 	}
@@ -889,6 +943,7 @@ public class Worm extends Object {
 	 * @param prevYpos
 	 * 			The y-position of the worm before he moved.
 	 */
+	@Raw
 	private int computeCost2(double prevXpos, double prevYpos){
 		return (int) (Math.round(Math.abs(this.getXpos()-prevXpos))
 				+Math.round(4*Math.abs(this.getYpos()-prevYpos)));
@@ -902,6 +957,7 @@ public class Worm extends Object {
 	 * 			and return False if there aren't enough actionpoints for the wished step.
 	 * 			| this.getActionPoints() >= this.computeCostStep(steps)
 	 */
+	@Raw
 	public boolean isValidStep(){
 		return this.getActionPoints() >= this.computeCostStep(1);
 	}
@@ -927,6 +983,7 @@ public class Worm extends Object {
 	 * 			and return False if there aren't enough actionpoints for the wished turn.
 	 * 			| this.getActionPoints() >= this.computeCostTurn(angle) 
 	 */
+	@Raw
 	public boolean isValidTurn(double angle){
 		return this.getActionPoints() >= this.computeCostTurn(angle);
 	}
@@ -940,6 +997,7 @@ public class Worm extends Object {
 	 * @post	The worm's actionpoints must be decreased accordingly.
 	 * 			|new.getActionpoints() == old.getActionpoints() - old.computeCostTurn(angle)
 	 */
+	@Raw
 	public void turn(double angle){
 		assert this.isValidTurn(angle);
 		this.setDirection(this.getDirection()+ angle);
@@ -949,16 +1007,24 @@ public class Worm extends Object {
 	//jump (defensive)
 	/**
 	 * Changes the positions of the worm as a result of a jump from the current position.
-	 * @post 	The worm jumped to the correct position when the direction is in the range (0 - PI)
-	 * 			| new.getXpos() == old.getXpos() + this.jumpDistance()
-	 * @post 	The worm hasn't jumped when the direction is in the range (PI- 2*PI)
-	 * 			| new.getXpos() == old.getXpos()
+	 * @post	If the worm jumped out of the map it will have been removed.
+	 * 			|this.getWorld().getWorms().contains(this) == false
+	 * @post 	The worm jumped to the correct position
+	 * 			| while (world.isPassable(tempXpos, tempYpos, this.getRadius()))
+	 *			|	tempXpos = this.jumpStep(t)[0]
+	 *			|	tempYpos = this.jumpStep(t)[1]
+	 *			|	t += timeStep
+	 *			|	if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
+	 *			|			(Math.sqrt(Math.pow((origXpos-tempXpos), 2)+Math.pow((origYpos-tempYpos), 2))>=this.getRadius() ))
+	 *			|				new.getXpos() == tempXpos
+	 *			|				new.getYpos() == tempYpos
 	 * @post	The worm's actionpoints are reduced to zero.
 	 * 			|new.getActionPoints() == 0;
 	 * @throws 	IllegalStateException
 	 * 			When the worm has no action point left to jump the exception is thrown.
 	 * 			|! canJump()
 	 */
+	@Raw
 	public void jump(Double timeStep) throws IllegalStateException{
 		if (this.canJump()) {
 			World world = this.getWorld();	
@@ -972,11 +1038,9 @@ public class Worm extends Object {
 				tempYpos = this.jumpStep(t)[1];
 				t += timeStep;
 				
-				
 				if (isOutOfTheMap(tempXpos,tempYpos)) {
 					this.killWorm();
 					break;
-					
 					
 				}
 				if ((world.isAdjacent(tempXpos, tempYpos, this.getRadius())) &&  
@@ -987,10 +1051,7 @@ public class Worm extends Object {
 					this.setActionPoints(0);
 					break;
 				}
-				
-			}
-			
-			
+			}			
 		} else throw new IllegalStateException();
 	}
 	
@@ -998,7 +1059,8 @@ public class Worm extends Object {
 	/**
 	 * Checks whether the worms still has actionpoints is placed in passable terrain.
 	 */
-	public boolean canJump() {
+	@Raw
+	private boolean canJump() {
 		World world = this.getWorld();
 		return ((this.getActionPoints() > 0) && world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
@@ -1007,7 +1069,7 @@ public class Worm extends Object {
 	 * Returns the jump velocity of a worm.
 	 * 	this is needed in to calculate the distance over which to worm can jump.
 	 */
-	@Basic 
+	@Basic @Raw
 	private double jumpVelocity() {
 		double force = (5*this.getActionPoints())+(this.getMass()*G);
 		double velocity = ((force/this.getMass())*0.5);
@@ -1019,6 +1081,7 @@ public class Worm extends Object {
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
+	@Raw
 	public double jumpTime(double timeStep) throws IllegalStateException{
 		World world = this.getWorld();	
 		double origXpos = this.getXpos();
@@ -1053,7 +1116,7 @@ public class Worm extends Object {
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
-	@Basic
+	@Basic @Raw
 	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
 		double[] step;
         step = new double[2];
@@ -1076,6 +1139,7 @@ public class Worm extends Object {
 	 * @post	When the food gets eaten this food object will de removed from the world.
 	 * 			| (! (this.getWorld()).hasAsObject(food))
 	 */
+	@Raw
 	public void consumeFood() {
 		double xpos = this.getXpos();
 		double ypos = this.getYpos();
@@ -1089,6 +1153,7 @@ public class Worm extends Object {
 	/**
 	 * This method return the food objects that overlap with the worms position.
 	 */
+	@Raw
 	public Food overlappingFood() {
 		World world = this.getWorld();
 		double maxDistance = this.getRadius() + 0.2;
@@ -1114,7 +1179,8 @@ public class Worm extends Object {
 	 * 			The propulsion that needs to be checked.
 	 * @return	True if the propulsion is between 0 and 100.
 	 */
-	public boolean isValidPropulsion(int propulsion) {
+	@Raw
+	private boolean isValidPropulsion(int propulsion) {
 		return (propulsion >= 0 && propulsion <= 100);
 	}
 	/**
@@ -1125,7 +1191,8 @@ public class Worm extends Object {
 	 * 			If the propulsion isn't a valid propulsion the error is thrown.
 	 * 			| if !(isValidPropulsion(propulsion))
 	 */
-	public void setPropulsionYield(int propulsion) throws IllegalArgumentException {
+	@Raw
+	private void setPropulsionYield(int propulsion) throws IllegalArgumentException {
 		if (isValidPropulsion(propulsion)) {
 			this.propulsion = propulsion;
 		} else 
@@ -1134,29 +1201,33 @@ public class Worm extends Object {
 	/**
 	 * This method returns the propulsion yield.
 	 */
+	@Raw
 	public int getPropulsionYield(){
 		return this.propulsion;
 	}
 	/**
 	 * This method returns the mass of the projectile of the selected weapon.
 	 */
+	@Raw
 	public int getMassProjectile(){
 		return weapon.getMass();
 	}
 	/**
 	 * This method returns the name of the selected weapon.
 	 */
+	@Raw
 	public String getSelectedWeapon(){
 		return weapon.getName();
 	}
 	/**
 	 * This method makes the worm select the next weapon.
 	 */
+	@Raw
 	public void selectNextWeapon(){
 		weapon.changeWeapon();
 	}
 	/**
-	 * This method checks whether a worm can shoot.
+	 * This method checks whether a worm can shoot and sets the cost.
 	 * @return	True if the cost to use the weapon is smaller then 
 	 * 			the remaining action points of the worm and if the worm is positioned on passable
 	 * 			terrain and false if the cost to use the weapon is bigger then the 
@@ -1164,12 +1235,30 @@ public class Worm extends Object {
 	 * 			| this.getActionPoints() >= weapon.getCost()
 	 * 			| !this.getWorld().isImpassable(this.getXpos(),this.getYpos(),this.getRadius()) 
 	 */
-	public boolean canShoot(){
-		this.cost = weapon.getCost();
+	@Raw
+	private boolean canShoot(){
+		if (this.getSelectedWeapon()=="Rifle"){
+			this.cost = 10;
+		}
+		else {
+			this.cost = 50;
+		}
 		if (((this.getActionPoints()- this.cost) >=0) && (!this.getWorld().isImpassable(this.getXpos(), this.getYpos(), this.getRadius())))
+
 			return true;
 		else 
 			return false;
+	}
+	@Raw
+	private void setCost(){
+		if (this.getSelectedWeapon() == "Rifle")
+			this.cost = 20;
+		else 
+			this.cost = 50;
+	}
+	@Raw
+	public int getCost(){
+		return this.cost;
 	}
 	/**
 	 * This method makes the worm shoot a projectile.
@@ -1188,6 +1277,7 @@ public class Worm extends Object {
 	 * 			on impassable terrain the exception will be thrown.
 	 * 			| !canShoot()
 	 */
+	@Raw
 	public void shoot(int yield) throws IllegalArgumentException, IllegalStateException{
 		if( !isValidPropulsion(yield)){
 			throw new IllegalArgumentException();
@@ -1198,7 +1288,7 @@ public class Worm extends Object {
 				World world = this.getWorld();
 				this.setPropulsionYield(yield);
 				new Projectile(world,this.getXpos(),this.getYpos(),this);
-				this.setActionPoints(this.getActionPoints()-weapon.getCost());
+				this.setActionPoints(this.getActionPoints()-this.getCost());
 			}
 		}
 	}

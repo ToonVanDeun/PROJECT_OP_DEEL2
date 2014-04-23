@@ -1,19 +1,11 @@
 package worms.model;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Model;
-import be.kuleuven.cs.som.annotate.Raw;
-import be.kuleuven.cs.som.annotate.Value;
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class of objects that can be in a world of class World. 
  * Classes Worm, Food, Team and Projectile all inherit from Object.
  * 
- * @invar  Each object can only be located in at most one world.
- *       | 
- * @invar  No world contains the same object twice.
- *       | 
- *       
  * @author 	Toon Stuyck
  * 			Toon Van Deun
  * 			Burgerlijk Ingenieur
@@ -30,7 +22,6 @@ public abstract class Object {
 	 *         world.
 	 *       | setWorldTo(world)
 	 */
-	@Raw
 	@Model
 	protected Object(World world) throws IllegalArgumentException {
 		setWorldTo(world);
@@ -40,7 +31,6 @@ public abstract class Object {
 	 *   A null reference is returned if this object is not in a world.
 	 */
 	@Basic
-	@Raw
 	public World getWorld() {
 		return this.world;
 	}
@@ -52,7 +42,6 @@ public abstract class Object {
 	 * @return True, if the object is not yet in a world.
 	 * 			| !world.getAllObjects().contains(this)
 	 */
-	@Raw
 	public boolean canHaveAsWorld(World world) {
 		// nog niet juis controleert enkel of object niet in gegeven wereld zit.
 		// moet ook controleren of het niet in een andere wereld zit.
@@ -65,7 +54,6 @@ public abstract class Object {
 	 * @return True if and only if the world of this object is effective.
 	 *       | result == (getWorld() != null)
 	 */
-	@Raw
 	public boolean hasWorld() {
 		return getWorld() != null;
 	}
@@ -106,7 +94,6 @@ public abstract class Object {
 	 * @post   	The world of this object is the same as the given world.
 	 *       	| new.getWorld() == world
 	 */
-	@Raw
 	private void setWorld(@Raw World world) {
 		assert this.canHaveAsWorld(world);
 		this.world = world;
@@ -136,21 +123,21 @@ public abstract class Object {
 	/**
 	 * Returns the radius of the object.
 	 */
-	@Basic @Raw
+	@Basic 
 	public double getRadius() {
 		return this.radius;
 	}
 	/**
 	 * Returns the X position of the object
 	 */
-	@Basic @Raw
+	@Basic 
 	public double getXpos() {
 		return position.getXpos();
 	}
 	/**
 	 * Returns the Y position of the object
 	 */
-	@Basic @Raw
+	@Basic 
 	public double getYpos(){
 		return position.getYpos();
 	}

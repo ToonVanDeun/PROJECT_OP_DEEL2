@@ -1,6 +1,3 @@
-/**
- * 
- */
 package worms.model;
 
 import java.util.ArrayList;
@@ -8,12 +5,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Raw;
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class of team that can be in a world of class World. 
- * The class inherits from Object and contains methods to change the foods position and delete the food.
+ * The class inherits from Object and contains methods to add worms to and delete from a team.
  *       
  * @author 	Toon Stuyck
  * 			Toon Van Deun
@@ -36,7 +32,7 @@ public class Team extends Object {
 	/**
 	 * Returns the name of the team.
 	 */
-	@Basic @Raw
+	@Basic 
 	public String getName() {
 		return this.name;
 	}
@@ -50,8 +46,8 @@ public class Team extends Object {
 	 * 			When the name is not a valid name the exception is thrown.
 	 * 			| ! isValidName(name)
 	 */
-	@Raw
-	public void setName(String name) throws IllegalArgumentException{
+	@Immutable
+	private void setName(String name) throws IllegalArgumentException{
 		if (! isValidName(name))
 			throw new IllegalArgumentException();
 		this.name = name;
@@ -64,8 +60,7 @@ public class Team extends Object {
 	 * 			If the give name is not a valid name the method returns false.
 	 * 			| result == match "[A-Z]{1}[a-zA-Z " ']{1,}"
 	 */
-	@Raw
-	public static boolean isValidName(String name){
+	private static boolean isValidName(String name){
 	    String regex = "^[A-Z]{1}[a-zA-Z]{1,}$";
 	    Pattern pattern = Pattern.compile(regex);
 	    Matcher matcher = pattern.matcher(name);
@@ -78,7 +73,6 @@ public class Team extends Object {
 	 * @return	True is the team contains the worm.
 	 * 			|worms.contains(worm)
 	 */
-	@Raw
 	public boolean hasAsWorm(Worm worm) {
 		return worms.contains(worm);
 	}
@@ -92,7 +86,7 @@ public class Team extends Object {
 	 *       	| for each index in 0..result-size()-1 :
 	 *       	|   result.get(index) == getWormAt(index+1)
 	 */
-	@Basic @Raw
+	@Basic 
 	public ArrayList<Worm> getAllWorms() {
 		return new ArrayList<Worm>(worms);
 	}
@@ -106,7 +100,6 @@ public class Team extends Object {
 	 *       |   result.get(index).getIsAlive() == true &&
 	 *       |	 result.get(index).getTeam()==this
 	 */
-	@Raw
 	public ArrayList<Worm> getAllAliveWorms() {		
 		ArrayList<Worm> lijst = getAllWorms();
 		ArrayList<Worm> aliveWorms = new ArrayList<Worm>(); 
@@ -156,7 +149,6 @@ public class Team extends Object {
 	 *       	| for each index in getIndexOfWorm(worm)+1..getNbWorms():
 	 *       	|   new.getWormAt(index-1) == getWormAt(index) 
 	 */
-	@Raw
 	public void removeAsWorm(Worm worm) {
 		assert (worm != null);
 		assert (hasAsWorm(worm));

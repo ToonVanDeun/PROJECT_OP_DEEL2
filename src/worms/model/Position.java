@@ -29,6 +29,7 @@ public class Position {
 	 * 			|new.getXpos() == xpos
 	 * 			|new.getYpos() == ypos
 	 */
+	@Raw
 	public Position(double xpos, double ypos) {
 		this.setXpos(xpos);
 		this.setYpos(ypos);
@@ -42,6 +43,7 @@ public class Position {
 	 * @post 	The new position is an adjacent position.
 	 * 			|world.isAdjacent(new.getXpos(), new.getYpos, object.getRadius)
 	 */
+	@Raw
 	public Position(World world, Object object) {
 		this.setAdjacantPosition(world, object);
 	}
@@ -50,7 +52,7 @@ public class Position {
 	/**
 	 * Returns the x-position of the object.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getXpos() {
 		return this.xpos;
 	}
@@ -64,6 +66,7 @@ public class Position {
 	 * 			If xpos isn't a valid x-position the exception is thrown.
 	 * 			| ! isValidPos(xpos)
 	 */
+	@Raw
 	public void setXpos(double xpos) throws IllegalArgumentException {
 		if (! isValidPos(xpos))
 			throw new IllegalArgumentException();
@@ -72,7 +75,7 @@ public class Position {
 	/**
 	 * Returns the y-position of the object.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getYpos() {
 		return this.ypos;
 	}
@@ -86,6 +89,7 @@ public class Position {
 	 * 			If ypos isn't a valid y position the exception is thrown.
 	 * 			| ! isValidPos(ypos)
 	 */
+	@Raw
 	public void setYpos(double ypos) throws IllegalArgumentException {
 		if (! isValidPos(ypos))
 			throw new IllegalArgumentException();
@@ -104,6 +108,7 @@ public class Position {
 	 * @post 	The new position is an adjacent position.
 	 * 			|world.isAdjacent(new.getXpos(), new.getYpos, object.getRadius)
 	 */
+	@Raw
 	public void setAdjacantPosition(World world, Object object) {
 		double radius = object.getRadius();
 		double randXpos = radius+ (Math.random()*(world.getWidth()-radius));
@@ -145,6 +150,7 @@ public class Position {
 	 * 			| If (world.isAdjacent((new) position)) For a<world.getWidth()/10
 	 * 			| 	Then new.World.isAdjacent(position);
 	 */
+	@Raw
 	public void setNearestAdjacent(World world, double xpos, double ypos, double radius) throws IllegalArgumentException {
 		double tempx =xpos;
 		double tempy =ypos;

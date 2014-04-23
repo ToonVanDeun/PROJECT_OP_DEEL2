@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package worms.model;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -11,6 +9,11 @@ import be.kuleuven.cs.som.annotate.*;
  * A class of food that can be in a world of class World. 
  * The class inherits from Object and contains methods to change the foods position and delete the food.
  *       
+ * @invar	The radius of food is 0.20
+ * 			|this.getRadius()==0.20
+ * @invar	The position of food is always adjacent to impassable terrain.
+ * 			|this.getWorld().isadjacent(this.getXpos(),this.getYpos,this.getRadius)==true
+ * 
  * @author 	Toon Stuyck
  * 			Toon Van Deun
  * 			Burgerlijk Ingenieur
@@ -46,6 +49,7 @@ import be.kuleuven.cs.som.annotate.*;
 		 * @post	The Y position is set to the given ypos.
 		 * 			|this.position.getYpos()==ypos	
 		 */
+		@Raw
 		public Food(World world, double xpos, double ypos) {
 			super(world);
 			this.setRadius();

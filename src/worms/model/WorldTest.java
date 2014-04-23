@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
 
 import org.junit.After;
@@ -26,10 +25,13 @@ public class WorldTest {
 	private Random random;
 	private static World world;
 	private static World worldWithObjects;
+	private static World world_projectile;
 	public static boolean[][] passableMap;
 	public static boolean[][] passableMap1;
 	private Collection<Worm> worms = new ArrayList<Worm>();
 	private Collection<Food> food = new ArrayList<Food>();
+	private static Team team1;
+	private static Team team2;
 
 	@Before
 	public void setUp() throws Exception {
@@ -53,15 +55,22 @@ public class WorldTest {
 		//world
 		world = new World(100, 100, passableMap1, random  );
 		worldWithObjects = new World(100, 100, passableMap1, random  );
+		world_projectile = new World(100, 100, passableMap1, random  );
 		//worms
 		Worm worm1 = new Worm(worldWithObjects, 2, 2, 1, 1, "Timon");
 		Worm worm2 = new Worm(worldWithObjects, 3, 3, 1, 1, "Poemba");
+		Worm worm_team = new Worm(worldWithObjects, 2, 2, 1, 1, "Team");
+		Worm worm_shoot = new Worm(world_projectile, 2, 2, 1, 1, "Shoot");
 		Food food1 = new Food(worldWithObjects,5,5);
 		Food food2 = new Food(worldWithObjects,6,6);
 		worms.add(worm1);
 		worms.add(worm2);
+		worms.add(worm_team);
 		food.add(food1);
 		food.add(food2);
+		
+		team1 = new Team(worldWithObjects, "TeamTof");
+		team2 = new Team(worldWithObjects, "TeamSuperTof");
 	}
 	@After
 	public void tearDown() throws Exception {
@@ -111,7 +120,6 @@ public class WorldTest {
 	public void test_isPassable_fails() {
 		assertEquals(world.isPassable(10, 70, 2),true);
 	}
-	//WERKT NOG NIET
 	@Test
 	public void test_isAdjacent_valid1() {
 		assertEquals(world.isAdjacent(10, 48, 2),true);
@@ -147,11 +155,11 @@ public class WorldTest {
 	//Objects
 	@Test
 	public void test_getNbObjects_valid1() {
-		assertEquals(worldWithObjects.getNbObjects(),4);
+		assertEquals(worldWithObjects.getNbObjects(),7);
 	}
 	@Test(expected = AssertionError.class)
 	public void test_getNbObjects_fails() {
-		assertEquals(worldWithObjects.getNbObjects(),7);
+		assertEquals(worldWithObjects.getNbObjects(),5);
 	}
 	@Test
 	public void test_canHaveAsObject_valid1() {
@@ -227,6 +235,11 @@ public class WorldTest {
 	public void test_getFood_valid2() {
 		assertEquals(worldWithObjects.getFood(),food);
 	}
-	
 
+	//Team
+	@Test
+	public void test_getTeams_valid() {
+		assertEquals(worldWithObjects.getTeams().size(),2);
+	}
+	
 }

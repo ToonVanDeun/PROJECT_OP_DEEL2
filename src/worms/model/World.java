@@ -17,7 +17,10 @@ import be.kuleuven.cs.som.annotate.Raw;
  * A class of World involving width, height, passableMap, and lists of objects.
  * Complemented with methods to interact with the world and change certain values.
  * 
- * @invar	
+ * @invar	The width is a valid width.
+ * 			|isValidWidth(this.getWidth()) ==true
+ * @invar	The height is a valid height.
+ * 			|isValidHeight(this.getHeight())==true
  * 	
  * @author 	Toon Stuyck
  * 			Toon Van Deun
@@ -46,6 +49,7 @@ public class World {
 	 * @post	The perimeter is set to the given random object.
 	 * 			|new.getPerimeter == random
 	 */
+	@Raw
 	public World(double width, double height, boolean[][] passableMap, Random random) {
 		World.setUpperboundHeight(height);
 		World.setUpperboundWidth(width);
@@ -59,7 +63,7 @@ public class World {
 	/**
 	 * Returns the perimeter, a random object to determine several random aspects of the world.
 	 */
-	@Basic
+	@Basic @Raw
 	public Random getPerimeter() {
 		return this.perimeter;		
 	}
@@ -68,7 +72,7 @@ public class World {
 	/**
 	 * Returns the width of the world.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getWidth() {
 		return this.width;
 	}
@@ -82,6 +86,7 @@ public class World {
 	 * 			If width isn't a valid width the exception is thrown.
 	 * 			| ! isValidWidth(width)
 	 */
+	@Raw
 	public final void setWidth(double width) throws IllegalArgumentException {
 		if (! isValidWidth(width))
 			throw new IllegalArgumentException();
@@ -104,15 +109,14 @@ public class World {
 	/**
 	 * Returns the upper bound width of the world.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getUpperboundWidth() {
 		return World.upperboundWidth;
 	}
 	/**
 	 * Sets the upper bound for the width of the world. 
-	 * @param 	The new upperboundWidth for the world.
-	 * @pre		The new upperboundWidth can't be smaller than the current width of the world
-	 * 			| upperboundWidth>this.getWidth()
+	 * @param 	upperboundWidth
+	 * 			The new upperboundWidth for the world.
 	 * @post 	The upperboundWidth of the world is set to the given upperboundWidth.
 	 * 			|new.getUpperboundWidth() ==uperboundWidth
 	 * @throws 	IllegalArgumentException
@@ -128,7 +132,7 @@ public class World {
 	/**
 	 * Returns the height of the world.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getHeight() {
 		return this.height;
 	}
@@ -165,20 +169,20 @@ public class World {
 	/**
 	 * Returns the upper bound height of the world.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getUpperboundHeight() {
 		return World.upperboundHeight;
 	}
 	/**
 	 * Sets the upper bound for the height of the world.
-	 * @param 	The new upperboundHeight for the world.
-	 * @pre		The new upperboundHeight can't be smaller than the current height of the world
-	 * 			| upperboundHeight>this.getheight()
+	 * @param 	upperboundHeight
+	 * 			The new upperboundHeight for the world.
 	 * @post 	The upperboundHeight of the world is set to the given upperboundHeight.
 	 * 			|new.getUpperboundHeight() ==uperboundHeight
 	 * @throws IllegalArgumentException
 	 * 			if the upperboundHeight is not a valid upperboundHeight.
 	 */
+	@Raw
 	public static void setUpperboundHeight(double upperboundHeight) throws IllegalArgumentException {
 		if (upperboundHeight<0)
 			throw new IllegalArgumentException();
@@ -208,6 +212,7 @@ public class World {
 	 * 			overlaps with impassable terrain.
 	 * 			| (isLocatedOnPassableLocation(position) && doesNotOverlapWithImpassableTerrain(position,radius)
 	 */
+	@Raw
 	public boolean isPassable(double x, double y, double radius) {
 		int mapWidth = this.getPassableMap()[1].length; //eigenlijk height
 		int mapHeight = this.getPassableMap().length; //eigenlijk width
@@ -237,6 +242,7 @@ public class World {
 	 * @return	True is the given position overlaps with, or is positioned in impassable terrain.
 	 * 			!this.isPassable(x, y, radius);
 	 */
+	@Raw
 	public boolean isImpassable(double x, double y, double radius) {		
 		return !this.isPassable(x, y, radius);
 	}
@@ -254,6 +260,7 @@ public class World {
 	 * 			False if the object isn't placed on adjacent terrain
 	 * 			|(this.isPassable(x, y, radius)) && (this.isImpassable(x, y, radius*1.1))
 	 */
+	@Raw
 	public boolean isAdjacent(double x, double y ,double radius){
 		if ((this.isPassable(x, y, radius)) && (this.isImpassable(x, y, radius*1.1))){
 			return true;
@@ -265,7 +272,7 @@ public class World {
 	/**
 	 * The index of the worm that is currently being controlled.
 	 */
-	@Basic
+	@Basic @Raw
 	public int getCurrentWormIndex() {
 		return currentWormIndex;
 	}
@@ -278,6 +285,7 @@ public class World {
 	 * @post 	The currentWormIndext is set to the given currentWormIndex
 	 * 			|new.getCurrentWormIndex() == currentWormIndex
 	 */
+	@Raw
 	public void setCurrentWormIndex(int currentWormIndex) {
 		if (currentWormIndex<0){
 			currentWormIndex = 0;
@@ -288,7 +296,7 @@ public class World {
 	 * Returns the the worm that is currently being controlled.
 	 * (The worm on position "getCurrentWormIndex" in the list of worms.)
 	 */
-	@Basic
+	@Basic @Raw
 	public Worm getCurrentWorm(){
 		return ((ArrayList<Worm>) getWorms()).get(this.getCurrentWormIndex());
 	}
@@ -329,6 +337,7 @@ public class World {
 	 * If only one team remains the winner is the remaining team.
 	 * If from the only remaining team only one worm remains, that worm will be the winner.
 	 */
+	@Raw
 	public String getWinner(){
 		Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
 		if (team ==null) {
@@ -345,6 +354,7 @@ public class World {
 	/**
 	 * Checks whether the game is finished or not.
 	 */
+	@Raw
 	public boolean isGameFinished(){
 		if (this.getWorms().size()>0){
 			Team team = ((Worm) this.getWorms().toArray()[0]).getTeam();
@@ -361,7 +371,6 @@ public class World {
 			return true;
 		}
 		return false;
-		
 	}
 
 	
@@ -369,8 +378,7 @@ public class World {
 	/**
 	 * Returns the number of objects in this world.
 	 */
-	@Basic
-	@Raw
+	@Basic @Raw
 	public int getNbObjects() {
 		return objects.size();
 	}
@@ -415,7 +423,7 @@ public class World {
 	 *       	| for each index in 0..result-size()-1 :
 	 *       	|   result.get(index) == getObjectAt(index+1)
 	 */
-	@Basic
+	@Basic @Raw
 	public List<Object> getAllObjects() {
 		return new ArrayList<Object>(objects);
 	}
@@ -481,7 +489,7 @@ public class World {
 	 * 			| for each index in 0..result.size()-1:
 	 *      	|   (result.get(i) instanceof Worm) == true
 	 */
-	@Basic
+	@Basic @Raw
 	public Collection<Worm> getWorms() {
 		ArrayList<Object> lijst = new ArrayList<Object>(objects);
 		Collection<Worm> worms = new ArrayList<Worm>(); 
@@ -497,7 +505,7 @@ public class World {
 	 * @post 	objects no longer contains worm
 	 * 			| new.objects.contains(worm) == false;
 	 */
-	@Raw
+	@Raw 
 	public void deleteWorm(Worm worm){
 		((List<Object>) objects).remove(worm);
 	}
@@ -513,6 +521,7 @@ public class World {
 	 *       	|   result.get(index) instanceof Food = true
 	 *       
 	 */
+	@Raw
 	public Collection<Food> getFood() {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Food> food = new ArrayList<Food>();
@@ -543,6 +552,7 @@ public class World {
 	 *       | for each index in 0..result.size()-1 :
 	 *       |   result.get(index) instanceof Team == true      
 	 */	
+	@Raw
 	public Collection<Team> getTeams() {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Team> teams = new ArrayList<Team>();
@@ -565,6 +575,7 @@ public class World {
 	 * 			which is the maximum allowed number of teams per world.
 	 * 			|!(this.getTeams().size()<10)
 	 */
+	@Raw
 	public boolean canAddAsTeam(String teamName) throws IllegalArgumentException, IllegalStateException {
 		if (! isValidTeamName(teamName))
 			throw new IllegalArgumentException();
@@ -602,6 +613,7 @@ public class World {
 	 *       | for each index in 0..result.size()-1 :
 	 *       |   result.get(index) instanceof Projectile == true      
 	 */	
+	@Raw
 	public Collection<Projectile> getProjectile() {
 		ArrayList<Object> lijst = (ArrayList<Object>) objects;
 		Collection<Projectile> projectile = new ArrayList<Projectile>();
