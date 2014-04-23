@@ -2,19 +2,16 @@ package worms.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.hamcrest.core.IsAnything;
-
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of worms involving x-position, y-position a radius, a direction a mass , actionpoints and a name.
- * Complemented with methodes that interact with the worm and change curtain values.
+ * A class of worms involving x-position, y-position a radius, a direction a mass, 
+ * actionpoints, hitpoints, team participation, and a name.
+ * Complemented with methods that interact with the worm and change certain values and 
+ * methods that allow the worm to interact with the world of the worm and objects in that world.
  * 
  * @invar	The radius must be a valid radius for the worm.
  * 		  	| isValidRadius(this.getRadius())
@@ -22,17 +19,21 @@ import be.kuleuven.cs.som.annotate.*;
  * 			|this.getActionPoints() >= 0
  * @invar	The actionpoints of a worm must always be equal to or smaller than the maximum actionpoints.
  * 		  	| this.getActionpoints() =< this.getMaxActionPoints()
+ * @invar	The hitpoints of a worm must always be larger than zero.
+ * 			|this.getHitPoints() >= 0
+ * @invar	The hitpoints of a worm must always be equal to or smaller than the maximum hitpoints.
+ * 		  	| this.getHitPoints() =< this.getMaxHitPoints() 
  * 	
- * @author 	Toon Stuyck
+  * @author Toon Stuyck
  * 			Toon Van Deun
  * 			Burgerlijk Ingenieur
- * 			https://github.com/ToonVanDeun/PROJECT_OP
- * @version 1.0
+ * 			https://github.com/ToonVanDeun/PROJECT_OP_DEEL2
+ * @version 2.0
  */
 public class Worm extends Object {
-	
 	/**
-	 * Initialize a worm with a x-and -position (meters), direction (radians), radius (meters) and a name.
+	 * Initialize a worm in a given world, 
+	 * with a x-and y-position (meters), direction (radians), radius (meters) and a name.
 	 * @param xpos
 	 * 			The X position of the worm.
 	 * @param ypos
@@ -43,6 +44,8 @@ public class Worm extends Object {
 	 * 			The Radius of the worm.
 	 * @param name
 	 * 			The name of the worm.
+	 * @pre		The world must be valid.
+	 * 			|world!=null
 	 * @pre		The positions of the worm must be valid positions.
 	 * 			|isValidPos(xpos)
 	 * 			|isValidPos(ypos)
@@ -65,8 +68,15 @@ public class Worm extends Object {
 	 * 			|new.getMaxActionPoints() == (int) Math.round(this.getMass())
 	 * @post	The amount of actionpoints are set to the maximum amount of actionpoints.
 	 * 			|new.getActionPoints() == new.getMaxActionPoints()
+	 * @post	The maximum amount of hitpoints is set accordingly to the worm's mass.
+	 * 			|new.getMaxHitPoints() == (int) Math.round(this.getMass())
+	 * @post	The amount of hitpoints are set to the maximum amount of hitpoints.
+	 * 			|new.getHitPoints() == new.getMaxHitPoints()
 	 * @post	The name of the worm is set to the given name.
 	 * 			|new.getName() == name.
+	 * @post	The Worm is added to a team is there are any teams.
+	 * 			|if (world.getTeams.size()!=0)
+	 * 			| 	then this.hasTeam() == true
 	 * @post	The lower bound of the radius is set to the given lower bound.
 	 * 			Or when no lower bound is given it's set to 0.25 as it is in this case.
 	 * 			|new.getRadiusLowerBound() ==  0.25
@@ -79,13 +89,45 @@ public class Worm extends Object {
 		this.setName(name);
 		this.setActionPoints(maxActionPoints);
 		this.setHitPoints(maxHitPoints);
-		//this.setIsAlive();
+		this.setTeamRandom();
 	}
-
-	
+	/**
+	 * Initialize a worm in a given world, 
+	 * and a x-and y-position (meters), direction (radians), radius (meters) and a name will be determined.
+	 * @param	world
+	 * 			The world in which a worm is being added.
+	 * @pre		The world must be valid.
+	 * 			|world!=null
+	 * @post	The x- and y-position are set to valid x- and y-positions.
+	 * 			|isValidXpos(world,new.getXpos()) == true
+	 * 			|isValidYpos(world,new.getYpos()) == true
+	 * @post	The x- and y-position are set to passable position adjacent to impassable terrain.
+	 * 			|world.isAdjacent(new.getXpos(), new.getYpos()) == true
+	 * @post	The direction is set to a valid direction.
+	 * 			|isValidDirection(new.getDirection()) == true
+	 * @post	The radius is set to a valid radius
+	 * 			|isValidRadius(new.getRadius()) == true
+	 * @post	The mass of a worm is set accordingly to its radius.
+	 * 			|new.getMass() == DENSITY*((4.0/3.0)*Math.PI*Math.pow(radius, 3))
+	 * @post	The maximum amount of actionpoints is set accordingly to the worm's mass.
+	 * 			|new.getMaxActionPoints() == (int) Math.round(this.getMass())
+	 * @post	The amount of actionpoints are set to the maximum amount of actionpoints.
+	 * 			|new.getActionPoints() == new.getMaxActionPoints()
+	 * @post	The maximum amount of hitpoints is set accordingly to the worm's mass.
+	 * 			|new.getMaxHitPoints() == (int) Math.round(this.getMass())
+	 * @post	The amount of hitpoints are set to the maximum amount of hitpoints.
+	 * 			|new.getHitPoints() == new.getMaxHitPoints()
+	 * @post	The name of the worm is set to the given name.
+	 * 			|new.getName() == name.
+	 * @post	The Worm is added to a team is there are any teams.
+	 * 			|if (world.getTeams.size()!=0)
+	 * 			| 	then this.hasTeam() == true
+	 * @post	The lower bound of the radius is set to the given lower bound.
+	 * 			Or when no lower bound is given it's set to 0.25 as it is in this case.
+	 * 			|new.getRadiusLowerBound() ==  0.25
+	 */
 	public Worm(World world){
 		super(world);
-		//this.setWorldTo(world);
 		Random perimeter = world.getPerimeter();
 		this.setRadius(radiusLowerBound);
 		this.position = new Position(world, this);
@@ -94,23 +136,33 @@ public class Worm extends Object {
 		this.setActionPoints(this.getMaxActionPoints());
 		this.setHitPoints(this.getMaxHitPoints());
 		this.setTeamRandom();
-		//this.setIsAlive();
 		
 	}
 	
+	/**
+	 * Prepare the worm for a new round.
+	 * @post	If the worm is alive, The amount of action points is set to maximumActionPoints
+	 * 			| if(this.alive == true)
+	 * 			|	then new.getActionPoints() == this.getMaxActionPoints()
+	 * @post	If the worm is alive, The amount of hitpoints is increased with health.
+	 * 			| if(this.alive == true)
+	 * 			|	then new.getHitPoints() == old.getHitpoints() + health
+	 */
 	public void newRound(){
 		if (this.alive == true)
 			this.renewActionPoints();
 			this.heal(health);
 	}
-	// team
 	
+	// team
+	/**
+	 * Returns the name of the team if the worm has a team.
+	 */
 	public String getTeamName(){
 		if (this.hasTeam())
 			return this.getTeam().getName();
 		return null;
 	}
-	
 	/**
 	 * Return the team of this worm.
 	 *   A null reference is returned if this object is not in a team.
@@ -120,15 +172,12 @@ public class Worm extends Object {
 	public Team getTeam() {
 		return this.team;
 	}
-
 	/**
-	 * Check whether this worm can have the given team
-	 * as its team.
-	 *
+	 * Check whether this worm can have the given team as its team.
 	 * @param  team
 	 *         The team to check.
-	 * @return True, if the worm is not yet in a team.
-	 * 			| ...
+	 * @return True, if the worm is not yet in the team.
+	 * 			| !team.getAllWorms().contains(this)
 	 */
 	@Raw
 	public boolean canHaveAsTeam(Team team) {
@@ -139,63 +188,59 @@ public class Worm extends Object {
 	}
 	/**
 	 * Check whether this worm is in a team.
-	 *
-	 * @return True if and only if the team of this worm is effective.
-	 *       | result == (getTeam() != null)
+	 * @return 	True if and only if the team of this worm is effective.
+	 *       	| result == (getTeam() != null)
 	 */
 	@Raw
 	private boolean hasTeam() {
 		return getTeam() != null;
 	}
-
 	/**
 	 * Set the team of this worm to the given team.
-	 *
-	 * @param  team
-	 *         The new team for this worm.
-	 * @post   The team of this worm is the same as the given team.
-	 *       | new.getTeam() == team
-	 * @post   The number of worms of the given team
-	 *         is incremented by 1.
-	 *       | (new team).getNbWorms() == team.getNbWorms() + 1
-	 * @post   The given team has this worm as its new last
-	 *         worm.
-	 *       | (new team).getWormAt(getNbWorms()+1) == this
-	 * @throws IllegalArgumentException
-	 *         The given team is not effective or it cannot have this worm
-	 *         as its new last worm.
-	 *       | (team == null) ||
-	 *       |   (! team.canHaveAsWormAt(this,team.getNbWorms()+1))
-	 * @throws IllegalStateException
-	 *         This worm already belongs to a team.
-	 *       | hasTeam()
+	 * @param  	team
+	 *         	The new team for this worm.
+	 * @post   	The team of this worm is the same as the given team.
+	 *       	| new.getTeam() == team
+	 * @post   	The number of worms of the given team
+	 *         	is incremented by 1.
+	 *       	| (new team).getNbWorms() == team.getNbWorms() + 1
+	 * @throws 	IllegalArgumentException
+	 *         	The given team is not effective.
+	 *       	| (team == null)
+	 * @throws 	IllegalStateException
+	 *         	This worm already belongs to a team.
+	 *       	| hasTeam()
 	 */	
 	public void setTeamTo(Team team)
 			throws IllegalArgumentException, IllegalStateException {
 		if ((team == null))
-				//|| (!team.canHaveAsWormAt(this, team.getNbWorms()+1))) 
 			throw new IllegalArgumentException();
 		if (this.hasTeam())
 			throw new IllegalStateException("Already belongs to a world!");
 		setTeam(team);
 		team.addAsWorm(this);
 	}
-
 	/**
 	 * Set the team of this worm to the given team.
-	 *
-	 * @param  team
-	 *         The new team for this worm.
-	 * @pre    This worm can have the given team as its team.
-	 *       | canHaveAsTeam(team)
-	 * @post   The team of this worm is the same as the given team.
-	 *       | new.getTeam() == team
+	 * @param  	team
+	 *         	The new team for this worm.
+	 * @pre    	This worm can have the given team as its team.
+	 *       	| canHaveAsTeam(team)
+	 * @post   	The team of this worm is the same as the given team.
+	 *       	| new.getTeam() == team
 	 */
 	@Raw
 	private void setTeam(@Raw Team team) {
 		assert canHaveAsTeam(team);
 		this.team = team;
 	}
+	/**
+	 * Sets the team to a random team, is there are teams.
+	 * @post	If there where teams the worm is added to a team.
+	 * 			If there where no teams the worm isn't added to a team.
+	 * 			| if ((this.getWorld().getTeams().size()!=0)) {
+	 * 			|	then this.hasTeam() == true;
+	 */
 	public void setTeamRandom(){
 		World world = this.getWorld();
 		ArrayList<Team> teams = (ArrayList<Team>) world.getTeams();
@@ -204,23 +249,15 @@ public class Worm extends Object {
 			int randomIndex = (int) (Math.random()*i);
 			this.setTeamTo(teams.get(randomIndex));
 		} 
-	
 	}
 	/**
-	 * Unset the team, if any, from this worm.
-	 *
-	 * @post   This worm no longer belongs to a team.
-	 *       | ! new.hasTeam()
-	 * @post   The former team of this worm, if any, no longer
-	 *         has this worm as one of its worms.
-	 *       |    (getTeam() == null)
-	 *       | || (! (new getTeam()).hasAsWorm(worm))
-	 * @post   All worms registered beyond the position at which
-	 *         this worm was registered shift one position to the left.
-	 *       | (getTeam() == null) ||
-	 *       | (for each index in
-	 *       |        getTeam().getIndexOfWorm(worm)+1..getTeam().getNbWorms():
-	 *       |    (new getTeam()).getWormAt(index-1) == getTeam().getWormAt(index) ) 
+	 * Unsets the team, if any, from this worm.
+	 * @post   	This worm no longer belongs to a team.
+	 *       	| ! new.hasTeam()
+	 * @post   	The former team of this worm, if any, no longer
+	 *         	has this worm as one of its worms.
+	 *       	|    (getTeam() == null)
+	 *       	| || (! (new getTeam()).hasAsWorm(worm))
 	 */
 	public void unsetTeam() {
 		if (hasTeam()) {
@@ -229,7 +266,6 @@ public class Worm extends Object {
 			formerTeam.removeAsWorm(this);
 		}
 	}
-	
 	
 	//position (defensive)
 	/**
@@ -241,13 +277,11 @@ public class Worm extends Object {
 	}
 	/**
 	 * Sets the x-position of the worm.
-	 * @param xpos
+	 * @param 	xpos
 	 * 			The (new) x-position of the worm
-	 * @post	the given x-position is the new x-position of the worm.
+	 * @post	the given x-position is the new x-position of the worm 
+	 * 			if it is accepted by Position.
 	 * 			| new.getXpos() == xpos
-	 * @throws	IllegalArgumentException
-	 * 			If xpos isn't a valid x-position the exception is thrown.
-	 * 			| ! isValidPos(xpos)
 	 */
 	@Raw
 	private void setXpos(double xpos) {
@@ -264,21 +298,24 @@ public class Worm extends Object {
 	 * Sets the y-position of the worm.
 	 * @param ypos
 	 * 			The (new) y-position of the worm
-	 * @post	the given y-position is the new y-position of the worm.
+	 * @post	the given y-position is the new y-position of the worm 
+	 * 			if it is accepted by Position
 	 * 			| new.getYpos() == ypos
-	 * @throws	IllegalArgumentException
-	 * 			If ypos isn't a valid y position the exception is thrown.
-	 * 			| ! isValidPos(ypos)
 	 */
 	@Raw
 	private void setYpos(double ypos) {
 		position.setYpos(ypos);
 	}
-	
+	/**
+	 * Sets the position to the nearest adjacent position to the given position, if any.
+	 * @param 	xpos
+	 * 			The position to which we try to find and set a new x-position that is adjacent
+	 * @param 	ypos
+	 * 			The position to which we try to find and set a new x-position that is adjacent
+	 */
 	private void setNearestAdjacent(double xpos, double ypos){
 		position.setNearestAdjacent(this.getWorld(), xpos, ypos, this.getRadius());
 	}
-	
 	/**
 	 * Checks whether the given position is a valid position.
 	 * @param	pos
@@ -286,25 +323,45 @@ public class Worm extends Object {
 	 * @return 	True if the given position (pos) is a valid position.
 	 * 			If the given position isn't a valid position (not a number (NaN),
 	 * 			the method returns false.
+	 * 			|(!Double.isNaN(pos))
 	 */
 	@Raw
 	public boolean isValidPos(double pos) {
 		return ! (Double.isNaN(pos));
 	}
-	
+	/**
+	 * Checks if the given position is out of the boundaries of the map.
+	 * @param 	xpos
+	 * 			The x-position to be checked.
+	 * @param 	ypos
+	 * 			The y-position to be checked.
+	 * @return	True if the given position isn't in the boundaries of the map.
+	 * 			False if e given position is in the boundaries of the map.
+	 * 			| !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
+				|	((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius())))
+	 */
 	private boolean isOutOfTheMap(double xpos, double ypos) {
 		World world= this.getWorld();
 		return !((xpos<=(world.getWidth()-this.getRadius()))&&((xpos>=this.getRadius()))&&
 				((ypos <= world.getHeight()-this.getRadius())) && ((ypos>=this.getRadius()))) ;
 	}
-	
+	/**
+	 * Checks if the worm can fall.
+	 * That is if the worm's position is passable and is not adjacent.
+	 * @return 	True if the worm can fall.
+	 * 			False if the worm can't fall.
+	 * 			| world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
+				|!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
+	 */
 	public boolean canFall() {
 		World world = this.getWorld();
 		return( world.isPassable(this.getXpos(), this.getYpos(), this.getRadius()) &&
 				!world.isAdjacent(this.getXpos(), this.getYpos(), this.getRadius()));
 	}
-	
-	public void fall() throws IllegalArgumentException{
+	/**
+	 * Makes the worm fall, if it can fall, until the worm falls on an obstacle or falls out of the map.			
+	 */
+	public void fall() {
 		World world = this.getWorld();
 		double distance = 0;
 		boolean trigger = false;

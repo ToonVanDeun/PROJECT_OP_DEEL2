@@ -145,11 +145,11 @@ public class Position {
 	 * 			| If (world.isAdjacent((new) position)) For a<world.getWidth()/10
 	 * 			| 	Then new.World.isAdjacent(position);
 	 */
-	public void setNearestAdjacent(World world, double xpos, double ypos, double radius){
+	public void setNearestAdjacent(World world, double xpos, double ypos, double radius) throws IllegalArgumentException {
 		double tempx =xpos;
 		double tempy =ypos;
 		
-		for (double a=0;a<(world.getWidth()/10); a=a+0.01) {
+		for (double a=0;a<=(world.getWidth()/10); a=a+0.01) {
 			if (world.isAdjacent(tempx+a, tempy, radius)){
 				this.setXpos(tempx+a);
 				this.setYpos(tempy);
@@ -171,6 +171,8 @@ public class Position {
 				break;
 			}
 		}
+		if ((this.getXpos()==xpos) && (this.getYpos()==ypos))
+			throw new IllegalArgumentException("There is no nearest adjacent position available.");
 	}
 	
 	//Checkers
