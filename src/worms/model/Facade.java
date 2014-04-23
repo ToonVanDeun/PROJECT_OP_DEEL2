@@ -11,7 +11,6 @@ public  class Facade implements IFacade {
 	 * constructor for Facade.
 	 */
 	public Facade() {
-		
 	}
 	/**
 	 * Checks whether a given worm can turn over a given angel.
@@ -20,7 +19,6 @@ public  class Facade implements IFacade {
 	public boolean canTurn(Worm worm, double angle) {
 		return worm.isValidTurn(angle);
 	}
-
 	/**
 	 * Turns a given worm over a given angel.
 	 */
@@ -28,7 +26,6 @@ public  class Facade implements IFacade {
 	public void turn(Worm worm, double angle) {
 		worm.turn(angle);
 	}
-
 	/**
 	 * Get the x- and y-position of a given worm that's jumping at a given time t,
 	 *  after the jump started.
@@ -41,7 +38,6 @@ public  class Facade implements IFacade {
 			throw new ModelException("can't jump");
 		}
 	}
-
 	/**
 	 * Get a worm's x-position.
 	 */
@@ -49,7 +45,6 @@ public  class Facade implements IFacade {
 	public double getX(Worm worm) {
 		return worm.getXpos();
 	}
-
 	/**
 	 * Get a worm's y-position.
 	 */
@@ -57,7 +52,6 @@ public  class Facade implements IFacade {
 	public double getY(Worm worm) {
 		return worm.getYpos();
 	}
-
 	/**
 	 * Get a worm's orientation.
 	 */
@@ -65,7 +59,6 @@ public  class Facade implements IFacade {
 	public double getOrientation(Worm worm) {
 		return worm.getDirection();
 	}
-
 	/**
 	 * Get a worms radius.
 	 */
@@ -73,7 +66,6 @@ public  class Facade implements IFacade {
 	public double getRadius(Worm worm) {
 		return worm.getRadius();
 	}
-
 	/**
 	 * Set the radius of the given worm to the given radius.
 	 */
@@ -85,7 +77,6 @@ public  class Facade implements IFacade {
 			throw new ModelException("not a valid radius");
 		}
 	}
-
 	/**
 	 * Get the minimal allowed radius of a given worm.
 	 */
@@ -93,7 +84,6 @@ public  class Facade implements IFacade {
 	public double getMinimalRadius(Worm worm) {
 		return 0.25;
 	}
-
 	/**
 	 * Get the amount of actionpoints of a given worm.
 	 */
@@ -101,7 +91,6 @@ public  class Facade implements IFacade {
 	public int getActionPoints(Worm worm) {
 		return worm.getActionPoints();
 	}
-
 	/**
 	 * Get the maximum allowed amount of actionpoints of a given worm.
 	 */
@@ -109,7 +98,6 @@ public  class Facade implements IFacade {
 	public int getMaxActionPoints(Worm worm) {
 		return worm.getMaxActionPoints();
 	}
-
 	/**
 	 * Get the name of a given worm.
 	 */
@@ -117,7 +105,6 @@ public  class Facade implements IFacade {
 	public String getName(Worm worm) {
 		return worm.getName();
 	}
-
 	/**
 	 * Give a worm a new name.
 	 */
@@ -129,7 +116,6 @@ public  class Facade implements IFacade {
 			throw new ModelException("that name is not valid");
 		}
 	}
-
 	/**
 	 * Get the mass of a given worm.
 	 */
@@ -138,7 +124,8 @@ public  class Facade implements IFacade {
 		return worm.getMass();
 	}
 	/**
-	 * Adds a new empty team wroms van join.
+	 * Adds a new empty team with name newName if the name is valid and 
+	 * the maximum number of teams hasn't been reached jet.
 	 */
 	@Override
 	public void addEmptyTeam(World world, String newName) {	
@@ -152,7 +139,6 @@ public  class Facade implements IFacade {
 		catch (IllegalStateException exc) {
 			throw new ModelException("You've reached the maximum number of teams");
 		}
-		
 	}
 	/**
 	 * Adds a food object to the world.
@@ -166,8 +152,7 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public void addNewWorm(World world) {
-		new Worm(world);
-		
+		new Worm(world);	
 	}
 	/**
 	 * Checks whether or not a worm can fall
@@ -195,8 +180,12 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public World createWorld(double width, double height,
-			boolean[][] passableMap, Random random) {
-		return new World(width, height, passableMap, random);
+			boolean[][] passableMap, Random random) throws ModelException {
+		try {
+			return new World(width, height, passableMap, random);
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException("The dimentions of the world are no valid dimentions.");
+		}
 	}
 	/**
 	 * Creates a worm with a given x-and y-position, direction, radius and name. 
@@ -204,19 +193,22 @@ public  class Facade implements IFacade {
 	 */
 	@Override
 	public Worm createWorm(World world, double x, double y, double direction,
-			double radius, String name) {
-		return new Worm(world,x,y,direction,radius, name);
-		//return null;
+			double radius, String name) throws ModelException {
+		try {
+			return new Worm(world,x,y,direction,radius, name);
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException("One of the given vaulues is not valid.");
+		}
 	}
 	/**
-	 * Makes a certain worm fall.
+	 * Makes the given worm fall.
 	 */
 	@Override
 	public void fall(Worm worm) {
 		worm.fall();
 	}
 	/**
-	 * Returns which projectile is active in the world.
+	 * Returns the projectile that is active in the world.
 	 */
 	@Override
 	public Projectile getActiveProjectile(World world) {
@@ -248,15 +240,24 @@ public  class Facade implements IFacade {
 	 *  after the jump started. 
 	 */
 	@Override
-	public double[] getJumpStep(Projectile projectile, double t) {
-		return projectile.jumpStep(t);
+	public double[] getJumpStep(Projectile projectile, double t) throws ModelException {
+		try {
+			return projectile.jumpStep(t);
+		} catch (IllegalStateException e) {
+			throw new ModelException("The Worm can't jump here.");
+		}
 	}
 	/**
 	 * Get the time it takes the given projectile to jump.
 	 */
 	@Override
-	public double getJumpTime(Projectile projectile, double timeStep) {
-		return projectile.jumpTime(timeStep);
+	public double getJumpTime(Projectile projectile, double timeStep) throws ModelException{
+		try {
+			return projectile.jumpTime(timeStep);
+		} catch (IllegalStateException e) {
+			throw new ModelException("The Projectile can't be fired here.");
+		}
+		
 	}
 	/**
 	 * Get the time it takes the given worm to jump.
@@ -425,7 +426,6 @@ public  class Facade implements IFacade {
 	@Override
 	public void selectNextWeapon(Worm worm) {
 		worm.selectNextWeapon();
-		
 	}
 	/**
 	 * Makes a worm shoot with a given yield.
@@ -444,7 +444,6 @@ public  class Facade implements IFacade {
 	@Override
 	public void startGame(World world) {
 		world.startGame();
-		
 	}
 	/**
 	 * Makes the next turn start in a given world.
@@ -452,7 +451,5 @@ public  class Facade implements IFacade {
 	@Override
 	public void startNextTurn(World world) {
 		world.startNextTurn();
-		
 	}
-	
 }
